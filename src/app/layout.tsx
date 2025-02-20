@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${typestarOCR.variable} antialiased`}
+        className={`${typestarOCR.variable} antialiased dark`}
       >
         {children}
       </body>
