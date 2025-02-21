@@ -41,7 +41,6 @@ const findPackageJsonFiles = async (
         );
         results = results.concat(nestedResults);
       } else if (entry.name === "package.json") {
-        console.log("entry", entry.path, entry.name);
         const content = await fs.readFile(`${entry.path}/${entry.name}`, "utf-8");
         const jsonPackage = JSON.parse(content)
 

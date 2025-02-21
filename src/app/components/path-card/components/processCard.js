@@ -35,7 +35,8 @@ const ProcessCard = ({ packageFile }) => {
             }),
         })
 
-        console.log("response", response?.ok)
+        console.log("response", response, response?.ok)
+
         if (response.ok) {
             setCurrentProcess(null)
         } else {
@@ -65,11 +66,10 @@ const ProcessCard = ({ packageFile }) => {
             {currentProcess?.processId ? <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button> : <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button>}
 
             <div className="flex items-baseline gap-2 justify-between w-full">
-                <div className="flex gap-2 items-baseline">
-                    <span>{packageFile.projectName}</span>
-                    <small className={`${color}`}>{type}</small>
-                </div>
-                {currentProcess?.processId && <small className="text-emerald-400 p-2">Running</small>}
+
+                <span className={currentProcess?.processId ? "text-emerald-400" : ""}>{packageFile.projectName}</span>
+                <small className={`${color}`}>{type}</small>
+
             </div>
         </CardContent>
     </Card>

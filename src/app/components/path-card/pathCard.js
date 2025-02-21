@@ -35,7 +35,7 @@ const PathCard = () => {
     }
 
     return (
-        <Card className="w-[30%] min-w-[400px]">
+        <Card className="w-[30%] min-w-[400px] bg-stone-900">
             <CardHeader>
                 <CardTitle>{packageFiles.length === 0 ? "Select directory" : "Process list"}</CardTitle>
                 <CardDescription>
