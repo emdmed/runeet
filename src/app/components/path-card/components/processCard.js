@@ -62,7 +62,7 @@ const ProcessCard = ({ packageFile }) => {
     }
 
     const { type, color } = getProjectTypeTag(packageFile)
-    
+
     if (type === "unknown") return null
 
     return <Card className={`my-1`} key={packageFile.filePath}>
