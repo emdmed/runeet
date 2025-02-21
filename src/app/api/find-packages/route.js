@@ -44,8 +44,12 @@ const findPackageJsonFiles = async (
         const content = await fs.readFile(`${entry.path}/${entry.name}`, "utf-8");
         const jsonPackage = JSON.parse(content)
 
-        const isVite = jsonPackage.scripts.dev === "vite"
-        const isServer = jsonPackage.main && jsonPackage.scripts.start.includes("node")
+        console.log("json package", jsonPackage)
+
+        const isVite = jsonPackage?.scripts?.dev === "vite" || false
+        const isServer = jsonPackage?.scripts?.start?.includes("node") || false
+        const isNext = jsonPackage?.scripts?.dev?.includes("next") || false
+        const isReact = jsonPackage?.scripts?.start?.includes("react") || false
 
         results.push({
           filePath,
@@ -53,6 +57,8 @@ const findPackageJsonFiles = async (
           projectName: jsonPackage.name,
           isVite,
           isServer,
+          isNext,
+          isReact,
           dependencies: jsonPackage.dependencies,
           devDependencies: jsonPackage.devDependencies,
           command: isVite ? "npm run dev" : isServer ? `node ${jsonPackage.main}` : null

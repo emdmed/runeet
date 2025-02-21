@@ -48,6 +48,8 @@ const ProcessCard = ({ packageFile }) => {
     const getProjectTypeTag = (packageFile) => {
         if (packageFile.isVite) return { type: "Vite", color: "text-purple-200" }
         if (packageFile.isServer) return { type: "Server", color: "text-emerald-200" }
+        if (packageFile.isNext) return { type: "Next", color: "text-white" }
+        if (packageFile.isReact) return { type: "React", color: "text-sky-200" }
         return { type: "unknown", color: "text-stone-500" }
     }
 
@@ -60,6 +62,8 @@ const ProcessCard = ({ packageFile }) => {
     }
 
     const { type, color } = getProjectTypeTag(packageFile)
+    
+    if (type === "unknown") return null
 
     return <Card className={`my-1`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">
