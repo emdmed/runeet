@@ -14,22 +14,34 @@ export async function POST(req) {
         try {
             await access(path);
         } catch (err) {
-            return NextResponse.json({ error: "Invalid or inaccessible path", err }, { status: 400 });
+            console.log("err", err)
+            return NextResponse.json({ error: "Invalid or inaccessible path" }, { status: 400 });
         }
 
-        // Use tmux for headless environments; gnome-terminal for GUI
-        const isGui = process.env.DISPLAY;
-        const execCommand = isGui
-            ? `gnome-terminal --working-directory="${path}" -- bash -c '${command}; exec bash'`
-            : `tmux new-session -d -c "${path}" '${command}'`;
+        // Ensure DISPLAY is set for GUI access
+        const envVariables = { ...process.env, DISPLAY: ":0" };
 
-        // Execute the command
-        spawn(execCommand, { shell: true, detached: true });
+        // Construct the execution command
+        const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
+
+
+
+        console.log("Executing command:", execCommand);
+
+        // Spawn the process with the correct DISPLAY environment variable
+        const childProcess = spawn(execCommand, {
+            shell: true,
+            stdio: "inherit",
+            env: envVariables // 👈 ADDING DISPLAY VARIABLE HERE
+        });
+
+        console.log("Started process with PID:", childProcess.pid);
 
         return NextResponse.json({
             message: "Command executed successfully",
             executedCommand: command,
             executedPath: path,
+            processId: childProcess.pid
         });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

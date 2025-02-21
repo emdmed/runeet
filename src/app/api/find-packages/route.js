@@ -45,14 +45,18 @@ const findPackageJsonFiles = async (
         const content = await fs.readFile(`${entry.path}/${entry.name}`, "utf-8");
         const jsonPackage = JSON.parse(content)
 
-        const isVite = jsonPackage.dev === "vite" 
+        const isVite = jsonPackage.scripts.dev === "vite"
+        const isServer = jsonPackage.main && jsonPackage.scripts.start.includes("node")
 
         results.push({
           filePath,
+          path: entry.path,
           projectName: jsonPackage.name,
           isVite,
+          isServer,
           dependencies: jsonPackage.dependencies,
-          devDependencies: jsonPackage.devDependencies
+          devDependencies: jsonPackage.devDependencies,
+          command: isVite ? "npm run dev" : isServer ? `node ${jsonPackage.main}` : null
         });
       }
     }

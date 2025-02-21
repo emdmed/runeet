@@ -12,10 +12,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+import ProcessCard from "./components/processCard"
+
 const PathCard = () => {
     const [folderPath, setFolderPath] = useState("/home/enrique/projects");
-    //const [packageFiles, setPackageFiles]
-
+    const [packageFiles, setPackageFiles] = useState(false)
 
     async function searchPackages(directory) {
         const response = await fetch("/api/find-packages", {
@@ -25,7 +26,7 @@ const PathCard = () => {
         });
 
         const data = await response.json();
-        console.log("Found package.json files:", data.packageJsonFiles);
+        setPackageFiles(data.packageJsonFiles)
     }
 
     const handleSearchPackages = async () => {
@@ -34,18 +35,24 @@ const PathCard = () => {
     }
 
     return (
-        <Card>
+        <Card className="w-[30%] min-w-[400px]">
             <CardHeader>
-                <CardTitle>Select directory</CardTitle>
+                <CardTitle>{packageFiles.length === 0 ? "Select directory" : "Process list"}</CardTitle>
                 <CardDescription>
-                    Directory absolute path where all your apps are (ex. projects, monorepo)
+                    {packageFiles.length === 0 ? "Directory absolute path where all your apps are (ex. projects, monorepo)" : "Run apps and servers from this list"}
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex gap-2">
+                {!packageFiles && <div className="flex gap-2">
                     <Input onChange={e => setFolderPath(e.target.value)} value={folderPath} placeholder="Projects absolute path..." />
                     <Button onClick={handleSearchPackages} size="sm">Create</Button>
-                </div>
+                </div>}
+                {
+                    packageFiles && packageFiles.map(packageFile => {
+                        return <ProcessCard key={packageFile.filePath} packageFile={packageFile} />
+                    }
+                    )
+                }
 
             </CardContent>
         </Card>

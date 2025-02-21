@@ -1,0 +1,33 @@
+{
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "workbench.colorCustomizations": {
+      "editorBracketHighlight.foreground1": "#f7b6c2", // Color for ()
+      "editorBracketHighlight.foreground2": "#ffcc66", // Color for []
+      "editorBracketHighlight.foreground3": "#66ccff"  // Color for {}
+    },
+    "editor.tokenColorCustomizations": {
+      "textMateRules": [
+        {
+          "scope": "punctuation.parenthesis",
+          "settings": {
+            "foreground": "#f7b6c2",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "scope": "punctuation.squarebracket",
+          "settings": {
+            "foreground": "#ffcc66",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "scope": "punctuation.brace",
+          "settings": {
+            "foreground": "#66ccff",
+            "fontStyle": "underline"
+          }
+        }
+      ]
+    }
+  }
