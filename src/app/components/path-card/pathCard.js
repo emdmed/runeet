@@ -16,12 +16,13 @@ import ProcessCard from "./components/processCard"
 import { LoaderCircle, Trash, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
-    const [folderPath, setFolderPath] = useState("/home/enrique/projects");
-    const [packageFiles, setPackageFiles] = useState(false)
+///home/enrique/projects
+
+const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCards }) => {
+    const [folderPath, setFolderPath] = useState(pathCard?.path || "");
+    const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [allActiveTerminals, setAllActiveTerminals] = useState()
-
 
     async function searchPackages(directory) {
         setIsLoading(true)
@@ -34,6 +35,17 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
         const data = await response.json();
         setPackageFiles(data.packageJsonFiles)
         setIsLoading(false)
+
+        const newPathCards = pathCards.map(card => {
+            if (card.id === pathCard.id) {
+                return { ...pathCard, path: directory }
+            } else {
+                return pathCard
+            }
+        })
+        setPathCards([...newPathCards])
+
+        localStorage.setItem("pathCards", JSON.stringify(newPathCards))
     }
 
     async function monitorTerminals() {
@@ -46,8 +58,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
     }
 
     const handleSearchPackages = async () => {
-        const response = await searchPackages(folderPath)
-        console.log("handleSearchPackages response", response)
+        await searchPackages(folderPath)
     }
 
     const getFolderName = () => {
@@ -61,8 +72,8 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
     }
 
     useEffect(() => {
-        if(!folderPath) return
-    }, [folderPath])
+        if (pathCard?.path) handleSearchPackages()
+    }, [pathCard?.path])
 
     useEffect(() => {
         monitorTerminals()
@@ -73,31 +84,40 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
         return () => clearInterval(timer)
     }, [])
 
+
+    const handleDeleteFolderPath = () => {
+        setPackageFiles([])
+        setFolderPath("")
+    }
+
     return (
         <Card className="w-[30%] min-w-[500px] bg-stone-900">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
-                    {packageFiles.length === 0 ? "Select directory" : "Process list"}
+                    {packageFiles?.length === 0 ? "Select directory" : "Process list"}
                     <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200"><X /></Button>
                 </CardTitle>
                 <CardDescription>
-                    {packageFiles.length === 0 ? "Directory absolute path where all your apps are (ex. projects, monorepo)" : "Run apps and servers from this list"}
+                    {packageFiles?.length === 0 ? "Directory absolute path where all your apps are (ex. projects, monorepo)" : "Run apps and servers from this list"}
                 </CardDescription>
             </CardHeader>
             <CardContent className="h-max" style={{ overflow: "auto" }}>
                 {isLoading && <div className="flex items-center justify-center w-full p-2">
                     <LoaderCircle className="spinner" /></div>}
 
-                {!packageFiles && !isLoading && <div className="flex gap-2">
-                    <Input onChange={e => setFolderPath(e.target.value)} value={folderPath} placeholder="Projects absolute path..." />
-                    <Button onClick={handleSearchPackages} size="sm">Create</Button>
+                {packageFiles.length === 0 && !isLoading ? <div className="flex flex-col">
+                    <div className="flex gap-2">
+                        <Input onChange={e => setFolderPath(e.target.value)} value={folderPath} placeholder="Projects absolute path..." />
+                        <Button onClick={handleSearchPackages} size="sm">Create</Button>
+                    </div>
+                </div> : null}
+
+                {packageFiles.length > 0 && !isLoading && <div className="flex items-center justify-between">
+                    <Badge>{"./"}{getFolderName()}</Badge>
+                    <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
                 </div>}
 
-                {packageFiles && !isLoading && <div className="flex items-center justify-between">
-                    <Badge>{"./"}{getFolderName()}</Badge>
-                    <Button onClick={() => setPackageFiles(false)} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
-                </div>}
-                {packageFiles && packageFiles.map(packageFile => {
+                {packageFiles.length > 0 && packageFiles.map(packageFile => {
                     return <ProcessCard allActiveTerminals={allActiveTerminals} key={packageFile.filePath} packageFile={packageFile} />
                 })}
 
