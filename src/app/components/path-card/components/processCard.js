@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
 
-const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite }) => {
+const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunningFilterOn }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
 
@@ -78,6 +78,8 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite }) => {
     console.log("current process", currentProcess)
 
     const { color } = getProjectTypeTag(packageFile)
+
+    if(isRunningFilterOn && currentProcess?.state !== "running") return null
 
     return <Card className={`my-1`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">

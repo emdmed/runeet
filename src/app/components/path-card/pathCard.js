@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import ProcessCard from "./components/processCard"
 import { LoaderCircle, Trash, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Filter } from "lucide-react";
 
 ///home/enrique/projects
 
@@ -23,6 +24,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
     const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [allActiveTerminals, setAllActiveTerminals] = useState()
+    const [isRunningFilterOn, setIsRunningFilterOn] = useState(false)
 
     async function searchPackages(directory) {
         setIsLoading(true)
@@ -127,16 +129,19 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
                 {packageFiles?.length > 0 && !isLoading && <div className="flex items-center justify-between">
                     <Badge>{"./"}{getFolderName()}</Badge>
-                    <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
+                    <div>
+                        <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={isRunningFilterOn ? "text-lime-300" : "text-stone-700"}><Filter /></Button>
+                        <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
+                    </div>
                 </div>}
 
                 <div className="mt-2">
                     {packageFiles?.length > 0 && packageFiles.filter(element => element.favorite).map(packageFile => {
-                        return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
+                        return <ProcessCard isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                     })}
 
                     {packageFiles?.length > 0 && packageFiles.filter(element => !element.favorite).map(packageFile => {
-                        return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
+                        return <ProcessCard isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                     })}
                 </div>
 
