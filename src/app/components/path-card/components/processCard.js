@@ -3,7 +3,7 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { LoaderCircle, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
