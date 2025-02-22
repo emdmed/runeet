@@ -79,11 +79,11 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
     useEffect(() => {
         monitorTerminals()
-/*         const timer = setInterval(() => {
-            monitorTerminals()
-        }, 3000);
-
-        return () => clearInterval(timer) */
+        /*         const timer = setInterval(() => {
+                    monitorTerminals()
+                }, 3000);
+        
+                return () => clearInterval(timer) */
     }, [])
 
     const toggleFavorite = (packageFile) => {
@@ -110,12 +110,17 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
             <Card className="w-[30%] min-w-[600px] bg-stone-900 flex flex-col h-full">
                 <CardHeader>
                     <CardTitle className="flex justify-between items-center">
-                        {packageFiles?.length === 0 ? "Select directory" : "Process list"}
+                        {packageFiles?.length === 0 && "Select directory"}
+                        {packageFiles?.length > 0 && <div className="flex items-center gap-1">
+                            <Badge className="me-3">{"./"}{getFolderName()}</Badge>
+                            <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={isRunningFilterOn ? "text-lime-300" : "text-stone-700"}><Filter /></Button>
+                            <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
+                        </div>}
                         <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200"><X /></Button>
                     </CardTitle>
-                    <CardDescription>
-                        {packageFiles?.length === 0 ? "Directory absolute path where all your apps are (ex. projects, monorepo)" : "Run apps and servers from this list"}
-                    </CardDescription>
+                    {packageFiles?.length === 0 && <CardDescription>
+                        {"Directory absolute path where all your apps are (ex. projects, monorepo)"}
+                    </CardDescription>}
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0">
                     {isLoading && <div className="flex items-center justify-center w-full p-2">
@@ -128,15 +133,11 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
                         </div>
                     </div> : null}
 
-                    {packageFiles?.length > 0 && !isLoading && <div className="flex items-center justify-between">
-                        <Badge>{"./"}{getFolderName()}</Badge>
-                        <div>
-                            <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={isRunningFilterOn ? "text-lime-300" : "text-stone-700"}><Filter /></Button>
-                            <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
-                        </div>
+                    {packageFiles?.length > 0 && !isLoading && <div className="flex items-center justify-end">
+
                     </div>}
 
-                    <div className="mt-2 flex-1 overflow-y-auto px-2">
+                    <div className="flex-1 overflow-y-auto px-2">
                         {packageFiles?.length > 0 && packageFiles.filter(element => element.favorite).map(packageFile => {
                             return <ProcessCard isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                         })}
