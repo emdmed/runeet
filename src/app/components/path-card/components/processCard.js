@@ -24,7 +24,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals }) => {
         })
 
         const jsonRes = await response.json()
-        setCurrentProcess(jsonRes)
+        setCurrentProcess({ ...jsonRes, state: "running" })
     }
 
     async function killProcess() {
@@ -75,11 +75,10 @@ const ProcessCard = ({ packageFile, allActiveTerminals }) => {
 
     return <Card className={`my-1`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">
-            {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button>}
-            {currentProcess?.state === "stopped" && <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button>}
 
-            {!currentProcess && <div className="flex items-center justify-center w-full p-2">
-                <LoaderCircle className="spinner" /></div>}
+            {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button>}
+
+            {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button> : null}
 
 
             <div className="flex items-baseline gap-2 justify-between w-full">

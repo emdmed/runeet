@@ -61,6 +61,10 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
     }
 
     useEffect(() => {
+        if(!folderPath) return
+    }, [folderPath])
+
+    useEffect(() => {
         monitorTerminals()
         const timer = setTimeout(() => {
             monitorTerminals()
