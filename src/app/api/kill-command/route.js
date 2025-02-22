@@ -60,28 +60,6 @@ export async function POST(req) {
         }
 
         try {
-            const { stdout } = await execAsync(
-                `ps aux | grep node | grep "${path}" | grep -v grep | awk '{print $2}'`
-            );
-
-            const pids = stdout.trim().split("\n").filter(pid => pid);
-
-            if (pids.length === 0) {
-                return NextResponse.json({ error: `No Node.js process found running from: ${path}` }, { status: 404 });
-            }
-
-            console.log("Found PIDs:", pids);   
-
-            await execAsync(`kill -9 ${pids.join(" ")} || true`);
-
-
-        } catch (err) {
-            console.error("Kill error:", err.message);
-            return NextResponse.json({ error: `Failed to terminate process: ${err.message}` }, { status: 500 });
-        }
-
-
-        try {
             const activeTerminals = await getTerminalsAndCommands()
             const terminalToKill = activeTerminals.find(terminal => terminal.cwd === path)
             await execAsync(`kill -9 ${terminalToKill.pid} || true`);
