@@ -9,8 +9,9 @@ const typestarOCR = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dev Dashboard",
+  title: "RunDeck",
   description: "Cool as fuck dev dashboard",
+  icons: "/favicon.ico", 
 };
 
 export default function RootLayout({
@@ -20,6 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+      </head>
       <body
         className={`${typestarOCR.variable} antialiased dark`}
       >
