@@ -3,13 +3,15 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { LoaderCircle, Play } from "lucide-react";
 import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 const ProcessCard = ({ packageFile, allActiveTerminals }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
+
 
     async function runProcess(process) {
         const response = await fetch("/api/run-command", {
@@ -31,7 +33,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals }) => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                path: currentProcess?.executedPath || null
+                path: currentProcess?.executedPath || currentProcess?.cwd || null
             }),
         })
 
@@ -62,40 +64,34 @@ const ProcessCard = ({ packageFile, allActiveTerminals }) => {
     }
 
     useEffect(() => {
-
-        if (allActiveTerminals && allActiveTerminals.length === 0) return
-        console.log("allActiveTerminals", allActiveTerminals, "packagefile", packageFile)
+        if (!allActiveTerminals || allActiveTerminals.length === 0) return
         const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path && element?.command === packageFile.command) || null
-        setCurrentProcess(foundCurrentProcess)
-    }, [allActiveTerminals, packageFile?.command, packageFile?.path])
+        setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
+    }, [allActiveTerminals])
 
-    /*     const getFolderName = (packageFile) => {
-            try {
-                const array = packageFile.path.split("/")
-                console.log("array", array, packageFile.path)
-                return array[array.length - 1]
-            } catch (e) {
-                console.log(e)
-                return "Not found"
-            }
-        } */
+    console.log("current process", currentProcess)
 
     const { color } = getProjectTypeTag(packageFile)
 
     return <Card className={`my-1`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">
-            {currentProcess?.processId || currentProcess?.pid ? <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button> : <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button>}
+            {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button>}
+            {currentProcess?.state === "stopped" && <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button>}
+
+            {!currentProcess && <div className="flex items-center justify-center w-full p-2">
+                <LoaderCircle className="spinner" /></div>}
+
 
             <div className="flex items-baseline gap-2 justify-between w-full">
                 <div className="flex items-baseline me-2 justify-between w-full">
-                    <span className={currentProcess?.processId || currentProcess?.pid ? "text-emerald-400" : ""}>{packageFile.projectName}</span>
+                    {currentProcess?.state === "running" ? <Badge className="bg-lime-300">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
                     <small className="text-stone-700">{packageFile?.command || "None"}</small>
                 </div>
                 <small className={`${color}`}>{packageFile.framework}</small>
 
             </div>
         </CardContent>
-    </Card>
+    </Card >
 
 }
 

@@ -61,6 +61,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
     }
 
     useEffect(() => {
+        monitorTerminals()
         const timer = setTimeout(() => {
             monitorTerminals()
         }, 5000);
@@ -69,11 +70,11 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
     }, [])
 
     return (
-        <Card className="w-[30%] min-w-[400px] bg-stone-900">
+        <Card className="w-[30%] min-w-[500px] bg-stone-900">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     {packageFiles.length === 0 ? "Select directory" : "Process list"}
-                    <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-rose-200"><X /></Button>
+                    <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200"><X /></Button>
                 </CardTitle>
                 <CardDescription>
                     {packageFiles.length === 0 ? "Directory absolute path where all your apps are (ex. projects, monorepo)" : "Run apps and servers from this list"}
@@ -89,8 +90,8 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
                 </div>}
 
                 {packageFiles && !isLoading && <div className="flex items-center justify-between">
-                    <Badge>{getFolderName()}</Badge>
-                    <Button variant="ghost" size="sm" className="text-rose-200"><Trash /></Button>
+                    <Badge>{"./"}{getFolderName()}</Badge>
+                    <Button onClick={() => setPackageFiles(false)} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
                 </div>}
                 {packageFiles && packageFiles.map(packageFile => {
                     return <ProcessCard allActiveTerminals={allActiveTerminals} key={packageFile.filePath} packageFile={packageFile} />
