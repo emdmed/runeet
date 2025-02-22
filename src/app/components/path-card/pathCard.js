@@ -79,11 +79,11 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
     useEffect(() => {
         monitorTerminals()
-        /*         const timer = setInterval(() => {
-                    monitorTerminals()
-                }, 3000);
-        
-                return () => clearInterval(timer) */
+        const timer = setInterval(() => {
+            monitorTerminals()
+        }, 3000);
+
+        return () => clearInterval(timer)
     }, [])
 
     const toggleFavorite = (packageFile) => {
