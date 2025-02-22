@@ -104,7 +104,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
     }
 
     return (
-        <Card className="w-[30%] min-w-[500px] bg-stone-900">
+        <Card className="w-[30%] min-w-[600px] bg-stone-900">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     {packageFiles?.length === 0 ? "Select directory" : "Process list"}
@@ -118,25 +118,27 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
                 {isLoading && <div className="flex items-center justify-center w-full p-2">
                     <LoaderCircle className="spinner" /></div>}
 
-                {packageFiles.length === 0 && !isLoading ? <div className="flex flex-col">
+                {packageFiles?.length === 0 && !isLoading ? <div className="flex flex-col">
                     <div className="flex gap-2">
                         <Input onChange={e => setFolderPath(e.target.value)} value={folderPath} placeholder="Projects absolute path..." />
                         <Button onClick={handleSearchPackages} size="sm">Create</Button>
                     </div>
                 </div> : null}
 
-                {packageFiles.length > 0 && !isLoading && <div className="flex items-center justify-between">
+                {packageFiles?.length > 0 && !isLoading && <div className="flex items-center justify-between">
                     <Badge>{"./"}{getFolderName()}</Badge>
                     <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
                 </div>}
 
-                {packageFiles.length > 0 && packageFiles.filter(element => element.favorite).map(packageFile => {
-                    return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
-                })}
+                <div className="mt-2">
+                    {packageFiles?.length > 0 && packageFiles.filter(element => element.favorite).map(packageFile => {
+                        return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
+                    })}
 
-                {packageFiles.length > 0 && packageFiles.filter(element => !element.favorite).map(packageFile => {
-                    return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
-                })}
+                    {packageFiles?.length > 0 && packageFiles.filter(element => !element.favorite).map(packageFile => {
+                        return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
+                    })}
+                </div>
 
             </CardContent>
         </Card>
