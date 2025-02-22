@@ -123,7 +123,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
                 {packageFiles?.length === 0 && !isLoading ? <div className="flex flex-col">
                     <div className="flex gap-2">
                         <Input onChange={e => setFolderPath(e.target.value)} value={folderPath} placeholder="Projects absolute path..." />
-                        <Button onClick={handleSearchPackages} size="sm">Create</Button>
+                        <Button onClick={handleSearchPackages} size="sm">Find</Button>
                     </div>
                 </div> : null}
 
