@@ -84,9 +84,9 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     return <Card className={`my-1`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">
 
-            {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button>}
+            {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-rose-500 hover:text-black hover:bg-rose-500" variant="ghost" size="sm"><Square /></Button>}
 
-            {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button> : null}
+            {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-lime-300`} variant="ghost" size="sm"><Play /></Button> : null}
 
 
             <div className="flex items-baseline gap-2 justify-between w-full">
@@ -97,7 +97,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
                 <small className={`${color}`}>{packageFile.framework}</small>
 
             </div>
-            <Button onClick={() => toggleFavorite(packageFile)} variant="ghost" className={`${packageFile?.favorite ? "text-yellow-500" : "text-stone-700"} p-2`}><Star /></Button>
+            <Button onClick={() => toggleFavorite(packageFile)} variant="ghost" className={`hover:text-black hover:bg-yellow-400 ${packageFile?.favorite ? "text-yellow-400" : "text-stone-700"} p-2`}><Star /></Button>
         </CardContent>
     </Card >
 
