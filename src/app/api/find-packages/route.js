@@ -41,32 +41,34 @@ const findPackageJsonFiles = async (
         );
         results = results.concat(nestedResults);
       } else if (entry.name === "package.json") {
-        const content = await fs.readFile(`${entry.path}/${entry.name}`, "utf-8");
+        const content = await fs.readFile(filePath, "utf-8");
         const jsonPackage = JSON.parse(content)
 
-        console.log("json package", jsonPackage)
+        console.log("json package dev", jsonPackage?.scripts?.dev, "start", jsonPackage?.name)
 
-        const isVite = jsonPackage?.scripts?.dev === "vite" || false
-        const isServer = jsonPackage?.scripts?.start?.includes("node") || false
-        const isNext = jsonPackage?.scripts?.dev?.includes("next") || false
-        const isReact = jsonPackage?.scripts?.start?.includes("react") || false
+        const findFramework = (jsonPackage) => {
+          if (jsonPackage?.scripts?.dev?.includes("vite")) return { framework: "vite", command: "npm run dev" }
+          if (jsonPackage?.scripts?.start?.includes("node")) return { framework: "server", command: "npm start" }
+          if (jsonPackage?.scripts?.dev?.includes("next")) return { framework: "next", command: "npm run dev" }
+          if (jsonPackage?.scripts?.start?.includes("react") || jsonPackage?.scripts?.start.includes("webpack")) return { framework: "react", command: "npm start" }
+          return "unknown"
+        }
+
+
 
         results.push({
           filePath,
           path: entry.path,
           projectName: jsonPackage.name,
-          isVite,
-          isServer,
-          isNext,
-          isReact,
+          framework: findFramework(jsonPackage).framework,
           dependencies: jsonPackage.dependencies,
           devDependencies: jsonPackage.devDependencies,
-          command: isVite ? "npm run dev" : isServer ? `node ${jsonPackage.main}` : null
+          command: findFramework(jsonPackage).command
         });
       }
     }
   } catch (error) {
-    console.error(`Error accessing directory: ${dir}`, error);
+    console.error(`Error parsing directory: ${dir}`, error);
   }
 
   return results;
@@ -98,6 +100,8 @@ export async function POST(req) {
 
     // Find all package.json files (excluding node_modules)
     const packageJsonFiles = await findPackageJsonFiles(directory);
+
+    console.log("packageJsonFiles", packageJsonFiles)
 
     return NextResponse.json({ packageJsonFiles });
   } catch (error) {

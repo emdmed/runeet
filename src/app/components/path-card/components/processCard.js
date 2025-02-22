@@ -5,9 +5,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { Square } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const ProcessCard = ({ packageFile }) => {
+const ProcessCard = ({ packageFile, allActiveTerminals }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
 
@@ -46,11 +46,11 @@ const ProcessCard = ({ packageFile }) => {
     }
 
     const getProjectTypeTag = (packageFile) => {
-        if (packageFile.isVite) return { type: "Vite", color: "text-purple-200" }
-        if (packageFile.isServer) return { type: "Server", color: "text-emerald-200" }
-        if (packageFile.isNext) return { type: "Next", color: "text-white" }
-        if (packageFile.isReact) return { type: "React", color: "text-sky-200" }
-        return { type: "unknown", color: "text-stone-500" }
+        if (packageFile.framework === "vite") return { color: "text-purple-200" }
+        if (packageFile.framework === "server") return { color: "text-emerald-200" }
+        if (packageFile.framework === "next") return { color: "text-white" }
+        if (packageFile.framework === "react") return { color: "text-sky-200" }
+        return { color: "text-stone-500" }
     }
 
     const handleStartProcess = async (process) => {
@@ -61,18 +61,37 @@ const ProcessCard = ({ packageFile }) => {
         await killProcess()
     }
 
-    const { type, color } = getProjectTypeTag(packageFile)
+    useEffect(() => {
 
-    if (type === "unknown") return null
+        if (allActiveTerminals && allActiveTerminals.length === 0) return
+        console.log("allActiveTerminals", allActiveTerminals, "packagefile", packageFile)
+        const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path && element?.command === packageFile.command) || null
+        setCurrentProcess(foundCurrentProcess)
+    }, [allActiveTerminals, packageFile?.command, packageFile?.path])
+
+    /*     const getFolderName = (packageFile) => {
+            try {
+                const array = packageFile.path.split("/")
+                console.log("array", array, packageFile.path)
+                return array[array.length - 1]
+            } catch (e) {
+                console.log(e)
+                return "Not found"
+            }
+        } */
+
+    const { color } = getProjectTypeTag(packageFile)
 
     return <Card className={`my-1`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">
-            {currentProcess?.processId ? <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button> : <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button>}
+            {currentProcess?.processId || currentProcess?.pid ? <Button onClick={handleStopProcess} className="p-2 text-rose-500" variant="ghost" size="sm"><Square /></Button> : <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 ${currentProcess?.processId ? "text-emerald-500" : ""}`} variant="ghost" size="sm"><Play /></Button>}
 
             <div className="flex items-baseline gap-2 justify-between w-full">
-
-                <span className={currentProcess?.processId ? "text-emerald-400" : ""}>{packageFile.projectName}</span>
-                <small className={`${color}`}>{type}</small>
+                <div className="flex items-baseline me-2 justify-between w-full">
+                    <span className={currentProcess?.processId || currentProcess?.pid ? "text-emerald-400" : ""}>{packageFile.projectName}</span>
+                    <small className="text-stone-700">{packageFile?.command || "None"}</small>
+                </div>
+                <small className={`${color}`}>{packageFile.framework}</small>
 
             </div>
         </CardContent>

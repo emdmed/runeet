@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Card,
     CardContent,
@@ -20,6 +20,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
     const [folderPath, setFolderPath] = useState("/home/enrique/projects");
     const [packageFiles, setPackageFiles] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [allActiveTerminals, setAllActiveTerminals] = useState()
 
 
     async function searchPackages(directory) {
@@ -33,6 +34,15 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
         const data = await response.json();
         setPackageFiles(data.packageJsonFiles)
         setIsLoading(false)
+    }
+
+    async function monitorTerminals() {
+
+        const response = await fetch('/api/monitor-processes')
+
+        const data = await response.json()
+
+        setAllActiveTerminals(data.terminals)
     }
 
     const handleSearchPackages = async () => {
@@ -50,12 +60,20 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
         }
     }
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            monitorTerminals()
+        }, 5000);
+
+        return () => clearTimeout(timer)
+    }, [])
+
     return (
         <Card className="w-[30%] min-w-[400px] bg-stone-900">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     {packageFiles.length === 0 ? "Select directory" : "Process list"}
-                    <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-rose-500"><X /></Button>
+                    <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-rose-200"><X /></Button>
                 </CardTitle>
                 <CardDescription>
                     {packageFiles.length === 0 ? "Directory absolute path where all your apps are (ex. projects, monorepo)" : "Run apps and servers from this list"}
@@ -72,10 +90,10 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
 
                 {packageFiles && !isLoading && <div className="flex items-center justify-between">
                     <Badge>{getFolderName()}</Badge>
-                    <Button variant="ghost" size="sm" className="text-rose-500"><Trash /></Button>
+                    <Button variant="ghost" size="sm" className="text-rose-200"><Trash /></Button>
                 </div>}
                 {packageFiles && packageFiles.map(packageFile => {
-                    return <ProcessCard key={packageFile.filePath} packageFile={packageFile} />
+                    return <ProcessCard allActiveTerminals={allActiveTerminals} key={packageFile.filePath} packageFile={packageFile} />
                 })}
 
             </CardContent>
