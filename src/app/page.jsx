@@ -32,9 +32,6 @@ export default function Home() {
     ]
   );
 
-  console.log("storedPathCards", storedPathCards);
-  console.log("pathCards", pathCards);
-
   useEffect(() => {
     if (storedPathCards) setPathCards(storedPathCards);
   }, [storedPathCards]);

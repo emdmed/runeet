@@ -77,13 +77,26 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
     useEffect(() => {
         monitorTerminals()
-        const timer = setInterval(() => {
-            monitorTerminals()
-        }, 3000);
-
-        return () => clearInterval(timer)
+        /*         const timer = setInterval(() => {
+                    monitorTerminals()
+                }, 3000);
+        
+                return () => clearInterval(timer) */
     }, [])
 
+    const toggleFavorite = (packageFile) => {
+        const newPackageFiles = packageFiles.map(element => {
+            if (element.path === packageFile.path) {
+                return { ...element, favorite: !element.favorite }
+            } else {
+                return element
+            }
+        })
+
+
+        console.log("newPackageFiles", newPackageFiles)
+        setPackageFiles([...newPackageFiles])
+    }
 
     const handleDeleteFolderPath = () => {
         setPackageFiles([])
@@ -117,8 +130,12 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
                     <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
                 </div>}
 
-                {packageFiles.length > 0 && packageFiles.map(packageFile => {
-                    return <ProcessCard allActiveTerminals={allActiveTerminals} key={packageFile.filePath} packageFile={packageFile} />
+                {packageFiles.length > 0 && packageFiles.filter(element => element.favorite).map(packageFile => {
+                    return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
+                })}
+
+                {packageFiles.length > 0 && packageFiles.filter(element => !element.favorite).map(packageFile => {
+                    return <ProcessCard toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                 })}
 
             </CardContent>

@@ -7,11 +7,13 @@ import { Play } from "lucide-react";
 import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Star } from "lucide-react";
 
-const ProcessCard = ({ packageFile, allActiveTerminals }) => {
+const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
 
+    console.log("package file", packageFile)
 
     async function runProcess(process) {
         const response = await fetch("/api/run-command", {
@@ -63,10 +65,12 @@ const ProcessCard = ({ packageFile, allActiveTerminals }) => {
         await killProcess()
     }
 
+
+
     useEffect(() => {
         if (!allActiveTerminals || allActiveTerminals.length === 0) return
         const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path && element?.command === packageFile.command) || null
-        
+
         console.log("foundCurrentProcess", foundCurrentProcess, packageFile?.name)
         setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
     }, [allActiveTerminals])
@@ -91,6 +95,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals }) => {
                 <small className={`${color}`}>{packageFile.framework}</small>
 
             </div>
+            <Button onClick={() => toggleFavorite(packageFile)} variant="ghost" className={`${packageFile?.favorite ? "text-yellow-500" : "text-stone-700"} p-2`}><Star /></Button>
         </CardContent>
     </Card >
 
