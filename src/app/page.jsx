@@ -63,8 +63,10 @@ export default function Home() {
     setPathCards([...defaultPathCards]);
   };
 
+  console.log("PATH CARDS ARRAY", pathCards);
+
   return (
-    <div className="h-screen p-3">
+    <div className="h-screen max-h-screen p-3">
       <div className="flex gap-2 items-center mb-4">
         <h1 className="font-bold me-3 text-2xl mb-0">RunDeck</h1>
         <MonitorPlay />
@@ -106,7 +108,10 @@ export default function Home() {
           </CardContent>
         </Card>
       </div>
-      <div className="flex gap-3 w-full mt-3" style={{ overflow: "auto" }}>
+      <div
+        className="flex gap-3 w-full mt-3 flex-1 min-h-0"
+        style={{maxHeight: "calc(100% - 120px"}}
+      >
         {pathCards.map((card, index) => (
           <PathCard
             pathCard={card}
@@ -114,7 +119,7 @@ export default function Home() {
             setPathCards={setPathCards}
             handleRemovePathCard={handleRemovePathCard}
             index={index}
-            key={card.id}
+            key={`${index}_${card.path}`}
             card
           />
         ))}

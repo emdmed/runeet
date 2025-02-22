@@ -102,3 +102,36 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+/* Global modern dark scrollbar styles */
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: hsl(240 5% 26%) hsl(240 5% 15%); /* Firefox */
+}
+
+/* Chrome, Edge, and Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px; /* For horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(240 5% 15%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(240 5% 26%);
+  border-radius: 4px;
+  transition: background 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(240 5% 34%);
+}
+
+/* For horizontal scrollbars */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
