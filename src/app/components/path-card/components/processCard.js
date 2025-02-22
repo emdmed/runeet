@@ -66,6 +66,8 @@ const ProcessCard = ({ packageFile, allActiveTerminals }) => {
     useEffect(() => {
         if (!allActiveTerminals || allActiveTerminals.length === 0) return
         const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path && element?.command === packageFile.command) || null
+        
+        console.log("foundCurrentProcess", foundCurrentProcess, packageFile?.name)
         setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
     }, [allActiveTerminals])
 

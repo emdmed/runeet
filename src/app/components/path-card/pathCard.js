@@ -66,11 +66,11 @@ const PathCard = ({ index, handleRemovePathCard, pathCard }) => {
 
     useEffect(() => {
         monitorTerminals()
-        const timer = setTimeout(() => {
+        const timer = setInterval(() => {
             monitorTerminals()
-        }, 5000);
+        }, 3000);
 
-        return () => clearTimeout(timer)
+        return () => clearInterval(timer)
     }, [])
 
     return (
