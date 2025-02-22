@@ -106,7 +106,7 @@ export default function Home() {
           </CardContent>
         </Card>
       </div>
-      <div className="flex gap-3 w-full p-2" style={{ overflow: "auto" }}>
+      <div className="flex gap-3 w-full mt-3" style={{ overflow: "auto" }}>
         {pathCards.map((card, index) => (
           <PathCard
             pathCard={card}
