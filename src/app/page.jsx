@@ -3,10 +3,8 @@
 import PathCard from "@/app/components/path-card/pathCard";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { FolderPlus, MonitorPlay, Trash } from "lucide-react";
+import { FastForward, FolderPlus, Trash } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
-
-import { Card, CardContent } from "@/components/ui/card";
 
 import {
   AlertDialog,
@@ -66,51 +64,56 @@ export default function Home() {
   console.log("PATH CARDS ARRAY", pathCards);
 
   return (
-    <div className="h-screen max-h-screen p-3">
-      <div className="flex gap-2 items-center mb-4">
-        <h1 className="font-bold me-3 text-2xl mb-0">RunDeck</h1>
-        <MonitorPlay />
+    <div className="h-screen max-h-screen p-8">
+      <div className="flex gap-2 items-center mb-4 relative">
+        <h1 className="font-bold me-3 text-2xl mb-0 text-primary">./RunDeck</h1>
+        <div>
+          <FastForward
+            className="text-primary absolute"
+            style={{ bottom: 3 }}
+          />
+        </div>
       </div>
-      <div className="flex my-2">
-        <Card className="p-1 bg-stone-900">
-          <CardContent className="p-0">
-            <Button
-              onClick={handleAddPathCard}
-              variant="outline"
-              className="p-2 mx-1"
-            >
-              <FolderPlus />
-            </Button>
+      <div className="flex my-2 gap-2">
+        <Button
+          onClick={handleAddPathCard}
+          size="sm"
+          variant="default"
+          className="p-2"
+        >
+          <FolderPlus />
+        </Button>
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline" className="p-2 mx-1">
-                  <Trash />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    You are about to delete all Project cards, continue?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleClearAll}>
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </CardContent>
-        </Card>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="sm" className="p-2">
+              <Trash />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                You are about to delete all Project cards, continue?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleClearAll}>
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+      <div className="pt-2">
+        <h5>Folders</h5>
       </div>
       <div
         className="flex gap-3 w-full mt-3 flex-1 min-h-0"
-        style={{maxHeight: "calc(100% - 120px"}}
+        style={{ maxHeight: "calc(100% - 120px" }}
       >
         {pathCards.map((card, index) => (
           <PathCard

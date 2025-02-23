@@ -107,14 +107,14 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
     return (
         <div>
-            <Card className="w-[30%] min-w-[600px] bg-stone-900 flex flex-col h-full">
+            <Card className="w-[30%] min-w-[600px] flex flex-col h-full">
                 <CardHeader>
                     <CardTitle className="flex justify-between items-center">
                         {packageFiles?.length === 0 && "Select directory"}
                         {packageFiles?.length > 0 && <div className="flex items-center gap-1">
                             <Badge className="me-3">{"./"}{getFolderName()}</Badge>
-                            <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={isRunningFilterOn ? "text-lime-300" : "text-stone-700"}><Filter /></Button>
-                            <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="text-stone-200"><Trash /></Button>
+                            <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={`${isRunningFilterOn ? "text-lime-300" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Filter /></Button>
+                            <Button onClick={handleDeleteFolderPath} variant="ghost"  size="sm" className="p-2 bg-dark text-destructive hover:bg-destructive hover:text-black"><Trash /></Button>
                         </div>}
                         <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200"><X /></Button>
                     </CardTitle>
