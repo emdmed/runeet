@@ -107,7 +107,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
     return (
         <div>
-            <Card className="w-[30%] min-w-[600px] flex flex-col h-full">
+            <Card className="min-w-[300px] flex flex-col h-full">
                 <CardHeader>
                     <CardTitle className="flex justify-between items-center">
                         {packageFiles?.length === 0 && "Select directory"}

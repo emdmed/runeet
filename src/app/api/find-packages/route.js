@@ -18,7 +18,7 @@ const getGitBranch = async (dir) => {
     return stdout.trim();
   } catch (error) {
     console.log(error)
-    return "Not a Git repo";
+    return null;
   }
 };
 

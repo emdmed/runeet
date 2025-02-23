@@ -3,7 +3,7 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { Play, GitBranch } from "lucide-react";
 import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -79,23 +79,29 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
     const { color } = getProjectTypeTag(packageFile)
 
-    if(isRunningFilterOn && currentProcess?.state !== "running") return null
+    if (isRunningFilterOn && currentProcess?.state !== "running") return null
 
     return <Card className={`my-1`} key={packageFile.filePath}>
-        <CardContent className="p-2 flex items-center gap-2">
+        <CardContent className="p-2 flex items-center gap-1">
 
             {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}
 
             {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-lime-300`} variant="ghost" size="sm"><Play /></Button> : null}
 
 
-            <div className="flex items-baseline gap-2 justify-between w-full">
-                <div className="flex items-baseline me-2 justify-between w-full">
+            <div className="flex items-baseline gap-1 justify-between w-full">
+                <div className="flex items-baseline me-2 justify-end w-fit">
                     {currentProcess?.state === "running" ? <Badge className="bg-lime-300">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
-                    <small className="text-stone-500">{packageFile?.command || "None"}</small>
                 </div>
-                <small className={`${color}`}>{packageFile.framework}</small>
+                <div className="flex items-baseline gap-2">
+                    <div className={`${packageFile?.gitBranch ? "text-git" : "text-muted"} flex items-baseline gap-1 relative mx-2`}>
+                        <GitBranch className="relative" style={{ bottom: -3 }} size={15} />
+                        <small>{packageFile?.gitBranch || "none"}</small>
+                    </div>
+                    <small className="text-stone-500">{packageFile?.command || "None"}</small>
 
+                    <small className={`${color}`}>{packageFile.framework}</small>
+                </div>
             </div>
             <Button onClick={() => toggleFavorite(packageFile)} variant="ghost" size="sm" className={`p-2 hover:text-black hover:bg-yellow-400 ${packageFile?.favorite ? "text-yellow-400" : "text-stone-700"} p-2`}><Star /></Button>
         </CardContent>
