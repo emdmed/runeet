@@ -9,7 +9,6 @@ export async function runCommand(req, res) {
             return res.status(400).json({ error: "Path is required" });
         }
 
-        // Check if the path exists
         try {
             await access(path);
         } catch (err) {
@@ -17,21 +16,16 @@ export async function runCommand(req, res) {
             return res.status(400).json({ error: "Invalid or inaccessible path" });
         }
 
-        // Ensure DISPLAY is set for GUI access
         const envVariables = { ...process.env, DISPLAY: ":0" };
 
-        // Construct the execution command
         const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
-
-
 
         console.log("Executing command:", execCommand);
 
-        // Spawn the process with the correct DISPLAY environment variable
         const childProcess = spawn(execCommand, {
             shell: true,
             stdio: "inherit",
-            env: envVariables // 👈 ADDING DISPLAY VARIABLE HERE
+            env: envVariables
         });
 
         console.log("Started process with PID:", childProcess.pid);
