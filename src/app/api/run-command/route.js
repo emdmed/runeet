@@ -35,8 +35,6 @@ export async function POST(req) {
             env: envVariables // 👈 ADDING DISPLAY VARIABLE HERE
         });
 
-        console.log("Started process with PID:", childProcess.pid);
-
         return NextResponse.json({
             message: "Command executed successfully",
             executedCommand: command,
