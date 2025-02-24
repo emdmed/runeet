@@ -140,3 +140,11 @@ body {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+.text-git{
+  color: #fd7f63 ;
+}
+
+.bg-git{
+  background-color: #fd7f63 ;
+}
