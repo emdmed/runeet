@@ -1,27 +1,54 @@
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
+import { exec } from "child_process";
+import { promisify } from "util";
+
+const execAsync = promisify(exec);
+const IGNORE_LIST = ["node_modules", ".next"];
+
+/**
+ * Gets the current Git branch of a given directory.
+ * @param {string} dir - The directory path.
+ * @returns {Promise<string | null>} - The current Git branch or null if not a Git repo.
+ */
+const getCurrentGitBranch = async (dir) => {
+  try {
+    const { stdout } = await execAsync(`git -C "${dir}" rev-parse --abbrev-ref HEAD`);
+    return stdout.trim();
+  } catch (error) {
+    console.error(`Error getting current branch for ${dir}:`, error.message);
+    return null;
+  }
+};
+
+/**
+ * Retrieves all local Git branches in a repository.
+ * @param {string} dir - The Git repository path.
+ * @returns {Promise<string[]>} - List of local branches (excluding the current one).
+ */
+const getAllGitBranches = async (dir) => {
+  try {
+    const { stdout } = await execAsync(`git -C "${dir}" branch --format="%(refname:short)"`);
+    return stdout.trim().split("\n").map(branch => branch.trim());
+  } catch (error) {
+    console.error(`Error getting branches for ${dir}:`, error.message);
+    return [];
+  }
+};
 
 /**
  * Recursively searches for package.json files in a given directory.
- * Skips `node_modules` directories.
+ * Skips `node_modules` and `.next` directories.
  *
- * @param dir - The directory to search in.
- * @param maxDepth - Maximum recursion depth (to prevent infinite loops)
- * @param currentDepth - Tracks the current depth of recursion
- * @returns A promise that resolves to an array of absolute paths to package.json files.
+ * @param {string} dir - The directory to search in.
+ * @param {number} maxDepth - Maximum recursion depth.
+ * @param {number} currentDepth - Tracks the current depth of recursion.
+ * @returns {Promise<Array>} - A list of package.json details with Git branches.
  */
-
-const IGNORE_LIST = ["node_modules", ".next"];
-
-const findPackageJsonFiles = async (
-  dir,
-  maxDepth,
-  currentDepth
-) => {
+const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
   let results = [];
 
-  // Prevent infinite recursion
   if (currentDepth >= maxDepth) return results;
 
   try {
@@ -30,40 +57,38 @@ const findPackageJsonFiles = async (
     for (const entry of entries) {
       const filePath = path.join(dir, entry.name);
 
-      // Skip `node_modules` directories
       if (entry.isDirectory()) {
-        if (IGNORE_LIST.includes(entry.name)) continue; // 🚀 Skip node_modules
+        if (IGNORE_LIST.includes(entry.name)) continue;
 
-        const nestedResults = await findPackageJsonFiles(
-          filePath,
-          maxDepth,
-          currentDepth + 1
-        );
+        const nestedResults = await findPackageJsonFiles(filePath, maxDepth, currentDepth + 1);
         results = results.concat(nestedResults);
       } else if (entry.name === "package.json") {
         const content = await fs.readFile(filePath, "utf-8");
-        const jsonPackage = JSON.parse(content)
-
-        console.log("json package dev", jsonPackage?.scripts?.dev, "start", jsonPackage?.name)
+        const jsonPackage = JSON.parse(content);
 
         const findFramework = (jsonPackage) => {
-          if (jsonPackage?.scripts?.dev?.includes("vite")) return { framework: "vite", command: "npm run dev" }
-          if (jsonPackage?.scripts?.start?.includes("node")) return { framework: "server", command: "npm start" }
-          if (jsonPackage?.scripts?.dev?.includes("next")) return { framework: "next", command: "npm run dev" }
-          if (jsonPackage?.scripts?.start?.includes("react") || jsonPackage?.scripts?.start.includes("webpack")) return { framework: "react", command: "npm start" }
-          return "unknown"
-        }
+          if (jsonPackage?.scripts?.dev?.includes("vite")) return { framework: "vite", command: "npm run dev" };
+          if (jsonPackage?.scripts?.start?.includes("node")) return { framework: "server", command: "npm start" };
+          if (jsonPackage?.scripts?.dev?.includes("next")) return { framework: "next", command: "npm run dev" };
+          if (jsonPackage?.scripts?.start?.includes("react") || jsonPackage?.scripts?.start.includes("webpack")) 
+            return { framework: "react", command: "npm start" };
+          return { framework: "unknown", command: "N/A" };
+        };
 
-
+        const projectDir = path.dirname(filePath);
+        const currentBranch = await getCurrentGitBranch(projectDir);
+        const allBranches = await getAllGitBranches(projectDir);
 
         results.push({
           filePath,
-          path: entry.path,
+          path: projectDir,
           projectName: jsonPackage.name,
           framework: findFramework(jsonPackage).framework,
           dependencies: jsonPackage.dependencies,
           devDependencies: jsonPackage.devDependencies,
-          command: findFramework(jsonPackage).command
+          command: findFramework(jsonPackage).command,
+          gitBranch: currentBranch, // Current branch
+          availableBranches: allBranches.filter(branch => branch !== currentBranch), // Exclude current branch
         });
       }
     }
@@ -74,12 +99,10 @@ const findPackageJsonFiles = async (
   return results;
 };
 
-// **POST route to search for package.json in all directories (excluding node_modules)**
+// **POST route to search for package.json files and retrieve Git branches**
 export async function POST(req) {
   try {
     const { directory } = await req.json();
-
-    console.log("Searching in directory:", directory);
 
     if (!directory || typeof directory !== "string") {
       return NextResponse.json(
@@ -88,7 +111,6 @@ export async function POST(req) {
       );
     }
 
-    // Ensure the directory exists
     try {
       await fs.access(directory);
     } catch {
@@ -98,10 +120,9 @@ export async function POST(req) {
       );
     }
 
-    // Find all package.json files (excluding node_modules)
     const packageJsonFiles = await findPackageJsonFiles(directory);
 
-    console.log("packageJsonFiles", packageJsonFiles)
+    console.log("packageJsonFiles", packageJsonFiles);
 
     return NextResponse.json({ packageJsonFiles });
   } catch (error) {
