@@ -14,7 +14,7 @@ import { toast } from "sonner";
 
 const GitDisplay = ({ packageFile }) => {
     const [selectedBranch, setSelectedBranch] = useState(packageFile?.gitBranch || "none");
-    const [branches] = useState([...packageFile?.availableBranches, packageFile?.gitBranch, "none"]);
+    const [branches] = useState([...packageFile?.availableBranches, packageFile?.gitBranch]);
     const [isFetching, setIsFetching] = useState(false);
 
     const changeBranchRequest = async (newBranch) => {
