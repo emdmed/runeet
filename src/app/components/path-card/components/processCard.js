@@ -31,12 +31,11 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     }
 
     async function killProcess() {
-        console.log("kill ", currentProcess)
         const response = await fetch("/api/kill-command", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                path: currentProcess?.executedPath || currentProcess?.cwd || null
+                path: currentProcess?.executedPath || currentProcess?.cwd || currentProcess?.path || null
             }),
         })
 
@@ -67,6 +66,9 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     }
 
 
+    console.log("current process", currentProcess?.projectName, currentProcess)
+
+
 
     useEffect(() => {
         if (!allActiveTerminals || allActiveTerminals.length === 0) return
@@ -95,7 +97,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
                     {currentProcess?.state === "running" ? <Badge className="bg-lime-300">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
                 </div>
                 <div className="flex items-center gap-2">
-                    <GitDisplay packageFile={packageFile}/>
+                    <GitDisplay packageFile={packageFile} />
                     <small className="text-stone-500">{packageFile?.command || "None"}</small>
 
                     <small className={`${color}`}>{packageFile.framework}</small>
