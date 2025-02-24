@@ -3,11 +3,12 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play, GitBranch } from "lucide-react";
+import { Play } from "lucide-react";
 import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
+import GitDisplay from "./components/gitDisplay"
 
 const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunningFilterOn }) => {
 
@@ -89,15 +90,12 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
             {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-lime-300`} variant="ghost" size="sm"><Play /></Button> : null}
 
 
-            <div className="flex items-baseline gap-1 justify-between w-full">
-                <div className="flex items-baseline me-2 justify-end w-fit">
+            <div className="flex items-center gap-1 justify-between w-full">
+                <div className="flex items-center me-2 justify-end w-fit">
                     {currentProcess?.state === "running" ? <Badge className="bg-lime-300">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
                 </div>
-                <div className="flex items-baseline gap-2">
-                    <div className={`${packageFile?.gitBranch ? "text-git" : "text-muted"} flex items-baseline gap-1 relative mx-2`}>
-                        <GitBranch className="relative" style={{ bottom: -3 }} size={15} />
-                        <small>{packageFile?.gitBranch || "none"}</small>
-                    </div>
+                <div className="flex items-center gap-2">
+                    <GitDisplay packageFile={packageFile}/>
                     <small className="text-stone-500">{packageFile?.command || "None"}</small>
 
                     <small className={`${color}`}>{packageFile.framework}</small>

@@ -142,6 +142,9 @@ body {
 }
 
 .text-git{
-  color: #fd7f63;
-  opacity: 1;
+  color: #fd7f63 ;
+}
+
+.bg-git{
+  background-color: #fd7f63 ;
 }

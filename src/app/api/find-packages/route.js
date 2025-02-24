@@ -8,28 +8,43 @@ const execAsync = promisify(exec);
 const IGNORE_LIST = ["node_modules", ".next"];
 
 /**
- * Gets the Git branch of a given directory.
+ * Gets the current Git branch of a given directory.
  * @param {string} dir - The directory path.
- * @returns {Promise<string>} - The Git branch or "Not a Git repo".
+ * @returns {Promise<string | null>} - The current Git branch or null if not a Git repo.
  */
-const getGitBranch = async (dir) => {
+const getCurrentGitBranch = async (dir) => {
   try {
     const { stdout } = await execAsync(`git -C "${dir}" rev-parse --abbrev-ref HEAD`);
     return stdout.trim();
   } catch (error) {
-    console.log(error)
+    console.error(`Error getting current branch for ${dir}:`, error.message);
     return null;
   }
 };
 
 /**
+ * Retrieves all local Git branches in a repository.
+ * @param {string} dir - The Git repository path.
+ * @returns {Promise<string[]>} - List of local branches (excluding the current one).
+ */
+const getAllGitBranches = async (dir) => {
+  try {
+    const { stdout } = await execAsync(`git -C "${dir}" branch --format="%(refname:short)"`);
+    return stdout.trim().split("\n").map(branch => branch.trim());
+  } catch (error) {
+    console.error(`Error getting branches for ${dir}:`, error.message);
+    return [];
+  }
+};
+
+/**
  * Recursively searches for package.json files in a given directory.
- * Skips `node_modules` directories.
+ * Skips `node_modules` and `.next` directories.
  *
  * @param {string} dir - The directory to search in.
- * @param {number} maxDepth - Maximum recursion depth (to prevent infinite loops)
- * @param {number} currentDepth - Tracks the current depth of recursion
- * @returns {Promise<Array>} - A list of package.json details.
+ * @param {number} maxDepth - Maximum recursion depth.
+ * @param {number} currentDepth - Tracks the current depth of recursion.
+ * @returns {Promise<Array>} - A list of package.json details with Git branches.
  */
 const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
   let results = [];
@@ -61,7 +76,8 @@ const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
         };
 
         const projectDir = path.dirname(filePath);
-        const gitBranch = await getGitBranch(projectDir);
+        const currentBranch = await getCurrentGitBranch(projectDir);
+        const allBranches = await getAllGitBranches(projectDir);
 
         results.push({
           filePath,
@@ -71,7 +87,8 @@ const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
           dependencies: jsonPackage.dependencies,
           devDependencies: jsonPackage.devDependencies,
           command: findFramework(jsonPackage).command,
-          gitBranch, // Added Git branch info
+          gitBranch: currentBranch, // Current branch
+          availableBranches: allBranches.filter(branch => branch !== currentBranch), // Exclude current branch
         });
       }
     }
@@ -82,11 +99,10 @@ const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
   return results;
 };
 
-// **POST route to search for package.json files**
+// **POST route to search for package.json files and retrieve Git branches**
 export async function POST(req) {
   try {
     const { directory } = await req.json();
-
 
     if (!directory || typeof directory !== "string") {
       return NextResponse.json(
