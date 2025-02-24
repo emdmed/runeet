@@ -13,23 +13,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import ProcessCard from "./components/processCard"
-import { LoaderCircle, Trash, X, SquareActivity } from "lucide-react";
+import { LoaderCircle, Trash, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Filter } from "lucide-react";
-import { RefreshCw } from "lucide-react";
+
 
 ///home/enrique/projects
 
-const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCards }) => {
+const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCards, allActiveTerminals }) => {
     const [folderPath, setFolderPath] = useState(pathCard?.path || "");
     const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [allActiveTerminals, setAllActiveTerminals] = useState()
+
     const [isRunningFilterOn, setIsRunningFilterOn] = useState(false)
-    const [monitoringSettings, setMonitoringSettings] = useState({
-        autoMonitoring: true,
-        interval: 5
-    })
+
 
     async function searchPackages(directory) {
         setIsLoading(true)
@@ -55,14 +52,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
         localStorage.setItem("pathCards", JSON.stringify(newPathCards))
     }
 
-    async function monitorTerminals() {
 
-        const response = await fetch('/api/monitor-processes')
-
-        const data = await response.json()
-
-        setAllActiveTerminals(data.terminals)
-    }
 
     const handleSearchPackages = async () => {
         await searchPackages(folderPath)
@@ -81,26 +71,6 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
     useEffect(() => {
         if (pathCard?.path) handleSearchPackages()
     }, [pathCard?.path])
-
-
-    useEffect(() => {
-        monitorTerminals()
-    }, [])
-
-    useEffect(() => {
-
-
-        const timer = setInterval(() => {
-            monitorTerminals()
-        }, monitoringSettings?.interval * 1000);
-
-        if (!monitoringSettings?.autoMonitoring) {
-            clearInterval(timer)
-        }
-
-        return () => clearInterval(timer)
-
-    }, [monitoringSettings])
 
     const toggleFavorite = (packageFile) => {
         const newPackageFiles = packageFiles.map(element => {
@@ -121,18 +91,6 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
         setFolderPath("")
     }
 
-    const monitoringIntervals = [1, 3, 5, 10, 20]
-
-    const handleMonitoringIntervalChange = () => {
-        const arrayLength = monitoringIntervals.length
-
-        const index = monitoringIntervals.indexOf(monitoringSettings.interval)
-
-        if (index < arrayLength) setMonitoringSettings(prev => ({ ...prev, interval: monitoringIntervals[index + 1] }))
-        if (index === arrayLength - 1) setMonitoringSettings(prev => ({ ...prev, interval: monitoringIntervals[0] }))
-
-    }
-
     return (
         <div>
             <Card className="min-w-[300px] flex flex-col h-full">
@@ -143,9 +101,6 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
                             <Badge className="me-3">{"./"}{getFolderName()}</Badge>
                             <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={`${isRunningFilterOn ? "text-lime-300" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Filter /></Button>
                             <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="p-2 bg-dark text-destructive hover:bg-destructive hover:text-black"><Trash /></Button>
-                            <Button onClick={monitorTerminals} variant="ghost" size="sm" className="p-2 bg-dark text-primary hover:bg-primary hover:text-black"><RefreshCw /></Button>
-                            <Button onClick={() => setMonitoringSettings(prev => ({ ...prev, autoMonitoring: !prev.autoMonitoring }))} size="sm" className={`p-2 bg-dark ${monitoringSettings.autoMonitoring ? "text-primary" : "text-stone-700"} hover:bg-primary hover:text-black`} ><SquareActivity /></Button>
-                            <Button className={`ps-0 ${monitoringSettings.autoMonitoring ? "text-primary" : "text-stone-700"}`} variant="link" size="sm" onClick={handleMonitoringIntervalChange}>{monitoringSettings.interval} secs</Button>
                         </div>}
                         <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200"><X /></Button>
                     </CardTitle>
