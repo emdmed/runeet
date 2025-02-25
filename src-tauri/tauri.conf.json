@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-  "beforeDevCommand": "next dev",
-  "beforeBuildCommand": "cd .. next build",
+    "beforeDevCommand": "next dev",
+    "beforeBuildCommand": "cd .. && cd .. && next build && mkdir -p src-tauri/target/release/bundle/ && cp -r src-tauri/server src-tauri/target/release/bundle/",
     "devPath": "http://localhost:5551",
     "distDir": "../out"
   },
