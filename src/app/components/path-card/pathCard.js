@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import ProcessCard from "./components/processCard"
-import { LoaderCircle, Trash, X } from "lucide-react";
+import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Filter } from "lucide-react";
 
@@ -24,6 +24,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
     const [folderPath, setFolderPath] = useState(pathCard?.path || "");
     const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isCollapsed, setIsCollapsed] = useState(false)
 
     const [isRunningFilterOn, setIsRunningFilterOn] = useState(false)
 
@@ -92,23 +93,26 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
     }
 
     return (
-        <div>
-            <Card className="min-w-[300px] flex flex-col h-full">
+        <div className="px-2">
+            <Card className="min-w-[800px] flex flex-col h-full">
                 <CardHeader>
                     <CardTitle className="flex justify-between items-center">
                         {packageFiles?.length === 0 && "Select directory"}
                         {packageFiles?.length > 0 && <div className="flex items-center gap-1">
                             <Badge className="me-3">{"./"}{getFolderName()}</Badge>
-                            <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={`${isRunningFilterOn ? "text-lime-300" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Filter /></Button>
+                            <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={`${isRunningFilterOn ? "text-primary" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Filter /></Button>
                             <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="p-2 bg-dark text-destructive hover:bg-destructive hover:text-black"><Trash /></Button>
                         </div>}
-                        <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200"><X /></Button>
+                        <div>
+                            <Button onClick={() => setIsCollapsed(prev => !prev)} size="sm" variant="ghost" className="text-stone-200 p-2">{isCollapsed ? <Square /> : <Minus />}</Button>
+                            <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200 p-2"><X /></Button>
+                        </div>
                     </CardTitle>
                     {packageFiles?.length === 0 && <CardDescription>
                         {"Directory absolute path where all your apps are (ex. projects, monorepo)"}
                     </CardDescription>}
                 </CardHeader>
-                <CardContent className="flex-1 flex flex-col min-h-0">
+                {!isCollapsed && <CardContent className="flex-1 flex flex-col min-h-0">
                     {isLoading && <div className="flex items-center justify-center w-full p-2">
                         <LoaderCircle className="spinner" /></div>}
 
@@ -133,7 +137,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
                         })}
                     </div>
 
-                </CardContent>
+                </CardContent>}
             </Card>
         </div>
     );

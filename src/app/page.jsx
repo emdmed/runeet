@@ -193,13 +193,14 @@ export default function Home() {
           {monitoringSettings.interval} secs
         </Button>
       </div>
-      <div className="pt-2">
-        <h5>Folders</h5>
-      </div>
+
       <div
-        className="flex gap-3 w-full mt-3 flex-1 min-h-0"
-        style={{ maxHeight: "calc(100% - 120px" }}
+        className="flex flex-col gap-3 w-full mt-3 flex-1 min-h-0 overflow-auto px-2"
+        style={{ maxHeight: "calc(100% - 100px" }}
       >
+        <div className="pt-2 flex justify-start">
+          <h5>Folders</h5>
+        </div>
         {pathCards.map((card, index) => (
           <PathCard
             allActiveTerminals={allActiveTerminals}

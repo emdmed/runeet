@@ -3,7 +3,7 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { AppWindow, Play } from "lucide-react";
 import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -49,11 +49,31 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
     }
 
+
+    const openEditor = async () => {
+        console.log("currentProcess", currentProcess, "packageFile", packageFile)
+        const response = await fetch("/api/open-editor", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                path: currentProcess?.path || packageFile?.path || null,
+                command: "code . "
+            }),
+        })
+
+        if (response.ok) {
+            setCurrentProcess(null)
+        } else {
+            console.log("error terminating process")
+        }
+
+    }
+
     const getProjectTypeTag = (packageFile) => {
-        if (packageFile.framework === "vite") return { color: "text-purple-400" }
-        if (packageFile.framework === "server") return { color: "text-emerald-400" }
-        if (packageFile.framework === "next") return { color: "text-white" }
-        if (packageFile.framework === "react") return { color: "text-sky-400" }
+        if (packageFile.framework === "vite") return { color: "text-secondary" }
+        if (packageFile.framework === "server") return { color: "text-secondary" }
+        if (packageFile.framework === "next") return { color: "text-secondary" }
+        if (packageFile.framework === "react") return { color: "text-secondary" }
         return { color: "text-stone-500" }
     }
 
@@ -65,10 +85,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
         await killProcess()
     }
 
-
     console.log("current process", currentProcess?.projectName, currentProcess)
-
-
 
     useEffect(() => {
         if (!allActiveTerminals || allActiveTerminals.length === 0) return
@@ -89,20 +106,19 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
             {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}
 
-            {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-lime-300`} variant="ghost" size="sm"><Play /></Button> : null}
+            {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-primary`} variant="ghost" size="sm"><Play /></Button> : null}
 
 
             <div className="flex items-center gap-1 justify-between w-full">
-                <div className="flex items-center me-2 justify-end w-fit">
-                    {currentProcess?.state === "running" ? <Badge className="bg-lime-300">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
+                <div className="flex items-center me-2 justify-end w-fit gap-2">
+                    {currentProcess?.state === "running" ? <Badge className="bg-primary">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
+                    <small style={{ opacity: 0.7 }} className={`${color}`}>{packageFile.framework}</small>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mx-2">
                     <GitDisplay packageFile={packageFile} />
-                    <small className="text-stone-500">{packageFile?.command || "None"}</small>
-
-                    <small className={`${color}`}>{packageFile.framework}</small>
                 </div>
             </div>
+            <Button variant="ghost" onClick={openEditor} size="sm" className="p-2 text-secondary hover:bg-secondary"><AppWindow /></Button>
             <Button onClick={() => toggleFavorite(packageFile)} variant="ghost" size="sm" className={`p-2 hover:text-black hover:bg-yellow-400 ${packageFile?.favorite ? "text-yellow-400" : "text-stone-700"} p-2`}><Star /></Button>
         </CardContent>
     </Card >

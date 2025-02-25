@@ -14,35 +14,36 @@ body {
 
 @layer base {
   :root {
-    --background: 252 62% 99%;
-    --foreground: 252 67% 2%;
-    --muted: 72 22% 94%;
-    --muted-foreground: 72 1% 39%;
-    --popover: 252 62% 98%;
-    --popover-foreground: 252 67% 1%;
-    --card: 252 62% 98%;
-    --card-foreground: 252 67% 1%;
-    --border: 252 3% 94%;
-    --input: 252 3% 94%;
-    --primary: 252 11% 35%;
-    --primary-foreground: 252 11% 95%;
-    --secondary: 72 11% 35%;
-    --secondary-foreground: 0 0% 100%;
-    --accent: 72 11% 35%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 15 99% 31%;
-    --destructive-foreground: 15 99% 91%;
-    --ring: 252 11% 35%;
-    --chart-1: 252 11% 35%;
-    --chart-2: 72 11% 35%;
-    --chart-3: 72 11% 35%;
-    --chart-4: 72 11% 38%;
-    --chart-5: 252 14% 35%;
+    --background: 155 33.39% 89.61%;
+    --foreground: 155 71% 1%;
+    --muted: 155 5% 95%;
+    --muted-foreground: 155 8% 33%;
+    --popover: 155 36% 100%;
+    --popover-foreground: 155 71% 1%;
+    --card: 155 24.82% 78.51%;
+    --card-foreground: 155 71% 1%;
+    --border: 155 13% 90%;
+    --input: 155 13% 90%;
+    --primary: 155 58% 29%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 155 10.14% 46.09%;
+    --secondary-foreground: 155 0% 100%;
+    --accent: 155 23% 71%;
+    --accent-foreground: 155 23% 11%;
+    --destructive: 8 87% 43%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 155 58% 29%;
+    --chart-1: 155 58% 29%;
+    --chart-2: 155 10.14% 46.09%;
+    --chart-3: 155 23% 71%;
+    --chart-4: 155 10.14% 49.09%;
+    --chart-5: 155 61% 29%;
     --radius: 0.5rem;
   }
 
+
   .dark {
-    --background: 149.43 2.24% 3.76%;
+    --background: 149.43 2.24% 6%;
     --foreground: 252 15.08% 88.22%;
     --muted: 133.58 2.24% 15.05%;
     --muted-foreground: 0 0% 100%;
@@ -141,10 +142,14 @@ body {
   background: transparent;
 }
 
-.text-git{
+.dark .text-git{
   color: #fd7f63 ;
 }
 
 .bg-git{
   background-color: #fd7f63 ;
+}
+
+.text-git {
+  color: #cf4c2f;
 }
