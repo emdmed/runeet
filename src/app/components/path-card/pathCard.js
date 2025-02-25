@@ -92,6 +92,12 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
         setFolderPath("")
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === "Enter") {
+            handleSearchPackages()
+        }
+    }
+
     return (
         <div className="px-2">
             <Card className="min-w-[800px] flex flex-col h-full">
@@ -118,7 +124,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
                     {packageFiles?.length === 0 && !isLoading ? <div className="flex flex-col">
                         <div className="flex gap-2">
-                            <Input onChange={e => setFolderPath(e.target.value)} value={folderPath} placeholder="Projects absolute path..." />
+                            <Input onKeyDown={onKeyDown} onChange={e => setFolderPath(e.target.value)} value={folderPath} placeholder="Projects absolute path..." />
                             <Button onClick={handleSearchPackages} size="sm">Find</Button>
                         </div>
                     </div> : null}
