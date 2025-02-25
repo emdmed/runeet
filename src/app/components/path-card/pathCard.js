@@ -7,14 +7,14 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "../../../components/ui/card";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 
 import ProcessCard from "./components/processCard"
 import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "../../../components/ui/badge";
 import { Filter } from "lucide-react";
 
 

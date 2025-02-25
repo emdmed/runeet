@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/.pnp
+/src-tauri/server/node_modules
 .pnp.js
 .yarn/install-state.gz
 
@@ -12,6 +12,7 @@
 # next.js
 /.next/
 /out/
+/src/.next
 
 # production
 /build

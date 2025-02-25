@@ -1,7 +1,7 @@
 "use client";
 
-import PathCard from "@/app/components/path-card/pathCard";
-import { Button } from "@/components/ui/button";
+import PathCard from "./components/path-card/pathCard";
+import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
 import { FastForward, FolderPlus, Trash } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
@@ -17,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "../components/ui/alert-dialog";
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
