@@ -6,19 +6,10 @@ const execAsync = promisify(exec);
 
 async function getTerminalsAndCommands() {
     try {
-        const { stdout: terminalProcesses } = await execAsync(
-            `ps aux | grep -E 'gnome-terminal|konsole|xterm|mate-terminal|xfce4-terminal' | grep -v grep`
-        );
-
-        if (!terminalProcesses.trim()) {
-            console.log("No active terminals found.");
-            return [];
-        }
 
         const { stdout: ptsProcesses } = await execAsync(
             `ps aux | grep pts/ | grep -v grep`
         );
-
 
         const terminalInfo = await Promise.all(
             ptsProcesses.split("\n").map(async (line) => {
@@ -33,7 +24,6 @@ async function getTerminalsAndCommands() {
                         return { pid, tty, command, cwd: cwd.trim() };
                     } catch (error) {
                         console.log(error)
-                        return { pid, tty, command, cwd: "Unknown (Permission Denied or Process Ended)" };
                     }
                 }
                 return null;

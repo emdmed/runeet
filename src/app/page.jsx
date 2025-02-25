@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { FastForward, FolderPlus, Trash } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
+import { RefreshCw, SquareActivity } from "lucide-react";
 
 import {
   AlertDialog,
@@ -20,6 +21,11 @@ import {
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
+  const [monitoringSettings, setMonitoringSettings] = useState({
+    autoMonitoring: true,
+    interval: 5,
+  });
+  const [allActiveTerminals, setAllActiveTerminals] = useState();
 
   const [pathCards, setPathCards] = useState(
     storedPathCards || [
@@ -43,6 +49,49 @@ export default function Home() {
       },
     ]);
   };
+
+  async function monitorTerminals() {
+    const response = await fetch("/api/monitor-processes");
+
+    const data = await response.json();
+
+    setAllActiveTerminals(data.terminals);
+  }
+
+  const monitoringIntervals = [1, 3, 5, 10, 20];
+
+  const handleMonitoringIntervalChange = () => {
+    const arrayLength = monitoringIntervals.length;
+
+    const index = monitoringIntervals.indexOf(monitoringSettings.interval);
+
+    if (index < arrayLength)
+      setMonitoringSettings((prev) => ({
+        ...prev,
+        interval: monitoringIntervals[index + 1],
+      }));
+    if (index === arrayLength - 1)
+      setMonitoringSettings((prev) => ({
+        ...prev,
+        interval: monitoringIntervals[0],
+      }));
+  };
+
+  useEffect(() => {
+    monitorTerminals();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      monitorTerminals();
+    }, monitoringSettings?.interval * 1000);
+
+    if (!monitoringSettings?.autoMonitoring) {
+      clearInterval(timer);
+    }
+
+    return () => clearInterval(timer);
+  }, [monitoringSettings]);
 
   useEffect(() => {}, [pathCards]);
 
@@ -107,16 +156,54 @@ export default function Home() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+        <Button
+          onClick={monitorTerminals}
+          variant="ghost"
+          size="sm"
+          className="p-2 bg-dark text-primary hover:bg-primary hover:text-black"
+        >
+          <RefreshCw />
+        </Button>
+        <Button
+          onClick={() =>
+            setMonitoringSettings((prev) => ({
+              ...prev,
+              autoMonitoring: !prev.autoMonitoring,
+            }))
+          }
+          size="sm"
+          className={`p-2 bg-dark ${
+            monitoringSettings.autoMonitoring
+              ? "text-primary"
+              : "text-stone-700"
+          } hover:bg-primary hover:text-black`}
+        >
+          <SquareActivity />
+        </Button>
+        <Button
+          className={`ps-0 ${
+            monitoringSettings.autoMonitoring
+              ? "text-primary"
+              : "text-stone-700"
+          }`}
+          variant="link"
+          size="sm"
+          onClick={handleMonitoringIntervalChange}
+        >
+          {monitoringSettings.interval} secs
+        </Button>
       </div>
-      <div className="pt-2">
-        <h5>Folders</h5>
-      </div>
+
       <div
-        className="flex gap-3 w-full mt-3 flex-1 min-h-0"
-        style={{ maxHeight: "calc(100% - 120px" }}
+        className="flex flex-col gap-3 w-full mt-3 flex-1 min-h-0 overflow-auto px-2"
+        style={{ maxHeight: "calc(100% - 100px" }}
       >
+        <div className="pt-2 flex justify-start">
+          <h5>Folders</h5>
+        </div>
         {pathCards.map((card, index) => (
           <PathCard
+            allActiveTerminals={allActiveTerminals}
             pathCard={card}
             pathCards={pathCards}
             setPathCards={setPathCards}
