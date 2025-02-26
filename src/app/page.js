@@ -1,7 +1,7 @@
 "use client";
 
-import PathCard from "@/app/components/path-card/pathCard";
-import { Button } from "@/components/ui/button";
+import PathCard from "./components/path-card/pathCard";
+import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
 import { FastForward, FolderPlus, Trash } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
@@ -17,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "../components/ui/alert-dialog";
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -51,7 +51,7 @@ export default function Home() {
   };
 
   async function monitorTerminals() {
-    const response = await fetch("/api/monitor-processes");
+    const response = await fetch("http://localhost:5552/api/monitor-processes");
 
     const data = await response.json();
 
@@ -109,8 +109,6 @@ export default function Home() {
     localStorage.setItem("pathCards", JSON.stringify(defaultPathCards));
     setPathCards([...defaultPathCards]);
   };
-
-  console.log("PATH CARDS ARRAY", pathCards);
 
   return (
     <div className="h-screen max-h-screen p-8">

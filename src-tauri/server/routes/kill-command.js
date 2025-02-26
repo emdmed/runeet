@@ -1,12 +1,19 @@
-import { NextResponse } from "next/server";
-import { exec } from "child_process";
-import { promisify } from "util";
+/* eslint-disable @typescript-eslint/no-require-imports */
+const express = require("express");
+const { exec } = require("child_process");
+const { promisify } = require("util");
 
+const router = express.Router();
 const execAsync = promisify(exec);
 
+/**
+ * Gets a list of active terminal sessions and their commands.
+ * @returns {Promise<Array>} - List of terminal sessions with PID, TTY, command, and CWD.
+ */
 async function getTerminalsAndCommands() {
     try {
 
+        // Get all running terminal processes
         const { stdout: terminalProcesses } = await execAsync(
             `ps aux | grep -E 'gnome-terminal|konsole|xterm|mate-terminal|xfce4-terminal' | grep -v grep`
         );
@@ -16,10 +23,10 @@ async function getTerminalsAndCommands() {
             return [];
         }
 
+        // Get all processes attached to a pseudo-terminal (pts/)
         const { stdout: ptsProcesses } = await execAsync(
             `ps aux | grep pts/ | grep -v grep`
         );
-
 
         const terminalInfo = await Promise.all(
             ptsProcesses.split("\n").map(async (line) => {
@@ -30,10 +37,11 @@ async function getTerminalsAndCommands() {
                     const command = parts.slice(10).join(" ");
 
                     try {
+                        // Get the working directory of the process
                         const { stdout: cwd } = await execAsync(`readlink /proc/${pid}/cwd`);
                         return { pid, tty, command, cwd: cwd.trim() };
                     } catch (error) {
-                        console.log(error)
+                        console.log(error);
                         return { pid, tty, command, cwd: "Unknown (Permission Denied or Process Ended)" };
                     }
                 }
@@ -48,28 +56,35 @@ async function getTerminalsAndCommands() {
     }
 }
 
-export async function POST(req) {
+// **POST route to close a terminal based on its working directory**
+router.post("/kill-command", async (req, res) => {
     try {
-        const { path } = await req.json();
+        const { path } = req.body;
 
         if (!path) {
-            return NextResponse.json({ error: "Path is required" }, { status: 400 });
+            return res.status(400).json({ error: "Path is required" });
         }
 
         try {
-            const activeTerminals = await getTerminalsAndCommands()
-            const terminalToKill = activeTerminals.find(terminal => terminal.cwd === path)
-            await execAsync(`kill -9 ${terminalToKill.pid} || true`);
-        } catch (err) {
-            console.log(err)
-            return NextResponse.json({ error: `Failed to close terminal: ${err.message}` }, { status: 500 });
-        }
+            const activeTerminals = await getTerminalsAndCommands();
+            const terminalToKill = activeTerminals.find(terminal => terminal.cwd === path);
 
-        return NextResponse.json({
-            message: `Terminated successfully`
-        });
+            if (!terminalToKill) {
+                return res.status(404).json({ error: "No matching terminal found" });
+            }
+
+            // Kill the process
+            await execAsync(`kill -9 ${terminalToKill.pid} || true`);
+
+            return res.json({ message: `Terminated successfully (PID: ${terminalToKill.pid})` });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ error: `Failed to close terminal: ${err.message}` });
+        }
     } catch (error) {
         console.error("Unexpected error:", error.message);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return res.status(500).json({ error: error.message });
     }
-}
+});
+
+module.exports = router;

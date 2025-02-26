@@ -7,14 +7,14 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "../../../components/ui/card";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
 
 import ProcessCard from "./components/processCard"
 import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "../../../components/ui/badge";
 import { Filter } from "lucide-react";
 
 
@@ -31,7 +31,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
     async function searchPackages(directory) {
         setIsLoading(true)
-        const response = await fetch("/api/find-packages", {
+        const response = await fetch("http://localhost:5552/api/find-packages", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ directory }),
@@ -82,8 +82,6 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
             }
         })
 
-
-        console.log("newPackageFiles", newPackageFiles)
         setPackageFiles([...newPackageFiles])
     }
 

@@ -24,10 +24,6 @@ export async function POST(req) {
         // Construct the execution command
         const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
 
-
-
-        console.log("Executing command:", execCommand);
-
         // Spawn the process with the correct DISPLAY environment variable
         const childProcess = spawn(execCommand, {
             shell: true,

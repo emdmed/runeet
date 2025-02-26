@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
-import { exec } from "child_process";
-import { promisify } from "util";
+/* eslint-disable @typescript-eslint/no-require-imports */
+const express = require("express");
+const fs = require("fs/promises");
+const path = require("path");
+const { exec } = require("child_process");
+const { promisify } = require("util");
 
+const router = express.Router();
 const execAsync = promisify(exec);
 const IGNORE_LIST = ["node_modules", ".next"];
 
@@ -16,8 +18,7 @@ const getCurrentGitBranch = async (dir) => {
   try {
     const { stdout } = await execAsync(`git -C "${dir}" rev-parse --abbrev-ref HEAD`);
     return stdout.trim();
-  } catch (error) {
-    console.error(`Error getting current branch for ${dir}:`, error.message);
+  } catch {
     return null;
   }
 };
@@ -31,16 +32,13 @@ const getAllGitBranches = async (dir) => {
   try {
     const { stdout } = await execAsync(`git -C "${dir}" branch --format="%(refname:short)"`);
     return stdout.trim().split("\n").map(branch => branch.trim());
-  } catch (error) {
-    console.error(`Error getting branches for ${dir}:`, error.message);
+  } catch {
     return [];
   }
 };
 
 /**
  * Recursively searches for package.json files in a given directory.
- * Skips `node_modules` and `.next` directories.
- *
  * @param {string} dir - The directory to search in.
  * @param {number} maxDepth - Maximum recursion depth.
  * @param {number} currentDepth - Tracks the current depth of recursion.
@@ -100,34 +98,27 @@ const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
 };
 
 // **POST route to search for package.json files and retrieve Git branches**
-export async function POST(req) {
+router.post("/find-packages", async (req, res) => {
   try {
-    const { directory } = await req.json();
+    const { directory } = req.body;
 
     if (!directory || typeof directory !== "string") {
-      return NextResponse.json(
-        { error: "Invalid directory path" },
-        { status: 400 }
-      );
+      return res.status(400).json({ error: "Invalid directory path" });
     }
 
     try {
       await fs.access(directory);
     } catch {
-      return NextResponse.json(
-        { error: "Directory does not exist or cannot be accessed" },
-        { status: 404 }
-      );
+      return res.status(404).json({ error: "Directory does not exist or cannot be accessed" });
     }
 
     const packageJsonFiles = await findPackageJsonFiles(directory);
 
-    return NextResponse.json({ packageJsonFiles });
+    return res.json({ packageJsonFiles });
   } catch (error) {
     console.error("Error processing request:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return res.status(500).json({ error: "Internal server error" });
   }
-}
+});
+
+module.exports = router;

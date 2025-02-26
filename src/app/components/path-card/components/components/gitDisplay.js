@@ -9,7 +9,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
+} from "../../../../../components/ui/select";
 import { toast } from "sonner";
 
 const GitDisplay = ({ packageFile }) => {
@@ -19,7 +19,7 @@ const GitDisplay = ({ packageFile }) => {
 
     const changeBranchRequest = async (newBranch) => {
         setIsFetching(true);
-        const response = await fetch("/api/switch-branch", {
+        const response = await fetch("http://localhost:5552/api/switch-branch", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -35,7 +35,6 @@ const GitDisplay = ({ packageFile }) => {
 
     const handleBranchChange = async (newBranch) => {
         const jsonResponse = await changeBranchRequest(newBranch);
-        console.log("jsonResponse", jsonResponse);
         if (jsonResponse.error) {
             toast.error(jsonResponse?.error || "Unknown error", {
                 description: jsonResponse?.details || "",

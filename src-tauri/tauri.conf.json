@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "cd .. && cd .. && next build && cp src-tauri/server/dist/server-bundle.js src-tauri/server-bundle.js",
     "devPath": "http://localhost:5551",
     "distDir": "../out"
   },
@@ -18,9 +18,9 @@
       "active": true,
       "category": "DeveloperTool",
       "copyright": "",
-      "deb": {
-        "depends": []
-      },
+      "resources": [
+    "server/dist/server-bundle.js"
+      ],
       "externalBin": [],
       "icon": [
         "icons/32x32.png",
@@ -38,7 +38,6 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
       "shortDescription": "",
       "targets": "all",
       "windows": {
