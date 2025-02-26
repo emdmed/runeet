@@ -12,9 +12,9 @@
 ## BUILD DEB PACKAGE
 1) create .env.local & add NEXT_PUBLIC_API_URL="http://localhost:5552"
 2) in next.conf.mjs change static_site to true
-4) 3) npm run rundeck:build
-5) navigate to /src-tauri/target/release/bundle/deb
-6) sudo dpkg -i rundeck_0.1.0_amd64.deb
+3) npm run rundeck:build
+4) navigate to /src-tauri/target/release/bundle/deb
+5) sudo dpkg -i rundeck_0.1.0_amd64.deb
 
 ## DOWNLOAD DEB PACKAGE AND INSTALL
 1) download deb package
