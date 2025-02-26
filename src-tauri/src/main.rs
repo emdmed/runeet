@@ -4,6 +4,7 @@
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::io::{BufRead, BufReader};
+use std::thread;
 
 use tauri::{api::path::resource_dir, generate_context, Env};
 
@@ -32,6 +33,7 @@ fn main() {
     // Spawn the Node.js server process, forcing it to use port 5552
     let mut child = match Command::new("node")
         .arg(server_path.to_str().unwrap())
+        .env("PORT", "5552")   // Force the Node server to use port 5552
         .stdout(Stdio::piped())   // Capture stdout for logging (if needed)
         .stderr(Stdio::inherit()) // Show errors in Tauri logs
         .spawn()
@@ -43,14 +45,16 @@ fn main() {
         }
     };
 
-    // Optionally, read and log Node's stdout for debugging purposes.
+    // Spawn a new thread to read Node's stdout so it doesn't block the main thread.
     if let Some(stdout) = child.stdout.take() {
-        let reader = BufReader::new(stdout);
-        for line in reader.lines() {
-            if let Ok(output) = line {
-                println!("{}", output);
+        thread::spawn(move || {
+            let reader = BufReader::new(stdout);
+            for line in reader.lines() {
+                if let Ok(output) = line {
+                    println!("{}", output);
+                }
             }
-        }
+        });
     }
 
     println!("✅ Node.js server is set to use port 5552.");

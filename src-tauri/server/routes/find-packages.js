@@ -47,6 +47,8 @@ const getAllGitBranches = async (dir) => {
 const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
   let results = [];
 
+  console.log("dir", dir)
+
   if (currentDepth >= maxDepth) return results;
 
   try {

@@ -12,16 +12,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
 //Routes
-app.use("/", findPackagesRoute)
-app.use("/", killCommandRoute)
-app.use("/", monitorProcessesRoute)
-app.use("/", openEditorRoute)
-app.use("/", runCommandRoute)
-app.use("/", switchBranchRoute)
+app.use("/api", findPackagesRoute)
+app.use("/api", killCommandRoute)
+app.use("/api", monitorProcessesRoute)
+app.use("/api", openEditorRoute)
+app.use("/api", runCommandRoute)
+app.use("/api", switchBranchRoute)
 
 // Start the server
-const DEFAULT_PORT = 5552;
-app.listen(DEFAULT_PORT, () => {
-    console.log(`Server running at http://localhost:${DEFAULT_PORT}`);
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 })
