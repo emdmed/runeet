@@ -30,7 +30,7 @@ fn main() {
     // Spawn the Node.js server process, forcing it to use port 5552
     let mut child = match Command::new("node")
         .arg(server_path.to_str().unwrap())
-        .env("PORT", "5552")   // Force the Node server to use port 5552
+        .env("PORT", "5552") // Force the Node server to use port 5552
         .stdout(Stdio::piped())   // Capture stdout for logging (if needed)
         .stderr(Stdio::inherit()) // Show errors in Tauri logs
         .spawn()
@@ -57,8 +57,17 @@ fn main() {
     println!("✅ Node.js server is set to use port 5552.");
     println!("🟢 Launching Tauri application...");
 
-    // Start Tauri application
+    // Start Tauri application (this call is blocking)
     if let Err(err) = tauri::Builder::default().run(context) {
         eprintln!("❌ Error while running Tauri application: {}", err);
     }
+
+    // After the Tauri app closes, kill the Node.js server.
+    match child.kill() {
+        Ok(_) => println!("✅ Node.js server terminated successfully."),
+        Err(e) => eprintln!("❌ Failed to kill Node.js server: {}", e),
+    }
+
+    // Optionally, wait for the process to exit completely.
+    let _ = child.wait();
 }
