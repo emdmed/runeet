@@ -12,18 +12,23 @@ const router = express.Router();
  * @returns {Promise<object>} - Execution details.
  */
 async function startTerminalProcess(command = "npm run dev", path) {
+
+  
     if (!path) {
         throw new Error("Path is required");
     }
+
+    console.log("startTerminalProcess", command, path)
 
     // Check if the path exists
     try {
         await access(path);
     } catch (err) {
-        console.error("Invalid or inaccessible path:", err);
+        console.log("Invalid or inaccessible path:", err);
         throw new Error("Invalid or inaccessible path");
     }
 
+    
     // Ensure DISPLAY is set for GUI terminal access on Linux
     const envVariables = { ...process.env, DISPLAY: ":0" };
 
@@ -48,7 +53,7 @@ async function startTerminalProcess(command = "npm run dev", path) {
 }
 
 // **POST route to open a new terminal and run a command**
-router.post("/start-terminal", async (req, res) => {
+router.post("/run-command", async (req, res) => {
     try {
         const { command = "npm run dev", path } = req.body;
 
@@ -61,7 +66,7 @@ router.post("/start-terminal", async (req, res) => {
         const result = await startTerminalProcess(command, path);
         return res.json(result);
     } catch (error) {
-        console.error("Error:", error.message);
+        console.log("Error:", error.message);
         return res.status(500).json({ error: error.message });
     }
 });

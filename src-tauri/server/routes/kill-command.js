@@ -58,7 +58,7 @@ async function getTerminalsAndCommands() {
 }
 
 // **POST route to close a terminal based on its working directory**
-router.post("/kill-terminal", async (req, res) => {
+router.post("/kill-command", async (req, res) => {
     try {
         const { path } = req.body;
 

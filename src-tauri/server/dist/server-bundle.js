@@ -22857,7 +22857,7 @@ var require_kill_command = __commonJS({
         return [];
       }
     }
-    router.post("/kill-terminal", async (req, res) => {
+    router.post("/kill-command", async (req, res) => {
       try {
         const { path } = req.body;
         console.log("Received path:", path);
@@ -22923,7 +22923,7 @@ var require_monitor_processes = __commonJS({
         return [];
       }
     }
-    router.get("/list-terminals", async (req, res) => {
+    router.get("/monitor-processes", async (req, res) => {
       try {
         const activeTerminals = await getTerminalsAndCommands();
         return res.json({
@@ -22961,7 +22961,7 @@ var require_open_editor = __commonJS({
         return { error: "Invalid or inaccessible path" };
       }
     }
-    router.post("/execute-command", async (req, res) => {
+    router.post("/open-editor", async (req, res) => {
       try {
         const { command = "code .", path } = req.body;
         console.log("Received path:", path, "Command:", command);
@@ -22994,10 +22994,11 @@ var require_run_command = __commonJS({
       if (!path) {
         throw new Error("Path is required");
       }
+      console.log("startTerminalProcess", command, path);
       try {
         await access(path);
       } catch (err) {
-        console.error("Invalid or inaccessible path:", err);
+        console.log("Invalid or inaccessible path:", err);
         throw new Error("Invalid or inaccessible path");
       }
       const envVariables = { ...process.env, DISPLAY: ":0" };
@@ -23015,7 +23016,7 @@ var require_run_command = __commonJS({
         processId: childProcess.pid
       };
     }
-    router.post("/start-terminal", async (req, res) => {
+    router.post("/run-command", async (req, res) => {
       try {
         const { command = "npm run dev", path } = req.body;
         console.log("Received request:", { command, path });
@@ -23025,7 +23026,7 @@ var require_run_command = __commonJS({
         const result = await startTerminalProcess(command, path);
         return res.json(result);
       } catch (error) {
-        console.error("Error:", error.message);
+        console.log("Error:", error.message);
         return res.status(500).json({ error: error.message });
       }
     });

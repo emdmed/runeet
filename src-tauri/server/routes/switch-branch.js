@@ -8,19 +8,16 @@ const execAsync = promisify(exec);
 
 /**
  * Switches a Git branch in the specified directory.
- * @param {string} directory - The absolute path to the Git repository.
- * @param {string} branch - The branch name to switch to.
- * @returns {Promise<string>} - Git output message.
+ * @param {string} directory
+ * @param {string} branch
+ * @returns {Promise<string>} 
  */
 const switchGitBranch = async (directory, branch) => {
   try {
-    // Check if the directory is a Git repo
     await execAsync(`git -C "${directory}" rev-parse --is-inside-work-tree`);
 
-    // Fetch the latest branches before switching
     await execAsync(`git -C "${directory}" fetch --all`);
 
-    // Switch to the target branch
     const { stdout } = await execAsync(`git -C "${directory}" checkout ${branch}`);
 
     return stdout.trim();
@@ -29,7 +26,6 @@ const switchGitBranch = async (directory, branch) => {
   }
 };
 
-// **POST route to switch Git branch**
 router.post("/switch-branch", async (req, res) => {
   try {
     const { directory, branch } = req.body;

@@ -46,7 +46,7 @@ async function getTerminalsAndCommands() {
 }
 
 // **GET route to fetch all active terminals**
-router.get("/list-terminals", async (req, res) => {
+router.get("/monitor-processes", async (req, res) => {
     try {
         const activeTerminals = await getTerminalsAndCommands();
         

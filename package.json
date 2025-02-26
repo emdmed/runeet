@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 5551 src",
+    "serverBuild": "cd ./src-tauri/server && npm run bundle",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "cd ./src-tauri/server &&  npm run bundle && cd .. && tauri build"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.6",

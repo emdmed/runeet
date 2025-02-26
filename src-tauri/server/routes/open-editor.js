@@ -31,7 +31,7 @@ async function executeCommand(command, path) {
 }
 
 // **POST route to execute a command in a specified directory**
-router.post("/execute-command", async (req, res) => {
+router.post("/open-editor", async (req, res) => {
     try {
         const { command = "code .", path } = req.body;
 
