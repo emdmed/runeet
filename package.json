@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev:next": "next dev -p 5551",
-    "dev": "next dev -p 5551",
+    "dev": "next dev",
     "serverBuild": "cd ./src-tauri/server && npm run bundle",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "tauri:dev": "cd ./src-tauri/server && npm run bundle && sleep 2 && cd ../.. && tauri dev",
-    "tauri:build": "cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
+    "rundeck:dev": "next dev -p 5551 & cd ./src-tauri/server && cd ../.. && tauri dev",
+    "rundeck:build": "cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.6",
