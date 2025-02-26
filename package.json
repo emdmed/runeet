@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "tauri:dev": "cd ./src-tauri/server && npm run bundle && cd .. &&  npm run dev & tauri dev",
+    "tauri:dev": "cd ./src-tauri/server && npm run bundle && sleep 2 && cd ../.. && tauri dev",
     "tauri:build": "cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
   },
   "dependencies": {

@@ -19,7 +19,7 @@
       "category": "DeveloperTool",
       "copyright": "",
       "resources": [
-        "server-bundle.js"
+    "server/dist/server-bundle.js"
       ],
       "externalBin": [],
       "icon": [
