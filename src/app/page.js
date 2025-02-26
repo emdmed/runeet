@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { FastForward, FolderPlus, Trash } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { RefreshCw, SquareActivity } from "lucide-react";
+import { useApi } from "./hooks/useApi"
 
 import {
   AlertDialog,
@@ -26,6 +27,8 @@ export default function Home() {
     interval: 5,
   });
   const [allActiveTerminals, setAllActiveTerminals] = useState();
+
+  const { routes } = useApi()
 
   const [pathCards, setPathCards] = useState(
     storedPathCards || [
@@ -51,7 +54,7 @@ export default function Home() {
   };
 
   async function monitorTerminals() {
-    const response = await fetch("http://localhost:5552/api/monitor-processes");
+    const response = await fetch(routes.monitorProcess);
 
     const data = await response.json();
 
@@ -93,7 +96,7 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [monitoringSettings]);
 
-  useEffect(() => {}, [pathCards]);
+  useEffect(() => { }, [pathCards]);
 
   const handleRemovePathCard = (pathCard) => {
     setPathCards(pathCards.filter((card) => card.id !== pathCard.id));
@@ -170,20 +173,18 @@ export default function Home() {
             }))
           }
           size="sm"
-          className={`p-2 bg-dark ${
-            monitoringSettings.autoMonitoring
+          className={`p-2 bg-dark ${monitoringSettings.autoMonitoring
               ? "text-primary"
               : "text-stone-700"
-          } hover:bg-primary hover:text-black`}
+            } hover:bg-primary hover:text-black`}
         >
           <SquareActivity />
         </Button>
         <Button
-          className={`ps-0 ${
-            monitoringSettings.autoMonitoring
+          className={`ps-0 ${monitoringSettings.autoMonitoring
               ? "text-primary"
               : "text-stone-700"
-          }`}
+            }`}
           variant="link"
           size="sm"
           onClick={handleMonitoringIntervalChange}

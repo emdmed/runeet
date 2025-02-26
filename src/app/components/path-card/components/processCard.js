@@ -10,13 +10,15 @@ import { useEffect, useState } from "react";
 import { Badge } from "../../../../components/ui/badge";
 import { Star } from "lucide-react";
 import GitDisplay from "./components/gitDisplay"
+import { useApi } from "@/app/hooks/useApi";
 
 const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunningFilterOn }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
+    const { routes } = useApi()
 
     async function runProcess(process) {
-        const response = await fetch("http://localhost:5552/api/run-command", {
+        const response = await fetch(routes.runCommand, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -30,7 +32,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     }
 
     async function killProcess() {
-        const response = await fetch("http://localhost:5552/api/kill-command", {
+        const response = await fetch(routes.killCommand, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -47,7 +49,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     }
 
     const openEditor = async () => {
-        const response = await fetch("http://localhost:5552/api/open-editor", {
+        const response = await fetch(routes.openEditor, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
