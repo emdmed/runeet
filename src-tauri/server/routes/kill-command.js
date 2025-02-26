@@ -12,7 +12,6 @@ const execAsync = promisify(exec);
  */
 async function getTerminalsAndCommands() {
     try {
-        console.log("Fetching all active terminals...");
 
         // Get all running terminal processes
         const { stdout: terminalProcesses } = await execAsync(
@@ -61,8 +60,6 @@ async function getTerminalsAndCommands() {
 router.post("/kill-command", async (req, res) => {
     try {
         const { path } = req.body;
-
-        console.log("Received path:", path);
 
         if (!path) {
             return res.status(400).json({ error: "Path is required" });

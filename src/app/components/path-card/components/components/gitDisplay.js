@@ -35,7 +35,6 @@ const GitDisplay = ({ packageFile }) => {
 
     const handleBranchChange = async (newBranch) => {
         const jsonResponse = await changeBranchRequest(newBranch);
-        console.log("jsonResponse", jsonResponse);
         if (jsonResponse.error) {
             toast.error(jsonResponse?.error || "Unknown error", {
                 description: jsonResponse?.details || "",

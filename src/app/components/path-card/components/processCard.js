@@ -38,8 +38,6 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
             }),
         })
 
-        console.log("response", response, response?.ok)
-
         if (response.ok) {
             setCurrentProcess(null)
         } else {
@@ -48,9 +46,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
     }
 
-
     const openEditor = async () => {
-        console.log("currentProcess", currentProcess, "packageFile", packageFile)
         const response = await fetch("http://localhost:5552/api/open-editor", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -84,17 +80,12 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
         await killProcess()
     }
 
-    console.log("current process", currentProcess?.projectName, currentProcess)
-
     useEffect(() => {
         if (!allActiveTerminals || allActiveTerminals.length === 0) return
         const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path && element?.command === packageFile.command) || null
 
-        console.log("foundCurrentProcess", foundCurrentProcess, packageFile?.name)
         setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
     }, [allActiveTerminals])
-
-    console.log("current process", currentProcess)
 
     const { color } = getProjectTypeTag(packageFile)
 

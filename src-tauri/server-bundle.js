@@ -22822,12 +22822,10 @@ var require_kill_command = __commonJS({
     var execAsync = promisify(exec);
     async function getTerminalsAndCommands() {
       try {
-        console.log("Fetching all active terminals...");
         const { stdout: terminalProcesses } = await execAsync(
           `ps aux | grep -E 'gnome-terminal|konsole|xterm|mate-terminal|xfce4-terminal' | grep -v grep`
         );
         if (!terminalProcesses.trim()) {
-          console.log("No active terminals found.");
           return [];
         }
         const { stdout: ptsProcesses } = await execAsync(
@@ -22860,7 +22858,6 @@ var require_kill_command = __commonJS({
     router.post("/kill-command", async (req, res) => {
       try {
         const { path } = req.body;
-        console.log("Received path:", path);
         if (!path) {
           return res.status(400).json({ error: "Path is required" });
         }

@@ -82,8 +82,6 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
             }
         })
 
-
-        console.log("newPackageFiles", newPackageFiles)
         setPackageFiles([...newPackageFiles])
     }
 

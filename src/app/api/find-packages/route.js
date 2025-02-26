@@ -122,8 +122,6 @@ export async function POST(req) {
 
     const packageJsonFiles = await findPackageJsonFiles(directory);
 
-    console.log("packageJsonFiles", packageJsonFiles);
-
     return NextResponse.json({ packageJsonFiles });
   } catch (error) {
     console.error("Error processing request:", error);

@@ -34,8 +34,6 @@ router.post("/switch-branch", async (req, res) => {
       return res.status(400).json({ error: "Both 'directory' and 'branch' fields are required." });
     }
 
-    console.log(`Switching to branch '${branch}' in '${directory}'...`);
-
     const output = await switchGitBranch(directory, branch);
 
     return res.json({ message: `Switched to branch '${branch}'`, output });

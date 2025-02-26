@@ -19,7 +19,6 @@ async function executeCommand(command, path) {
         }
 
         const fullCommand = `cd ${path} && ${command}`;
-        console.log("Executing:", fullCommand);
 
         await execAsync(fullCommand);
 
@@ -34,8 +33,6 @@ async function executeCommand(command, path) {
 router.post("/open-editor", async (req, res) => {
     try {
         const { command = "code .", path } = req.body;
-
-        console.log("Received path:", path, "Command:", command);
 
         if (!path) {
             return res.status(400).json({ error: "Path is required" });

@@ -6,7 +6,6 @@ const execAsync = promisify(exec);
 
 async function getTerminalsAndCommands() {
     try {
-        console.log("Fetching all active terminals...");
 
         const { stdout: terminalProcesses } = await execAsync(
             `ps aux | grep -E 'gnome-terminal|konsole|xterm|mate-terminal|xfce4-terminal' | grep -v grep`
@@ -52,8 +51,6 @@ async function getTerminalsAndCommands() {
 export async function POST(req) {
     try {
         const { path } = await req.json();
-
-        console.log("Received path:", path);
 
         if (!path) {
             return NextResponse.json({ error: "Path is required" }, { status: 400 });

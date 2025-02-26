@@ -18,8 +18,6 @@ async function startTerminalProcess(command = "npm run dev", path) {
         throw new Error("Path is required");
     }
 
-    console.log("startTerminalProcess", command, path)
-
     // Check if the path exists
     try {
         await access(path);
@@ -34,8 +32,6 @@ async function startTerminalProcess(command = "npm run dev", path) {
 
     // Construct the execution command for GNOME Terminal
     const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
-
-    console.log("Executing command:", execCommand);
 
     // Spawn the process in the background
     const childProcess = spawn(execCommand, {
@@ -56,8 +52,6 @@ async function startTerminalProcess(command = "npm run dev", path) {
 router.post("/run-command", async (req, res) => {
     try {
         const { command = "npm run dev", path } = req.body;
-
-        console.log("Received request:", { command, path });
 
         if (!path) {
             return res.status(400).json({ error: "Path is required" });

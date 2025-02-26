@@ -8,16 +8,12 @@ export async function POST(req) {
     try {
         const { command = "code .", path } = await req.json();
 
-        console.log("path", path, "command", command)
-
         if (!path) {
             return NextResponse.json({ error: "Path is required" }, { status: 400 });
         }
 
-
         const fullCommand = `cd ${path} && ${command}`
 
-        console.log("fullCommand", fullCommand)
         try {
             await execAsync(
                 fullCommand
@@ -26,8 +22,6 @@ export async function POST(req) {
             console.log("err", err)
             return NextResponse.json({ error: "Invalid or inaccessible path" }, { status: 400 });
         }
-
-
 
         return NextResponse.json({
             message: "Command executed successfully",

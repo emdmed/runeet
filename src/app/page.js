@@ -110,8 +110,6 @@ export default function Home() {
     setPathCards([...defaultPathCards]);
   };
 
-  console.log("PATH CARDS ARRAY", pathCards);
-
   return (
     <div className="h-screen max-h-screen p-8">
       <div className="flex gap-2 items-center mb-4 relative">
