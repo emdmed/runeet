@@ -51,7 +51,7 @@ export default function Home() {
   };
 
   async function monitorTerminals() {
-    const response = await fetch("/api/monitor-processes");
+    const response = await fetch("http://localhost:5552/api/monitor-processes");
 
     const data = await response.json();
 

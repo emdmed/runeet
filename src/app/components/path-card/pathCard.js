@@ -31,7 +31,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
 
     async function searchPackages(directory) {
         setIsLoading(true)
-        const response = await fetch("/api/find-packages", {
+        const response = await fetch("http://localhost:5552/api/find-packages", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ directory }),

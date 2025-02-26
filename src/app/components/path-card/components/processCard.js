@@ -17,7 +17,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     console.log("package file", packageFile)
 
     async function runProcess(process) {
-        const response = await fetch("/api/run-command", {
+        const response = await fetch("http://localhost:5552/api/run-command", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -31,7 +31,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     }
 
     async function killProcess() {
-        const response = await fetch("/api/kill-command", {
+        const response = await fetch("http://localhost:5552/api/kill-command", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -52,7 +52,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
     const openEditor = async () => {
         console.log("currentProcess", currentProcess, "packageFile", packageFile)
-        const response = await fetch("/api/open-editor", {
+        const response = await fetch("http://localhost:5552/api/open-editor", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

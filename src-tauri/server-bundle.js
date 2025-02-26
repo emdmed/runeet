@@ -20696,8 +20696,8 @@ var require_application = __commonJS({
       tryRender(view, renderOptions, done);
     };
     app2.listen = function listen() {
-      var server2 = http.createServer(this);
-      return server2.listen.apply(server2, arguments);
+      var server = http.createServer(this);
+      return server.listen.apply(server, arguments);
     };
     function logerror(err) {
       if (this.get("env") !== "test") console.error(err.stack || err.toString());
@@ -23087,19 +23087,9 @@ app.use("/", monitorProcessesRoute);
 app.use("/", openEditorRoute);
 app.use("/", runCommandRoute);
 app.use("/", switchBranchRoute);
-var DEFAULT_PORT = 3001;
-var server = app.listen(DEFAULT_PORT, () => {
-  const { port } = server.address();
+var DEFAULT_PORT = 5552;
+app.listen(DEFAULT_PORT, () => {
   console.log(`Server running at http://localhost:${port}`);
-}).on("error", (err) => {
-  if (err.code === "EADDRINUSE") {
-    const dynamicServer = app.listen(0, () => {
-      const { port } = dynamicServer.address();
-      console.log(`Default port ${DEFAULT_PORT} was in use. Running on available port: http://localhost:${port}`);
-    });
-  } else {
-    console.error("Server failed to start:", err);
-  }
 });
 /*! Bundled license information:
 

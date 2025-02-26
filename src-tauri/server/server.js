@@ -21,18 +21,7 @@ app.use("/", runCommandRoute)
 app.use("/", switchBranchRoute)
 
 // Start the server
-const DEFAULT_PORT = 3001;
-const server = app.listen(DEFAULT_PORT, () => {
-    const { port } = server.address();
-    console.log(`Server running at http://localhost:${port}`);
-}).on("error", (err) => {
-    if (err.code === "EADDRINUSE") {
-        // If the default port is in use, find an available port dynamically
-        const dynamicServer = app.listen(0, () => {
-            const { port } = dynamicServer.address();
-            console.log(`Default port ${DEFAULT_PORT} was in use. Running on available port: http://localhost:${port}`);
-        });
-    } else {
-        console.error("Server failed to start:", err);
-    }
-});
+const DEFAULT_PORT = 5552;
+app.listen(DEFAULT_PORT, () => {
+    console.log(`Server running at http://localhost:${DEFAULT_PORT}`);
+})
