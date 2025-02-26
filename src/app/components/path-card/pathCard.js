@@ -16,6 +16,7 @@ import ProcessCard from "./components/processCard"
 import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 import { Filter } from "lucide-react";
+import { useApi } from "@/app/hooks/useApi";
 
 
 ///home/enrique/projects
@@ -25,13 +26,14 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
     const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isCollapsed, setIsCollapsed] = useState(false)
+    const { routes } = useApi()
 
     const [isRunningFilterOn, setIsRunningFilterOn] = useState(false)
 
 
     async function searchPackages(directory) {
         setIsLoading(true)
-        const response = await fetch("http://localhost:5552/api/find-packages", {
+        const response = await fetch(routes.findPackages, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ directory }),

@@ -3,25 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 5551 src",
+    "dev:next": "next dev -p 5551",
+    "dev": "next dev",
     "serverBuild": "cd ./src-tauri/server && npm run bundle",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "tauri:dev": "cd ./src-tauri/server && npm run bundle && sleep 2 && cd ../.. && tauri dev",
-    "tauri:build": "cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
+    "rundeck:dev": "next dev -p 5551 & cd ./src-tauri/server && cd ../.. && tauri dev",
+    "rundeck:build": "cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.6",
     "@radix-ui/react-label": "^2.1.2",
+    "@radix-ui/react-select": "^2.1.6",
     "@radix-ui/react-slot": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "next": "14.2.16",
+    "next-themes": "^0.4.4",
     "react": "^18",
     "react-dom": "^18",
+    "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7"
   },

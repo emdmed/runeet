@@ -11,15 +11,17 @@ import {
     SelectValue,
 } from "../../../../../components/ui/select";
 import { toast } from "sonner";
+import { useApi } from "@/app/hooks/useApi";
 
 const GitDisplay = ({ packageFile }) => {
     const [selectedBranch, setSelectedBranch] = useState(packageFile?.gitBranch || "none");
     const [branches] = useState([...packageFile?.availableBranches, packageFile?.gitBranch]);
     const [isFetching, setIsFetching] = useState(false);
+    const { routes } = useApi()
 
     const changeBranchRequest = async (newBranch) => {
         setIsFetching(true);
-        const response = await fetch("http://localhost:5552/api/switch-branch", {
+        const response = await fetch(routes.switchBranch, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
