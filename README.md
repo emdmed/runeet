@@ -1,5 +1,8 @@
-## RUN AS WEBAPP
+***RunDeck
 
+![Screenshot from 2025-02-26 23-50-15](https://github.com/user-attachments/assets/3d6e0403-37f8-4d4c-a3bc-cbf62581bf5b)
+
+## RUN AS WEBAPP
 1) delete .env.local if you have it or remove NEXT_PUBLIC_API_URL env var
 2) in next.conf.mjs change static_site to false
 2) ```npm run dev```
