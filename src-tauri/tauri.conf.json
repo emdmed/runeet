@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeDevCommand": "next dev",
-    "beforeBuildCommand": "cd .. && cd .. && next build && cd src-tauri && mkdir -p ./target/release/bundle/server/ && cp -r ./server/* ./target/release/bundle/server/",
+    "beforeBuildCommand": "cd .. && cd .. && next build && cp src-tauri/server/dist/server-bundle.js src-tauri/server-bundle.js",
     "devPath": "http://localhost:5551",
     "distDir": "../out"
   },
@@ -19,7 +19,7 @@
       "category": "DeveloperTool",
       "copyright": "",
       "resources": [
-        "server/*"
+        "server-bundle.js"
       ],
       "externalBin": [],
       "icon": [

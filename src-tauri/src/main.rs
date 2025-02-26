@@ -18,9 +18,8 @@ fn main() {
     } else {
         // Production mode → load from Tauri resources
         resource_dir(context.package_info(), &Env::default())
-        .expect("Could not locate resources directory")
-        .join("server")
-        .join("server.js")
+        .expect("resources missing")
+        .join("server-bundle.js")
     };
 
     if !server_path.exists() {
