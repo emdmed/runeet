@@ -9,15 +9,12 @@ use std::thread;
 use tauri::{api::path::resource_dir, generate_context, Env};
 
 fn main() {
-    // Generate Tauri's default context (includes package info, config, etc.)
     let context = generate_context!();
 
-    // Determine the path to your server bundle
     let server_path: PathBuf = if cfg!(debug_assertions) {
         // Development mode: direct path
-        PathBuf::from("src-tauri/server/server.js")
+        PathBuf::from("./server/dist/server-bundle.js")
     } else {
-        // Production mode: load from Tauri's resource directory
         resource_dir(context.package_info(), &Env::default())
             .expect("Could not locate Tauri resource directory")
             .join("server-bundle.js")

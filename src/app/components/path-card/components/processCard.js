@@ -15,8 +15,6 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
     const [currentProcess, setCurrentProcess] = useState()
 
-    console.log("package file", packageFile)
-
     async function runProcess(process) {
         const response = await fetch("http://localhost:5552/api/run-command", {
             method: "POST",

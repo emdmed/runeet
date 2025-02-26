@@ -9,8 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "tauri:dev": "tauri dev",
-    "tauri:build": "cd ./src-tauri/server &&  npm run bundle && cd .. && tauri build"
+    "tauri:dev": "cd ./src-tauri/server && npm run bundle && cd .. &&  npm run dev & tauri dev",
+    "tauri:build": "cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.6",
