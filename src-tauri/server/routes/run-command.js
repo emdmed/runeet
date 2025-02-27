@@ -81,6 +81,8 @@ router.post("/run-command", async (req, res) => {
     try {
         const { command = "npm run dev", path, port, framework } = req.body;
 
+        console.log("port ", port, "framework", framework)
+
         if (!path) {
             return res.status(400).json({ error: "Path is required" });
         }
