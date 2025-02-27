@@ -99,9 +99,9 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
     }
 
     return (
-        <div className="px-2">
-            <Card className="min-w-[800px] flex flex-col h-full">
-                <CardHeader>
+        <div className="px-2 mb-2 flex">
+            <Card className="w-fit min-w-[500px] flex flex-col h-full">
+                <CardHeader className={`${isCollapsed ? "p-0 px-2" : ""}`}>
                     <CardTitle className="flex justify-between items-center">
                         {packageFiles?.length === 0 && "Select directory"}
                         {packageFiles?.length > 0 && <div className="flex items-center gap-1">

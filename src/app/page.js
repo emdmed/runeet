@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import PathCard from "./components/path-card/pathCard";
@@ -12,11 +13,12 @@ export default function Home() {
   const [isCollMode, setIsCoolMode] = useState(true)
   const [monitoringSettings, setMonitoringSettings] = useState({
     autoMonitoring: true,
-    interval: 5,
+    interval: 10,
   });
   const [allActiveTerminals, setAllActiveTerminals] = useState();
 
   const { routes } = useApi()
+
 
   const [pathCards, setPathCards] = useState(
     storedPathCards || [
@@ -31,13 +33,16 @@ export default function Home() {
     if (storedPathCards) setPathCards(storedPathCards);
   }, [storedPathCards]);
 
+
+
+
   const handleAddPathCard = () => {
 
     const newPathCard = {
       path: "",
       id: new Date().getTime(),
     }
-    
+
     setPathCards(state => ([newPathCard, ...state]));
   };
 
@@ -84,8 +89,6 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [monitoringSettings]);
 
-  useEffect(() => { }, [pathCards]);
-
   const handleRemovePathCard = (pathCard) => {
     setPathCards(pathCards.filter((card) => card.id !== pathCard.id));
   };
@@ -100,6 +103,15 @@ export default function Home() {
     localStorage.setItem("pathCards", JSON.stringify(defaultPathCards));
     setPathCards([...defaultPathCards]);
   };
+
+
+
+  const menuBarActions = {
+    handleAddPathCard,
+    handleClearAll,
+    handleMonitoringIntervalChange
+  }
+
 
   return (
     <div className={`h-screen max-h-screen p-8 ${isCollMode ? "screen-container" : ""}`}>
@@ -116,20 +128,19 @@ export default function Home() {
       <MenuBar
         setIsCoolMode={setIsCoolMode}
         isCollMode={isCollMode}
-        handleMonitoringIntervalChange={handleMonitoringIntervalChange}
-        handleClearAll={handleClearAll}
-        handleAddPathCard={handleAddPathCard}
+        menuBarActions={menuBarActions}
         monitoringSettings={monitoringSettings}
         setMonitoringSettings={setMonitoringSettings}
       />
 
       <div
-        className="flex flex-col gap-3 w-full mt-3 flex-1 min-h-0 overflow-auto px-2"
+        className="flex flex-col gap-3 w-full mt-3 flex-1 min-h-0"
         style={{ maxHeight: "calc(100% - 100px" }}
       >
         <div className="pt-2 flex justify-start">
           <h5>Folders</h5>
         </div>
+        <div className="overflow-auto px-2">
         {pathCards.map((card) => (
           <PathCard
             allActiveTerminals={allActiveTerminals}
@@ -140,6 +151,7 @@ export default function Home() {
             key={`${card.path}_${card.id}`}
           />
         ))}
+        </div>
       </div>
     </div>
   );
