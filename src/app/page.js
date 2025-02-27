@@ -1,24 +1,11 @@
 "use client";
 
 import PathCard from "./components/path-card/pathCard";
-import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
-import { FastForward, FolderPlus, Trash } from "lucide-react";
+import { FastForward } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
-import { RefreshCw, SquareActivity } from "lucide-react";
 import { useApi } from "./hooks/useApi"
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../components/ui/alert-dialog";
+import MenuBar from "./components/menuBar/menuBar"
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -45,13 +32,13 @@ export default function Home() {
   }, [storedPathCards]);
 
   const handleAddPathCard = () => {
-    setPathCards((state) => [
-      ...state,
-      {
-        path: "",
-        id: new Date().getTime(),
-      },
-    ]);
+
+    const newPathCard = {
+      path: "",
+      id: new Date().getTime(),
+    }
+    
+    setPathCards(state => ([newPathCard, ...state]));
   };
 
   async function monitorTerminals() {
@@ -125,81 +112,16 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="flex my-2 gap-2">
-        <Button
-          onClick={handleAddPathCard}
-          size="sm"
-          variant="default"
-          className="p-2"
-        >
-          <FolderPlus />
-        </Button>
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive" size="sm" className="p-2">
-              <Trash />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                You are about to delete all Project cards, continue?
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleClearAll}>
-                Continue
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-        <Button
-          onClick={monitorTerminals}
-          variant="ghost"
-          size="sm"
-          className="p-2 bg-dark text-primary hover:bg-primary hover:text-black"
-        >
-          <RefreshCw />
-        </Button>
-        <Button
-          onClick={() =>
-            setMonitoringSettings((prev) => ({
-              ...prev,
-              autoMonitoring: !prev.autoMonitoring,
-            }))
-          }
-          size="sm"
-          className={`p-2 bg-dark ${monitoringSettings.autoMonitoring
-            ? "text-primary"
-            : "text-stone-700"
-            } hover:bg-primary hover:text-black`}
-        >
-          <SquareActivity />
-        </Button>
-        <Button
-          className={`ps-0 ${monitoringSettings.autoMonitoring
-            ? "text-primary"
-            : "text-stone-700"
-            }`}
-          variant="link"
-          size="sm"
-          onClick={handleMonitoringIntervalChange}
-        >
-          {monitoringSettings.interval} secs
-        </Button>
-        <Button
-          onClick={() => setIsCoolMode(prev => !prev)}
-          size="sm"
-          className={`p-2 bg-dark ${isCollMode
-            ? "text-primary"
-            : "text-stone-700"
-            } hover:bg-primary hover:text-black`} >{isCollMode ? "Cool" : "Boring"} mode</Button>
-      </div>
+      <MenuBar
+        setIsCoolMode={setIsCoolMode}
+        isCollMode={isCollMode}
+        handleMonitoringIntervalChange={handleMonitoringIntervalChange}
+        handleClearAll={handleClearAll}
+        handleAddPathCard={handleAddPathCard}
+        monitoringSettings={monitoringSettings}
+        setMonitoringSettings={setMonitoringSettings}
+      />
 
       <div
         className="flex flex-col gap-3 w-full mt-3 flex-1 min-h-0 overflow-auto px-2"
@@ -208,16 +130,14 @@ export default function Home() {
         <div className="pt-2 flex justify-start">
           <h5>Folders</h5>
         </div>
-        {pathCards.map((card, index) => (
+        {pathCards.map((card) => (
           <PathCard
             allActiveTerminals={allActiveTerminals}
             pathCard={card}
             pathCards={pathCards}
             setPathCards={setPathCards}
             handleRemovePathCard={handleRemovePathCard}
-            index={index}
-            key={`${index}_${card.path}`}
-            card
+            key={`${card.path}_${card.id}`}
           />
         ))}
       </div>

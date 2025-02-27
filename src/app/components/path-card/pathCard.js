@@ -21,7 +21,7 @@ import { useApi } from "@/app/hooks/useApi";
 
 ///home/enrique/projects
 
-const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCards, allActiveTerminals }) => {
+const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, allActiveTerminals }) => {
     const [folderPath, setFolderPath] = useState(pathCard?.path || "");
     const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -111,7 +111,7 @@ const PathCard = ({ index, handleRemovePathCard, pathCard, setPathCards, pathCar
                         </div>}
                         <div>
                             <Button onClick={() => setIsCollapsed(prev => !prev)} size="sm" variant="ghost" className="text-stone-200 p-2">{isCollapsed ? <Square /> : <Minus />}</Button>
-                            <Button onClick={() => handleRemovePathCard(pathCard)} disabled={index < 1} variant="ghost" size="sm" className="text-stone-200 p-2"><X /></Button>
+                            <Button onClick={() => handleRemovePathCard(pathCard)} variant="ghost" size="sm" className="text-stone-200 p-2"><X /></Button>
                         </div>
                     </CardTitle>
                     {packageFiles?.length === 0 && <CardDescription>
