@@ -22,6 +22,7 @@ import {
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
+  const [isCollMode, setIsCoolMode] = useState(true)
   const [monitoringSettings, setMonitoringSettings] = useState({
     autoMonitoring: true,
     interval: 5,
@@ -114,7 +115,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen max-h-screen p-8 screen-container">
+    <div className={`h-screen max-h-screen p-8 ${isCollMode ? "screen-container" : ""}`}>
       <div className="flex gap-2 items-center mb-4 relative">
         <h1 className="font-bold me-3 text-2xl mb-0 text-primary">./RunDeck</h1>
         <div>
@@ -191,6 +192,13 @@ export default function Home() {
         >
           {monitoringSettings.interval} secs
         </Button>
+        <Button
+          onClick={() => setIsCoolMode(prev => !prev)}
+          size="sm"
+          className={`p-2 bg-dark ${isCollMode
+            ? "text-primary"
+            : "text-stone-700"
+            } hover:bg-primary hover:text-black`} >{isCollMode ? "Cool" : "Boring"} mode</Button>
       </div>
 
       <div

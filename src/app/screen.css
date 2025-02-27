@@ -5,21 +5,14 @@
     --screen-background: #000000;
 }
 
-/* Apply retro screen styling */
-body {
-    background: var(--screen-background);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-}
-
 /* Container for the screen */
 .screen-container {
-    background: var(--screen-background);
-    position: relative;
+    position: absolute;
     overflow: hidden;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     opacity: 1;
     animation: screen-power-on 2s ease-in-out;
 }
@@ -33,14 +26,14 @@ body {
     left: 0;
     bottom: 0;
     right: 0;
-    opacity: 0.25;
+    opacity: 0.45;
     background: repeating-linear-gradient(
         to bottom, 
-        rgba(0, 255, 0, 0.05) 1px, 
-        rgba(0, 0, 0, 0.7) 3px
+        rgba(2, 2, 2, 0.05) 1px, 
+        rgba(14, 14, 14, 0.7) 3px
     );
     z-index: 2;
-    background-size: 100% 3px;
+    background-size: 100% 2px;
     pointer-events: none;
 }
 
@@ -57,7 +50,6 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100" height="100" fill="white" filter="url(#noise)"/></svg>');
     opacity: 0.4;
     animation: static-noise 1s steps(10) infinite;
     pointer-events: none;
@@ -71,7 +63,7 @@ body {
 }
 
 .flicker {
-    animation: flicker 0.08s infinite alternate;
+    animation: flicker 0.03s infinite alternate;
 }
 
 /* Power-on flicker effect */
