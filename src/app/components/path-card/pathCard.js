@@ -104,10 +104,10 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                         {packageFiles?.length === 0 && "Select directory"}
                         {packageFiles?.length > 0 && <div className="flex items-center gap-1">
                             <Badge className="me-3">{"./"}{getFolderName()}</Badge>
+                        </div>}
+                        <div className="gap-1 flex">
                             <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={`${isRunningFilterOn ? "text-primary" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Filter /></Button>
                             <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="p-2 bg-dark text-destructive hover:bg-destructive hover:text-black"><Trash /></Button>
-                        </div>}
-                        <div>
                             <Button onClick={() => setIsCollapsed(prev => !prev)} size="sm" variant="ghost" className="text-stone-200 p-2">{isCollapsed ? <Square /> : <Minus />}</Button>
                             <Button onClick={() => handleRemovePathCard(pathCard)} variant="ghost" size="sm" className="text-stone-200 p-2"><X /></Button>
                         </div>
