@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -17,9 +18,6 @@ import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 import { Filter } from "lucide-react";
 import { useApi } from "@/app/hooks/useApi";
-
-
-///home/enrique/projects
 
 const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, allActiveTerminals }) => {
     const [folderPath, setFolderPath] = useState(pathCard?.path || "");

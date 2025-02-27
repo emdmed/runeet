@@ -33,9 +33,6 @@ export default function Home() {
     if (storedPathCards) setPathCards(storedPathCards);
   }, [storedPathCards]);
 
-
-
-
   const handleAddPathCard = () => {
 
     const newPathCard = {
@@ -104,22 +101,19 @@ export default function Home() {
     setPathCards([...defaultPathCards]);
   };
 
-
-
   const menuBarActions = {
     handleAddPathCard,
     handleClearAll,
     handleMonitoringIntervalChange
   }
 
-
   return (
     <div className={`h-screen max-h-screen p-8 ${isCollMode ? "screen-container" : ""}`}>
       <div className="flex gap-2 items-center mb-4 relative">
-        <h1 className="font-bold me-3 text-2xl mb-0 text-primary">./RunDeck</h1>
+        <h1 className={`font-bold me-3 text-2xl mb-0 text-primary ${isCollMode ? "flicker" : ""}`}>./RunDeck</h1>
         <div>
           <FastForward
-            className="text-primary absolute"
+            className="text-primary absolute slide-in-left"
             style={{ bottom: 3 }}
           />
         </div>
