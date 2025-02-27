@@ -113,7 +113,7 @@ export default function Home() {
         <h1 className={`font-bold me-3 text-2xl mb-0 text-primary ${isCollMode ? "flicker" : ""}`}>./RunDeck</h1>
         <div>
           <FastForward
-            className="text-primary absolute slide-in-left"
+            className="text-primary absolute"
             style={{ bottom: 3 }}
           />
         </div>
