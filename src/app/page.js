@@ -114,7 +114,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen max-h-screen p-8">
+    <div className="h-screen max-h-screen p-8 screen-container">
       <div className="flex gap-2 items-center mb-4 relative">
         <h1 className="font-bold me-3 text-2xl mb-0 text-primary">./RunDeck</h1>
         <div>
@@ -174,16 +174,16 @@ export default function Home() {
           }
           size="sm"
           className={`p-2 bg-dark ${monitoringSettings.autoMonitoring
-              ? "text-primary"
-              : "text-stone-700"
+            ? "text-primary"
+            : "text-stone-700"
             } hover:bg-primary hover:text-black`}
         >
           <SquareActivity />
         </Button>
         <Button
           className={`ps-0 ${monitoringSettings.autoMonitoring
-              ? "text-primary"
-              : "text-stone-700"
+            ? "text-primary"
+            : "text-stone-700"
             }`}
           variant="link"
           size="sm"
