@@ -118,7 +118,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                         {"Directory absolute path where all your apps are (ex. projects, monorepo)"}
                     </CardDescription>}
                 </CardHeader>
-                {!isCollapsed && <CardContent className="flex-1 flex flex-col min-h-0">
+                {!isCollapsed && <CardContent className={`flex-1 flex flex-col min-h-0 swing-in-top-fwd`}>
                     {isLoading && <div className="flex items-center justify-center w-full p-2">
                         <LoaderCircle className="spinner" /></div>}
 
