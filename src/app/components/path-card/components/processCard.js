@@ -11,11 +11,14 @@ import { Badge } from "../../../../components/ui/badge";
 import { Star } from "lucide-react";
 import GitDisplay from "./components/gitDisplay"
 import { useApi } from "@/app/hooks/useApi";
+import Port from "./components/port"
+import { toast } from "sonner";
 
 const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunningFilterOn }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
     const { routes } = useApi()
+    const [port, setPort] = useState("")
 
     async function runProcess(process) {
         const response = await fetch(routes.runCommand, {
@@ -24,11 +27,28 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
             body: JSON.stringify({
                 command: process.command,
                 path: process.path,
+                port: port,
+                framework: packageFile.framework
             }),
         })
 
+
+
         const jsonRes = await response.json()
-        setCurrentProcess({ ...jsonRes, state: "running" })
+
+        if (!response.ok) {
+            toast.error(jsonRes?.error || "Unknown error", {
+                description: jsonRes?.details || "",
+            });
+
+            return
+        }
+
+        if (jsonRes.isPortUnavailable) {
+            setCurrentProcess({ ...jsonRes, isPortUnavailable: true })
+        } else {
+            setCurrentProcess({ ...jsonRes, state: "running" })
+        }
     }
 
     async function killProcess() {
@@ -109,9 +129,11 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
                     <small style={{ opacity: 0.7 }} className={`${color}`}>{packageFile.framework}</small>
                 </div>
                 <div className="flex items-center gap-2 mx-2">
+                    <Port currentProcess={currentProcess} port={port} setPort={setPort}></Port>
                     <GitDisplay packageFile={packageFile} />
                 </div>
             </div>
+
             <Button onClick={() => toggleFavorite(packageFile)} variant="ghost" size="sm" className={`p-2 hover:text-black hover:bg-yellow-400 ${packageFile?.favorite ? "text-yellow-400" : "text-stone-700"} p-2`}><Star /></Button>
         </CardContent>
     </Card >
