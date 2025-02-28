@@ -133,7 +133,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
 
                     <div className="flex-1 overflow-y-auto px-2">
                         {packageFiles?.length > 0 && packageFiles.filter(element => element.favorite).map(packageFile => {
-                            return <ProcessCard isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
+                            return <ProcessCard setPackageFiles={setPackageFiles} isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                         })}
 
                         {packageFiles?.length > 0 && packageFiles.filter(element => !element.favorite).map(packageFile => {

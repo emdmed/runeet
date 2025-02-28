@@ -10,7 +10,7 @@ import MenuBar from "./components/menuBar/menuBar"
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
-  const [isCollMode, setIsCoolMode] = useState(true)
+  const [isCoolMode, setIsCoolMode] = useState(true)
   const [monitoringSettings, setMonitoringSettings] = useState({
     autoMonitoring: true,
     interval: 10,
@@ -108,9 +108,9 @@ export default function Home() {
   }
 
   return (
-    <div className={`h-screen max-h-screen p-8 ${isCollMode ? "screen-container" : ""}`}>
+    <div className={`h-screen max-h-screen p-8 ${isCoolMode ? "screen-container" : ""}`}>
       <div className="flex gap-2 items-center mb-4 relative">
-        <h1 className={`font-bold me-3 text-2xl mb-0 text-primary ${isCollMode ? "flicker" : ""}`}>./RunDeck</h1>
+        <h1 className={`font-bold me-3 text-2xl mb-0 text-primary ${isCoolMode ? "flicker" : ""}`}>./RunDeck</h1>
         <div>
           <FastForward
             className="text-primary absolute"
@@ -121,10 +121,11 @@ export default function Home() {
 
       <MenuBar
         setIsCoolMode={setIsCoolMode}
-        isCollMode={isCollMode}
+        isCoolMode={isCoolMode}
         menuBarActions={menuBarActions}
         monitoringSettings={monitoringSettings}
         setMonitoringSettings={setMonitoringSettings}
+        monitorTerminals={monitorTerminals}
       />
 
       <div

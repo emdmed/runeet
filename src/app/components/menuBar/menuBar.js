@@ -14,7 +14,7 @@ import {
 //icons
 import { FolderPlus, RefreshCw, SquareActivity, Trash } from "lucide-react"
 
-const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCollMode, monitorTerminals, monitoringSettings }) => {
+const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolMode, monitorTerminals, monitoringSettings }) => {
     return (
         <div className="flex my-2 gap-2 justify-between items-center">
             <div className="flex gap-2">
@@ -51,7 +51,7 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCollM
                     </AlertDialogContent>
                 </AlertDialog>
                 <Button
-                    onClick={monitorTerminals}
+                    onClick={() => monitorTerminals()}
                     variant="ghost"
                     size="sm"
                     className="p-2 bg-dark text-primary hover:bg-primary hover:text-black"
@@ -91,11 +91,11 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCollM
                 onClick={() => setIsCoolMode(prev => !prev)}
                 variant="outline"
                 size="sm"
-                className={`p-2 bg-dark ${isCollMode
+                className={`p-2 bg-dark ${isCoolMode
                     ? "text-primary border-primary"
                     : "text-stone-700"
                     } hover:bg-primary hover:text-black`} >
-                {isCollMode ? "Cool" : "Boring"} style
+                {isCoolMode ? "Cool" : "Boring"} style
             </Button>
         </div>
     )
