@@ -2,20 +2,27 @@
 
 Website https://exhilarated-aims-580481.framer.app/ (sorry, no domain yet)
 
-✨ What's rundeck
+## ✨ What's RunDeck?
 
 It's a desktop/web app that makes managing your React, Next.js, Vite, and Node servers effortless!
 
 ✅ Auto-detect projects – Just enter a folder path, and RunDeck lists all available servers.
+
 ⭐ Favorite projects – Keep important projects at the top for quick access.
+
 🚀 One-click start & stop – Launch or stop dev servers instantly.
+
 🌐 Open in browser – Click the terminal URL to preview your app.
+
 🔁 Git branch management – Switch between branches with ease.
+
 🖥 Open in VS Code – Jump straight into coding with a single click.
+
 🌐 Manage ports
 
-🛠 Support & Feedback
-Having issues? Open an Issue
+
+
+
 
 ![Screenshot from 2025-02-26 23-50-15](https://github.com/user-attachments/assets/3d6e0403-37f8-4d4c-a3bc-cbf62581bf5b)
 
