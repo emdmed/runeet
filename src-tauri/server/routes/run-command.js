@@ -6,11 +6,6 @@ import net from "net"
 
 const router = express.Router();
 
-const portHandler = {
-    vite: "-- --port",
-    next: "-- -p"
-}
-
 const findIsPortAvailable = async (port) => {
 
     return new Promise((resolve) => {
@@ -39,7 +34,7 @@ const findIsPortAvailable = async (port) => {
  * @param {string} path - The directory where the command should be executed.
  * @returns {Promise<object>} - Execution details.
  */
-async function startTerminalProcess(command = "npm run dev", path, port, framework) {
+async function startTerminalProcess(command = "npm run dev", path) {
 
 
     if (!path) {
@@ -59,7 +54,7 @@ async function startTerminalProcess(command = "npm run dev", path, port, framewo
     const envVariables = { ...process.env, DISPLAY: ":0" };
 
     // Construct the execution command for GNOME Terminal
-    const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command} ${port ? portHandler[framework] : ""} ${port} ; exec zsh"`;
+    const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
 
     // Spawn the process in the background
     const childProcess = spawn(execCommand, {

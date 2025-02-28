@@ -3,11 +3,6 @@ import { spawn } from "child_process";
 import { access } from "fs/promises";
 import net from "net"
 
-const portHandler = {
-    vite: "-- --port",
-    next: "-- -p"
-}
-
 const findIsPortAvailable = async (port) => {
 
     return new Promise((resolve) => {
@@ -31,7 +26,7 @@ const findIsPortAvailable = async (port) => {
 
 export async function POST(req) {
     try {
-        const { command = "npm run dev", path, port, framework } = await req.json();
+        const { command = "npm run dev", path, port } = await req.json();
 
         if (!path) {
             return NextResponse.json({ error: "Path is required" }, { status: 400 });
@@ -63,7 +58,7 @@ export async function POST(req) {
         const envVariables = { ...process.env, DISPLAY: ":0" };
 
         // Construct the execution command
-        const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command} ${port ? portHandler[framework] : ""} ${port} ; exec zsh"`;
+        const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
 
         console.log("execCommand", execCommand)
         // Spawn the process with the correct DISPLAY environment variable

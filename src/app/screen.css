@@ -1,0 +1,95 @@
+/* Define CSS variables for easy theme adjustments */
+:root {
+    --ease-out-quint: cubic-bezier(0.230, 1.000, 0.320, 1.000);
+    --ease-in-quint: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    --screen-background: #000000;
+}
+
+/* Container for the screen */
+.screen-container {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 1;
+    animation: screen-power-on 2s ease-in-out;
+}
+
+/* Improved CRT Scanlines */
+.screen-container::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0.45;
+    background: repeating-linear-gradient(
+        to bottom, 
+        rgba(2, 2, 2, 0.05) 1px, 
+        rgba(14, 14, 14, 0.7) 3px
+    );
+    z-index: 2;
+    background-size: 100% 2px;
+    pointer-events: none;
+}
+
+/* Slight Static Noise Effect */
+@keyframes static-noise {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
+}
+
+.screen-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    animation: static-noise 1s steps(10) infinite;
+    pointer-events: none;
+}
+
+/* Subtle flicker effect */
+@keyframes flicker {
+    0% { opacity: 0.9; }
+    50% { opacity: 1; }
+    100% { opacity: 0.95; }
+}
+
+.flicker {
+    animation: flicker 0.03s infinite alternate;
+}
+
+/* Power-on flicker effect */
+@keyframes screen-power-on {
+    0% {
+        opacity: 0;
+        transform: scale(1, 0.8) translateY(-100%);
+        filter: brightness(30);
+    }
+    10% {
+        opacity: 1;
+        transform: scale(1, 0.9);
+        filter: brightness(10);
+    }
+    40% {
+        transform: scale(1, 1);
+        filter: brightness(1);
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Retro terminal blinking cursor */
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

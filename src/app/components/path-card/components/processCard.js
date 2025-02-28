@@ -20,19 +20,32 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
     const { routes } = useApi()
     const [port, setPort] = useState("")
 
+    const createCommand = (process, port) => {
+        const portHandler = {
+            vite: "-- --port",
+            server: "-- --port",
+            next: "-- -p"
+        }
+
+        const command = `${process.command} ${port ? `${portHandler[process.framework]} ${port}` : ""}`
+        console.log("comannd", command)
+        return command
+    }
+
     async function runProcess(process) {
+
+        const startCommand = createCommand(process, port)
+
         const response = await fetch(routes.runCommand, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                command: process.command,
+                command: startCommand,
                 path: process.path,
-                port: port,
+                port,
                 framework: packageFile.framework
             }),
         })
-
-
 
         const jsonRes = await response.json()
 
@@ -44,10 +57,10 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
             return
         }
 
-        if (jsonRes.isPortUnavailable) {
+        if (jsonRes?.isPortUnavailable) {
             setCurrentProcess({ ...jsonRes, isPortUnavailable: true })
         } else {
-            setCurrentProcess({ ...jsonRes, state: "running" })
+            setCurrentProcess({ ...jsonRes, state: "running", startCommand })
         }
     }
 
@@ -104,8 +117,8 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
     useEffect(() => {
         if (!allActiveTerminals || allActiveTerminals.length === 0) return
-        const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path && element?.command === packageFile.command) || null
-
+        const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path) || null
+        console.log("allActiveTerminals", allActiveTerminals, "packageFile", packageFile)
         setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
     }, [allActiveTerminals])
 
