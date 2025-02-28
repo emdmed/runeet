@@ -6,7 +6,9 @@ Website https://exhilarated-aims-580481.framer.app/ (sorry, no domain yet)
 
 It's a desktop/web app that makes managing your React, Next.js, Vite, and Node servers effortless!
 
-Supports windows, ubuntu, ios. (tested only in ubuntu for now)
+Web version Supports windows, ubuntu, ios. (tested only in ubuntu for now)
+
+Desktop app right now only available for Ubuntu
 
 ✅ Auto-detect projects – Just enter a folder path, and RunDeck lists all available servers.
 
@@ -30,6 +32,7 @@ Supports windows, ubuntu, ios. (tested only in ubuntu for now)
 
 ## RUN AS WEBAPP
 1) ```npm run rundeck:web```
+
 
 ## RUN AS DESKTOP DEV MODE (no installation)
 1) ```npm run rundeck:desk```
