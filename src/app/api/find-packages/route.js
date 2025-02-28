@@ -3,18 +3,24 @@ import fs from "fs/promises";
 import path from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
+import os from "os";
 
 const execAsync = promisify(exec);
 const IGNORE_LIST = ["node_modules", ".next"];
 
-/**
- * Gets the current Git branch of a given directory.
- * @param {string} dir - The directory path.
- * @returns {Promise<string | null>} - The current Git branch or null if not a Git repo.
- */
+
+const executeCommand = async (command, dir) => {
+  const shell = os.platform() === "win32" ? "cmd.exe" : "/bin/sh";
+  const fullCommand = os.platform() === "win32"
+    ? `cd /d "${dir}" && ${command}` 
+    : `cd "${dir}" && ${command}`;
+
+  return execAsync(fullCommand, { shell });
+};
+
 const getCurrentGitBranch = async (dir) => {
   try {
-    const { stdout } = await execAsync(`git -C "${dir}" rev-parse --abbrev-ref HEAD`);
+    const { stdout } = await executeCommand(`git rev-parse --abbrev-ref HEAD`, dir);
     return stdout.trim();
   } catch (error) {
     console.error(`Error getting current branch for ${dir}:`, error.message);
@@ -22,14 +28,9 @@ const getCurrentGitBranch = async (dir) => {
   }
 };
 
-/**
- * Retrieves all local Git branches in a repository.
- * @param {string} dir - The Git repository path.
- * @returns {Promise<string[]>} - List of local branches (excluding the current one).
- */
 const getAllGitBranches = async (dir) => {
   try {
-    const { stdout } = await execAsync(`git -C "${dir}" branch --format="%(refname:short)"`);
+    const { stdout } = await executeCommand(`git branch --format="%(refname:short)"`, dir);
     return stdout.trim().split("\n").map(branch => branch.trim());
   } catch (error) {
     console.error(`Error getting branches for ${dir}:`, error.message);
@@ -37,15 +38,6 @@ const getAllGitBranches = async (dir) => {
   }
 };
 
-/**
- * Recursively searches for package.json files in a given directory.
- * Skips `node_modules` and `.next` directories.
- *
- * @param {string} dir - The directory to search in.
- * @param {number} maxDepth - Maximum recursion depth.
- * @param {number} currentDepth - Tracks the current depth of recursion.
- * @returns {Promise<Array>} - A list of package.json details with Git branches.
- */
 const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
   let results = [];
 
@@ -88,7 +80,7 @@ const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
           devDependencies: jsonPackage.devDependencies,
           command: findFramework(jsonPackage).command,
           gitBranch: currentBranch, // Current branch
-          availableBranches: allBranches.filter(branch => branch !== currentBranch), // Exclude current branch
+          availableBranches: allBranches.filter(branch => branch !== currentBranch),
         });
       }
     }
@@ -99,7 +91,6 @@ const findPackageJsonFiles = async (dir, maxDepth = 5, currentDepth = 0) => {
   return results;
 };
 
-// **POST route to search for package.json files and retrieve Git branches**
 export async function POST(req) {
   try {
     const { directory } = await req.json();
