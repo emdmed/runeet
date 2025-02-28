@@ -15,7 +15,7 @@ import { Label } from "../../../components/ui/label"
 import { Switch } from "../../../components/ui/switch"
 
 //icons
-import { FolderPlus, RefreshCw, SquareActivity, Trash } from "lucide-react"
+import { FolderPlus, RefreshCw, Trash, Activity } from "lucide-react"
 
 const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolMode, monitorTerminals, monitoringSettings }) => {
     return (
@@ -61,7 +61,7 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
                 >
                     <RefreshCw />
                 </Button>
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                     <Button
                         onClick={() =>
                             setMonitoringSettings((prev) => ({
@@ -75,7 +75,7 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
                             : "text-stone-700"
                             } hover:bg-primary hover:text-black`}
                     >
-                        <SquareActivity />
+                        <Activity />
                     </Button>
                     <Button
                         className={`ps-0 ${monitoringSettings.autoMonitoring
