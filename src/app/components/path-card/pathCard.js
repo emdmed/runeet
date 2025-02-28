@@ -16,7 +16,7 @@ import { Button } from "../../../components/ui/button";
 import ProcessCard from "./components/processCard"
 import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
-import { Filter } from "lucide-react";
+import { Filter, Star } from "lucide-react";
 import { useApi } from "@/app/hooks/useApi";
 
 const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, allActiveTerminals }) => {
@@ -24,6 +24,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
     const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isCollapsed, setIsCollapsed] = useState(false)
+    const [isFavoriteFilter, setIsFavoriteFilter] = useState(true)
     const { routes } = useApi()
 
     const [isRunningFilterOn, setIsRunningFilterOn] = useState(false)
@@ -106,6 +107,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                             <Badge className="me-3">{"./"}{getFolderName()}</Badge>
                         </div>}
                         <div className="gap-1 flex">
+                            <Button onClick={() => setIsFavoriteFilter(prev => !prev)} variant="ghost" size="sm" className={`${isFavoriteFilter ? "text-primary" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Star /></Button>
                             <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={`${isRunningFilterOn ? "text-primary" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Filter /></Button>
                             <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="p-2 bg-dark text-destructive hover:bg-destructive hover:text-black"><Trash /></Button>
                             <Button onClick={() => setIsCollapsed(prev => !prev)} size="sm" variant="ghost" className="text-stone-200 p-2">{isCollapsed ? <Square /> : <Minus />}</Button>
@@ -132,12 +134,8 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                     </div>}
 
                     <div className="flex-1 overflow-y-auto px-2">
-                        {packageFiles?.length > 0 && packageFiles.filter(element => element.favorite).map(packageFile => {
-                            return <ProcessCard setPackageFiles={setPackageFiles} isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
-                        })}
-
-                        {packageFiles?.length > 0 && packageFiles.filter(element => !element.favorite).map(packageFile => {
-                            return <ProcessCard isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
+                        {packageFiles?.length > 0 && packageFiles.map(packageFile => {
+                            return <ProcessCard isFavoriteFilter={isFavoriteFilter} packageFiles={packageFiles} setPackageFiles={setPackageFiles} isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                         })}
                     </div>
 

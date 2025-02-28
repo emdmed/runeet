@@ -8,17 +8,20 @@ import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Badge } from "../../../../components/ui/badge";
-import { Star } from "lucide-react";
 import GitDisplay from "./components/gitDisplay"
 import { useApi } from "@/app/hooks/useApi";
 import Port from "./components/port"
 import { toast } from "sonner";
+import FavoriteButton from "./components/favoriteButton"
+import { useFavorites } from "@/app/hooks/useFavorites";
 
-const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunningFilterOn }) => {
+const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPackageFiles, packageFiles, isFavoriteFilter }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
     const { routes } = useApi()
     const [port, setPort] = useState("")
+
+    const { isFavorite, toggleFavorite } = useFavorites(packageFile.path)
 
     const createCommand = (process, port) => {
         const portHandler = {
@@ -126,7 +129,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
 
     if (isRunningFilterOn && currentProcess?.state !== "running") return null
     if (!currentProcess?.name && !packageFile?.projectName && packageFile?.framework === "unknown") return null
-
+    if (isFavoriteFilter && !isFavorite) return null
 
     return <Card className={`my-1`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-1">
@@ -147,7 +150,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, toggleFavorite, isRunnin
                 </div>
             </div>
 
-            <Button onClick={() => toggleFavorite(packageFile)} variant="ghost" size="sm" className={`p-2 hover:text-black hover:bg-yellow-400 ${packageFile?.favorite ? "text-yellow-400" : "text-stone-700"} p-2`}><Star /></Button>
+            <FavoriteButton isFavorite={isFavorite} packageFile={packageFile} setPackageFiles={setPackageFiles} toggleFavorite={toggleFavorite} packageFiles={packageFiles} />
         </CardContent>
     </Card >
 

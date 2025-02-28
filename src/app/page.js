@@ -19,7 +19,6 @@ export default function Home() {
 
   const { routes } = useApi()
 
-
   const [pathCards, setPathCards] = useState(
     storedPathCards || [
       {
