@@ -11,6 +11,9 @@ import {
     AlertDialogTrigger,
 } from "../../../components/ui/alert-dialog";
 
+import { Label } from "../../../components/ui/label"
+import { Switch } from "../../../components/ui/switch"
+
 //icons
 import { FolderPlus, RefreshCw, SquareActivity, Trash } from "lucide-react"
 
@@ -87,16 +90,16 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
                     </Button>
                 </div>
             </div>
-            <Button
-                onClick={() => setIsCoolMode(prev => !prev)}
-                variant="outline"
-                size="sm"
-                className={`p-2 bg-dark ${isCoolMode
-                    ? "text-primary border-primary"
-                    : "text-stone-700"
-                    } hover:bg-primary hover:text-black`} >
-                {isCoolMode ? "Cool" : "Boring"} style
-            </Button>
+            <div className="flex items-center space-x-3">
+                <Label htmlFor="cool-mode text">Cool mode</Label>
+                <Switch
+                    checked={isCoolMode}
+                    onCheckedChange={() => {
+                        setIsCoolMode(!isCoolMode)
+                    }}
+                    id="cool-mode"
+                />
+            </div>
         </div>
     )
 }
