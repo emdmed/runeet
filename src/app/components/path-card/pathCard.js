@@ -24,11 +24,10 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
     const [packageFiles, setPackageFiles] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isCollapsed, setIsCollapsed] = useState(false)
-    const [isFavoriteFilter, setIsFavoriteFilter] = useState(true)
+    const [isFavoriteFilter, setIsFavoriteFilter] = useState(false)
     const { routes } = useApi()
 
     const [isRunningFilterOn, setIsRunningFilterOn] = useState(false)
-
 
     async function searchPackages(directory) {
         setIsLoading(true)
