@@ -2,34 +2,11 @@
 const express = require("express");
 const { exec } = require("child_process");
 const { promisify } = require("util");
+const os = require("os");
 
 const router = express.Router();
 const execAsync = promisify(exec);
 
-/**
- * Executes a shell command in a given directory.
- * @param {string} command - The command to run.
- * @param {string} path - The directory path where the command should be executed.
- * @returns {Promise<string>} - Execution output or error message.
- */
-async function executeCommand(command, path) {
-    try {
-        if (!path) {
-            throw new Error("Path is required");
-        }
-
-        const fullCommand = `cd ${path} && ${command}`;
-
-        await execAsync(fullCommand);
-
-        return { message: "Command executed successfully" };
-    } catch (error) {
-        console.error("Error executing command:", error.message);
-        return { error: "Invalid or inaccessible path" };
-    }
-}
-
-// **POST route to execute a command in a specified directory**
 router.post("/open-editor", async (req, res) => {
     try {
         const { command = "code .", path } = req.body;
@@ -38,15 +15,25 @@ router.post("/open-editor", async (req, res) => {
             return res.status(400).json({ error: "Path is required" });
         }
 
-        const result = await executeCommand(command, path);
+        const fullCommand = os.platform() === "win32"
+            ? `cd /d "${path}" && ${command}`
+            : `cd "${path}" && ${command}`;
 
-        if (result.error) {
-            return res.status(400).json(result);
+
+
+        console.log('fullCommand', fullCommand)
+        try {
+            await execAsync(fullCommand, { shell: os.platform() === "win32" ? "cmd.exe" : "/bin/sh" });
+        } catch (err) {
+            console.error("Execution error:", err);
+            return res.status(400).json({ error: "Invalid or inaccessible path or command failed" });
         }
 
-        return res.json(result);
+        return res.json({
+            message: "Command executed successfully",
+        });
     } catch (error) {
-        console.error("Unexpected error:", error.message);
+        console.error("Server error:", error.message);
         return res.status(500).json({ error: error.message });
     }
 });
