@@ -13,9 +13,34 @@ import {
     AlertDialogTrigger,
 } from "../../../../components/ui/alert-dialog";
 import { Skull } from "lucide-react";
+import { useApi } from "../../../../app/hooks/useApi";
 
-const UsedPortButton = ({ port }) => {
+const UsedPortButton = ({ port, getPorts }) => {
     const [isHover, setIsHover] = useState(false)
+    const { routes } = useApi()
+
+    const killPortProcess = async (port) => {
+        try {
+            const response = await fetch(routes.killPortProcess, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    port
+                }),
+            })
+
+            const data = await response.json()
+
+            if (data.killed) {
+                getPorts()
+            } else {
+
+            }
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     return <AlertDialog>
         <AlertDialogTrigger asChild>
@@ -39,7 +64,7 @@ const UsedPortButton = ({ port }) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-destructive text-black" onClick={() => console.log("kill process")}>
+                <AlertDialogAction className="bg-destructive text-black" onClick={() => killPortProcess(port)}>
                     Continue
                     <Skull />
                 </AlertDialogAction>

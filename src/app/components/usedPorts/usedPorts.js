@@ -30,11 +30,11 @@ const UsedPorts = () => {
 
     return <div className="flex gap-1 overflow-auto w-full py-4 items-center">
         <Button onClick={handleRefetchUnavailablePorts} size="sm" variant="outline">Unavailable ports <RefreshCw /></Button>
-        <Button onClick={() => setIsCollapsed(prev => !prev)} className="text-white" size="sm" variant="outline">
+        <Button onClick={() => setIsCollapsed(prev => !prev)} className="text-white px-0" size="sm" variant="outline">
             {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
         </Button>
         {usedPorts && !isCollapsed && usedPorts.length > 0 && <div className="flex items-center gap-1">
-            {usedPorts.map(port => <UsedPortButton key={`port_btn_${port}`} port={port} />)}
+            {usedPorts.map(port => <UsedPortButton getPorts={getPorts} key={`port_btn_${port}`} port={port} />)}
         </div>}
         {isCollapsed && <Badge className="text-foreground border-destructive h-[18px]" variant="outline">{usedPorts?.length || 0} used ports</Badge>}
     </div>
