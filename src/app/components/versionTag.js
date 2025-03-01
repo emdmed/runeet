@@ -3,7 +3,7 @@ import Socials from "./socials"
 
 const VersionTag = () => {
 
-    const version = "v0.5.1"
+    const version = "v0.5.2"
 
     return <div className="opacity-50">
         <div className="flex items-center gap-2">

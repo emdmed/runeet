@@ -1,4 +1,4 @@
-## RunDeck v0.5.1
+## RunDeck v0.5.2
 
 Website https://exhilarated-aims-580481.framer.app/ (sorry, no domain yet)
 

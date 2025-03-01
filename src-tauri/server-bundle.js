@@ -22724,22 +22724,30 @@ var require_find_packages = __commonJS({
     var path = require("path");
     var { exec } = require("child_process");
     var { promisify } = require("util");
+    var os = require("os");
     var router = express2.Router();
     var execAsync = promisify(exec);
     var IGNORE_LIST = ["node_modules", ".next"];
+    var executeCommand = async (command, dir) => {
+      const shell = os.platform() === "win32" ? "cmd.exe" : "/bin/sh";
+      const fullCommand = os.platform() === "win32" ? `cd /d "${dir}" && ${command}` : `cd "${dir}" && ${command}`;
+      return execAsync(fullCommand, { shell });
+    };
     var getCurrentGitBranch = async (dir) => {
       try {
-        const { stdout } = await execAsync(`git -C "${dir}" rev-parse --abbrev-ref HEAD`);
+        const { stdout } = await executeCommand(`git rev-parse --abbrev-ref HEAD`, dir);
         return stdout.trim();
-      } catch {
+      } catch (error) {
+        console.error(`Error getting current branch for ${dir}:`, error.message);
         return null;
       }
     };
     var getAllGitBranches = async (dir) => {
       try {
-        const { stdout } = await execAsync(`git -C "${dir}" branch --format="%(refname:short)"`);
+        const { stdout } = await executeCommand(`git branch --format="%(refname:short)"`, dir);
         return stdout.trim().split("\n").map((branch) => branch.trim());
-      } catch {
+      } catch (error) {
+        console.error(`Error getting branches for ${dir}:`, error.message);
         return [];
       }
     };
@@ -22777,9 +22785,7 @@ var require_find_packages = __commonJS({
               devDependencies: jsonPackage.devDependencies,
               command: findFramework(jsonPackage).command,
               gitBranch: currentBranch,
-              // Current branch
               availableBranches: allBranches.filter((branch) => branch !== currentBranch)
-              // Exclude current branch
             });
           }
         }
@@ -22817,39 +22823,49 @@ var require_kill_command = __commonJS({
     var express2 = require_express2();
     var { exec } = require("child_process");
     var { promisify } = require("util");
+    var os = require("os");
     var router = express2.Router();
     var execAsync = promisify(exec);
     async function getTerminalsAndCommands() {
       try {
-        const { stdout: terminalProcesses } = await execAsync(
-          `ps aux | grep -E 'gnome-terminal|konsole|xterm|mate-terminal|xfce4-terminal' | grep -v grep`
-        );
-        if (!terminalProcesses.trim()) {
-          console.log("No active terminals found.");
-          return [];
-        }
-        const { stdout: ptsProcesses } = await execAsync(
-          `ps aux | grep pts/ | grep -v grep`
-        );
-        const terminalInfo = await Promise.all(
-          ptsProcesses.split("\n").map(async (line) => {
-            const parts = line.trim().split(/\s+/);
-            if (parts.length > 10) {
-              const pid = parts[1];
-              const tty = parts[6];
-              const command = parts.slice(10).join(" ");
-              try {
-                const { stdout: cwd } = await execAsync(`readlink /proc/${pid}/cwd`);
-                return { pid, tty, command, cwd: cwd.trim() };
-              } catch (error) {
-                console.log(error);
-                return { pid, tty, command, cwd: "Unknown (Permission Denied or Process Ended)" };
+        if (os.platform() === "win32") {
+          const { stdout } = await execAsync(
+            `powershell -Command "Get-WmiObject Win32_Process | Select-Object ProcessId,CommandLine,ExecutablePath | ConvertTo-Json"`
+          );
+          const processes = JSON.parse(stdout);
+          const processList = Array.isArray(processes) ? processes : [processes];
+          return processList.filter((proc) => proc.ExecutablePath).map((proc) => ({
+            pid: proc.ProcessId,
+            command: proc.CommandLine || "Unknown",
+            path: proc.ExecutablePath,
+            cwd: "Unknown (Windows does not expose cwd easily)"
+          }));
+        } else {
+          const { stdout } = await execAsync(`ps aux | grep pts/ | grep -v grep`);
+          if (!stdout.trim()) {
+            console.log("No active terminals found.");
+            return [];
+          }
+          const terminalInfo = await Promise.all(
+            stdout.split("\n").map(async (line) => {
+              const parts = line.trim().split(/\s+/);
+              if (parts.length > 10) {
+                const pid = parts[1];
+                const tty = parts[6];
+                const command = parts.slice(10).join(" ");
+                try {
+                  const { stdout: cwd } = await execAsync(`readlink /proc/${pid}/cwd`);
+                  return { pid, tty, command, cwd: cwd.trim(), path: cwd.trim() };
+                } catch (error) {
+                  console.log(error);
+                  return { pid, tty, command, cwd: "Unknown (Permission Denied or Process Ended)", path: "Unknown" };
+                }
               }
-            }
-            return null;
-          })
-        );
-        return terminalInfo.filter(Boolean);
+              return null;
+            })
+          );
+          return terminalInfo.filter(Boolean);
+        }
       } catch (error) {
         console.error("Error fetching terminal details:", error.message);
         return [];
@@ -22865,14 +22881,17 @@ var require_kill_command = __commonJS({
           const activeTerminals = await getTerminalsAndCommands();
           const terminalToKill = activeTerminals.find((terminal) => terminal.cwd === path);
           if (!terminalToKill) {
-            return res.status(404).json({ error: "No matching terminal found" });
+            return res.status(404).json({ error: "No active terminal found for the given path" });
           }
-          await execAsync(`kill -9 ${terminalToKill.pid} || true`);
-          return res.json({ message: `Terminated successfully (PID: ${terminalToKill.pid})` });
+          const killCommand = os.platform() === "win32" ? `taskkill /PID ${terminalToKill.pid} /F` : `kill -9 ${terminalToKill.pid} || true`;
+          await execAsync(killCommand);
         } catch (err) {
           console.log(err);
           return res.status(500).json({ error: `Failed to close terminal: ${err.message}` });
         }
+        return res.json({
+          message: "Terminated successfully"
+        });
       } catch (error) {
         console.error("Unexpected error:", error.message);
         return res.status(500).json({ error: error.message });
@@ -22889,32 +22908,49 @@ var require_monitor_processes = __commonJS({
     var express2 = require_express2();
     var { exec } = require("child_process");
     var { promisify } = require("util");
+    var os = require("os");
     var router = express2.Router();
     var execAsync = promisify(exec);
     async function getTerminalsAndCommands() {
       try {
-        const { stdout: ptsProcesses } = await execAsync(
-          `ps aux | grep pts/ | grep -v grep`
-        );
-        const terminalInfo = await Promise.all(
-          ptsProcesses.split("\n").map(async (line) => {
-            const parts = line.trim().split(/\s+/);
-            if (parts.length > 10) {
-              const pid = parts[1];
-              const tty = parts[6];
-              const command = parts.slice(10).join(" ");
-              try {
-                const { stdout: cwd } = await execAsync(`readlink /proc/${pid}/cwd`);
-                return { pid, tty, command, cwd: cwd.trim() };
-              } catch (error) {
-                console.log(error);
-                return null;
+        if (os.platform() === "win32") {
+          const { stdout } = await execAsync(
+            `powershell -Command "Get-WmiObject Win32_Process | Select-Object ProcessId,CommandLine,ExecutablePath | ConvertTo-Json"`
+          );
+          const processes = JSON.parse(stdout);
+          const processList = Array.isArray(processes) ? processes : [processes];
+          return processList.filter((proc) => proc.ExecutablePath).map((proc) => ({
+            pid: proc.ProcessId,
+            command: proc.CommandLine || "Unknown",
+            path: proc.ExecutablePath,
+            cwd: "Unknown (Windows does not expose cwd easily)"
+          }));
+        } else {
+          const { stdout: ptsProcesses } = await execAsync(`ps aux | grep pts/ | grep -v grep`);
+          if (!ptsProcesses.trim()) {
+            console.log("No active terminals found.");
+            return [];
+          }
+          const terminalInfo = await Promise.all(
+            ptsProcesses.split("\n").map(async (line) => {
+              const parts = line.trim().split(/\s+/);
+              if (parts.length > 10) {
+                const pid = parts[1];
+                const tty = parts[6];
+                const command = parts.slice(10).join(" ");
+                try {
+                  const { stdout: cwd } = await execAsync(`readlink /proc/${pid}/cwd`);
+                  return { pid, tty, command, cwd: cwd.trim(), path: cwd.trim() };
+                } catch (error) {
+                  console.log(error);
+                  return { pid, tty, command, cwd: "Unknown (Permission Denied or Process Ended)", path: "Unknown" };
+                }
               }
-            }
-            return null;
-          })
-        );
-        return terminalInfo.filter(Boolean);
+              return null;
+            })
+          );
+          return terminalInfo.filter(Boolean);
+        }
       } catch (error) {
         console.error("Error fetching terminal details:", error.message);
         return [];
@@ -22924,7 +22960,7 @@ var require_monitor_processes = __commonJS({
       try {
         const activeTerminals = await getTerminalsAndCommands();
         return res.json({
-          terminals: activeTerminals.filter((terminal) => !terminal.cwd.includes("Unknown"))
+          terminals: activeTerminals.filter((terminal) => terminal.path !== "Unknown")
         });
       } catch (error) {
         console.error("Unexpected error:", error.message);
@@ -22942,34 +22978,28 @@ var require_open_editor = __commonJS({
     var express2 = require_express2();
     var { exec } = require("child_process");
     var { promisify } = require("util");
+    var os = require("os");
     var router = express2.Router();
     var execAsync = promisify(exec);
-    async function executeCommand(command, path) {
-      try {
-        if (!path) {
-          throw new Error("Path is required");
-        }
-        const fullCommand = `cd ${path} && ${command}`;
-        await execAsync(fullCommand);
-        return { message: "Command executed successfully" };
-      } catch (error) {
-        console.error("Error executing command:", error.message);
-        return { error: "Invalid or inaccessible path" };
-      }
-    }
     router.post("/open-editor", async (req, res) => {
       try {
         const { command = "code .", path } = req.body;
         if (!path) {
           return res.status(400).json({ error: "Path is required" });
         }
-        const result = await executeCommand(command, path);
-        if (result.error) {
-          return res.status(400).json(result);
+        const fullCommand = os.platform() === "win32" ? `cd /d "${path}" && ${command}` : `cd "${path}" && ${command}`;
+        console.log("fullCommand", fullCommand);
+        try {
+          await execAsync(fullCommand, { shell: os.platform() === "win32" ? "cmd.exe" : "/bin/sh" });
+        } catch (err) {
+          console.error("Execution error:", err);
+          return res.status(400).json({ error: "Invalid or inaccessible path or command failed" });
         }
-        return res.json(result);
+        return res.json({
+          message: "Command executed successfully"
+        });
       } catch (error) {
-        console.error("Unexpected error:", error.message);
+        console.error("Server error:", error.message);
         return res.status(500).json({ error: error.message });
       }
     });
@@ -22984,41 +23014,82 @@ var require_run_command = __commonJS({
     var express2 = require_express2();
     var { spawn } = require("child_process");
     var { access } = require("fs/promises");
+    var { exec } = require("child_process");
+    var { promisify } = require("util");
+    var net = require("net");
+    var os = require("os");
     var router = express2.Router();
-    async function startTerminalProcess(command = "npm run dev", path) {
-      if (!path) {
-        throw new Error("Path is required");
-      }
-      try {
-        await access(path);
-      } catch (err) {
-        console.log("Invalid or inaccessible path:", err);
-        throw new Error("Invalid or inaccessible path");
-      }
-      const envVariables = { ...process.env, DISPLAY: ":0" };
-      const execCommand = `gnome-terminal -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
-      const childProcess = spawn(execCommand, {
-        shell: true,
-        stdio: "inherit",
-        env: envVariables
+    var execAsync = promisify(exec);
+    var findIsPortAvailable = async (port2) => {
+      return new Promise((resolve) => {
+        const server = net.createServer();
+        server.once("error", (err) => {
+          if (err.code === "EADDRINUSE") {
+            resolve(false);
+          } else {
+            resolve(false);
+          }
+        });
+        server.once("listening", () => {
+          server.close(() => resolve(true));
+        });
+        server.listen(port2);
       });
-      return {
-        message: "Command executed successfully",
-        executedCommand: command,
-        executedPath: path,
-        processId: childProcess.pid
-      };
-    }
+    };
     router.post("/run-command", async (req, res) => {
       try {
-        const { command = "npm run dev", path } = req.body;
+        const { command = "npm run dev", path, port: port2 } = req.body;
         if (!path) {
           return res.status(400).json({ error: "Path is required" });
         }
-        const result = await startTerminalProcess(command, path);
-        return res.json(result);
+        try {
+          await access(path);
+        } catch (err) {
+          console.log("Path error", err);
+          return res.status(400).json({ error: "Invalid or inaccessible path" });
+        }
+        if (port2) {
+          try {
+            const isPortAvailable = await findIsPortAvailable(port2);
+            if (!isPortAvailable) {
+              return res.status(404).json({ error: "Port is in use", isPortUnavailable: true });
+            }
+          } catch (err) {
+            console.log("Port check error", err);
+            return res.status(500).json({ error: "Error while checking port" });
+          }
+        }
+        let execCommand;
+        if (os.platform() === "win32") {
+          execCommand = `powershell -Command "Start-Process -NoNewWindow -FilePath 'cmd.exe' -ArgumentList '/k cd /d ${path} && ${command}'"`;
+        } else {
+          const possibleTerminals = ["gnome-terminal", "konsole", "xfce4-terminal", "xterm"];
+          let terminal = "x-terminal-emulator";
+          for (const term of possibleTerminals) {
+            try {
+              await execAsync(`which ${term}`);
+              terminal = term;
+              break;
+            } catch (err) {
+              console.log(`Terminal ${term} not found, checking next...`, err);
+            }
+          }
+          execCommand = `${terminal} -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
+        }
+        console.log("Executing:", execCommand);
+        const childProcess = spawn(execCommand, {
+          shell: true,
+          stdio: "inherit",
+          env: { ...process.env, DISPLAY: ":0" }
+        });
+        return res.json({
+          message: "Command executed successfully",
+          executedCommand: command,
+          executedPath: path,
+          processId: childProcess.pid
+        });
       } catch (error) {
-        console.log("Error:", error.message);
+        console.error("Unexpected error:", error.message);
         return res.status(500).json({ error: error.message });
       }
     });
@@ -23051,6 +23122,7 @@ var require_switch_branch = __commonJS({
         if (!directory || !branch) {
           return res.status(400).json({ error: "Both 'directory' and 'branch' fields are required." });
         }
+        console.log(`Switching to branch '${branch}' in '${directory}'...`);
         const output = await switchGitBranch(directory, branch);
         return res.json({ message: `Switched to branch '${branch}'`, output });
       } catch (error) {
