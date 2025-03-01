@@ -8,6 +8,7 @@ import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { useApi } from "./hooks/useApi"
 import MenuBar from "./components/menuBar/menuBar"
 import Socials from "./components/socials"
+import VersionTag from "./components/versionTag"
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -19,7 +20,6 @@ export default function Home() {
   const [allActiveTerminals, setAllActiveTerminals] = useState();
 
   const { routes } = useApi()
-
 
   const [pathCards, setPathCards] = useState(
     storedPathCards || [
@@ -150,6 +150,7 @@ export default function Home() {
         </div>
       </div>
       <Socials/>
+      <VersionTag/>
     </div>
   );
 }

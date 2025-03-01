@@ -8,11 +8,14 @@
   },
   "package": {
     "productName": "rundeck",
-    "version": "0.4.0"
+    "version": "0.5.0"
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "shell": {
+        "open": true
+      }
     },
     "bundle": {
       "active": true,

@@ -1,4 +1,3 @@
-//tauri shell not working
 
 import {
     Card,
@@ -7,31 +6,30 @@ import {
 
 import { Button } from "../../components/ui/button";
 import { Github, Twitter } from "lucide-react";
-import { useState, useEffect } from "react";
 
-const Socials = () => {
+let openExternalLink;
 
-    const [openLink, setOpenLink] = useState(() => (url) => window.open(url, "_blank")); // Default for web
-
-    useEffect(() => {
-        const loadTauriShell = async () => {
-            if (typeof window !== "undefined" && window.__TAURI__) {
-                try {
-                    const tauri = await import("@tauri-apps/api");
-                    setOpenLink(() => tauri.shell.open);
-                } catch (error) {
-                    console.error("Failed to load Tauri shell:", error);
-                }
+if (window.__TAURI__) {
+    import("@tauri-apps/api/shell").then(({ open }) => {
+        openExternalLink = async (url) => {
+            try {
+                await open(url);
+            } catch (error) {
+                console.error("Failed to open URL in Tauri:", error);
             }
         };
+    });
+} else {
+    openExternalLink = (url) => {
+        window.open(url, "_blank", "noopener,noreferrer");
+    };
+}
 
-        loadTauriShell();
-    }, []);
-
+const Socials = () => {
     return <Card className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full">
         <CardContent className="p-2 flex gap-2 mx-1">
             <Button
-                onClick={() => openLink('https://github.com/emdmed/rundeck')}
+                onClick={() => openExternalLink('https://github.com/emdmed/rundeck')}
                 className="rounded-full hover:bg-primary hover:text-black"
                 variant="ghost"
                 size="icon"
@@ -39,7 +37,7 @@ const Socials = () => {
                 <Github />
             </Button>
             <Button
-                onClick={() => openLink('https://x.com/e7r1us')}
+                onClick={() => openExternalLink('https://x.com/e7r1us')}
                 className="rounded-full hover:bg-primary hover:text-black"
                 variant="ghost"
                 size="icon"
