@@ -3,11 +3,12 @@
 
 import PathCard from "./components/path-card/pathCard";
 import { useEffect, useState } from "react";
-import { FastForward } from "lucide-react";
+import { FastForward, Folder } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { useApi } from "./hooks/useApi"
 import MenuBar from "./components/menuBar/menuBar"
 import Socials from "./components/socials"
+import UsedPorts from "./components/usedPorts"
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -130,13 +131,14 @@ export default function Home() {
         setMonitoringSettings={setMonitoringSettings}
         monitorTerminals={monitorTerminals}
       />
-
+      <UsedPorts />
       <div
-        className="flex flex-col gap-3 w-full mt-3 flex-1 min-h-0"
+        className="flex flex-col gap-3 w-full flex-1 min-h-0"
         style={{ maxHeight: "calc(100% - 100px" }}
       >
-        <div className="pt-2 flex justify-start">
-          <h5>Folders</h5>
+        <div className="flex justify-start gap-2">
+          <h5 className="font-bold">Folders</h5>
+          <Folder/>
         </div>
         <div className="overflow-auto px-2">
           {pathCards.map((card) => (
