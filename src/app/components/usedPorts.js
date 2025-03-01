@@ -27,9 +27,9 @@ const UsedPorts = () => {
 
     return <div className="flex gap-1 overflow-auto w-full py-4 items-center">
         <Button onClick={handleRefetchUnavailablePorts} size="sm" variant="outline" className="me-2">Unavailable ports <RefreshCw /></Button>
-        <div className="flex items-center gap-1">
+        {usedPorts && usedPorts.length > 0 && <div className="flex items-center gap-1">
             {usedPorts.map(port => <Badge variant="outline" className="border-destructive" key={`port_${port}`}>{port}</Badge>)}
-        </div>
+        </div>}
     </div>
 }
 

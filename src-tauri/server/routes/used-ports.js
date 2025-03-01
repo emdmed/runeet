@@ -1,10 +1,8 @@
-// File: app/api/tcp-ports/route.js
-
-import { NextResponse } from 'next/server';
+/* eslint-disable @typescript-eslint/no-require-imports */
+const express = require("express");
+const router = express.Router();
 import { exec } from 'child_process';
 import { promisify } from 'util';
-
-const execAsync = promisify(exec);
 
 function extractUsedPorts(portsStr, platform) {
     const ports = [];
@@ -56,34 +54,39 @@ function extractUsedPorts(portsStr, platform) {
     return ports;
 }
 
+const execAsync = promisify(exec);
 
-export async function GET() {
-    const platform = process.platform;
-    let command = '';
-
-    if (platform === 'win32') {
-        // Windows: List all TCP connections with process IDs.
-        command = 'netstat -ano';
-    } else if (platform === 'linux') {
-        // Ubuntu/Linux: List TCP ports in use.
-        command = 'netstat -tuln';
-    } else if (platform === 'darwin') {
-        // macOS: List listening TCP ports.
-        command = 'lsof -nP -iTCP -sTCP:LISTEN';
-    } else {
-        return NextResponse.json({ error: 'Unsupported platform' }, { status: 400 });
-    }
-
+router.get("/used-ports", async (req, res) => {
     try {
+        const platform = process.platform;
+        let command = '';
+
+        if (platform === 'win32') {
+            // Windows: List all TCP connections with process IDs.
+            command = 'netstat -ano';
+        } else if (platform === 'linux') {
+            // Ubuntu/Linux: List TCP ports in use.
+            command = 'netstat -tuln';
+        } else if (platform === 'darwin') {
+            // macOS: List listening TCP ports.
+            command = 'lsof -nP -iTCP -sTCP:LISTEN';
+        } else {
+            return res.status(400).json({ error: 'Unsupported platform' });
+        }
+
         const { stdout, stderr } = await execAsync(command);
         if (stderr) {
-            return NextResponse.json({ error: stderr }, { status: 500 });
+            return res.status(500).json({ error: stderr });
         }
 
         const formattedStdout = extractUsedPorts(stdout, platform)
 
-        return NextResponse.json({ ports: formattedStdout });
+        return res.json({ ports: formattedStdout });
+
     } catch (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        console.error("Unexpected error:", error.message);
+        return res.status(404).json({ error: error.message });
     }
-}
+})
+
+module.exports = router
