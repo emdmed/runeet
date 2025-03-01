@@ -10,7 +10,7 @@ const VersionTag = ({openExternalLink}) => {
 
     const { routes } = useApi()
 
-    const version = "v0.5.4"
+    const version = "v0.5.5"
 
     const getVersionFromTag = (tag) => {
         try{
@@ -45,7 +45,7 @@ const VersionTag = ({openExternalLink}) => {
                 onClick={() => openExternalLink('https://github.com/emdmed/rundeck')}
                 size="sm"
                 variant="outline"
-                className={`${isUpdatePrompt ? "border-destructive text-destructive opacity-100 hover:bg-destructive hover:text-white" : "opacity-100"}`}
+                className={`${isUpdatePrompt ? "border-destructive text-destructive opacity-100 hover:bg-destructive hover:text-black" : "opacity-100"}`}
             ><Github/>{version}{isUpdatePrompt ? " Please update" : null}
             </Button>
         </div>
