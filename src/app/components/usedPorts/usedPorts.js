@@ -36,7 +36,7 @@ const UsedPorts = () => {
         {usedPorts && !isCollapsed && usedPorts.length > 0 && <div className="flex items-center gap-1">
             {usedPorts.map(port => <UsedPortButton getPorts={getPorts} key={`port_btn_${port}`} port={port} />)}
         </div>}
-        {isCollapsed && <Badge className="text-foreground border-destructive h-[18px]" variant="outline">{usedPorts?.length || 0} used ports</Badge>}
+        {isCollapsed && <Badge className="text-foreground border-destructive h-[20px]" variant="outline">{usedPorts?.length || 0} used ports</Badge>}
     </div>
 }
 

@@ -82,7 +82,7 @@ export async function GET() {
 
         const formattedStdout = extractUsedPorts(stdout, platform)
 
-        return NextResponse.json({ ports: formattedStdout });
+        return NextResponse.json({ ports: formattedStdout.filter(port => port > 3000) });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

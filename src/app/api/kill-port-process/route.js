@@ -11,6 +11,9 @@ export async function POST(request) {
       return NextResponse.json({ error: "Port not provided" }, { status: 400 });
     }
 
+    if (port < 3000) {
+      return NextResponse.json({ error: "This port process might be not safe to kill" }, { status: 400 });
+    }
     const numericPort = Number(port);
     if (isNaN(numericPort) || numericPort <= 0) {
       return NextResponse.json({ error: "Port must be a valid positive number" }, { status: 400 });
@@ -20,13 +23,10 @@ export async function POST(request) {
     let command = "";
 
     if (platform === "win32") {
-      // Find PID using netstat and then kill the process
       command = `for /f "tokens=5" %a in ('netstat -ano | findstr :${numericPort}') do taskkill /F /PID %a`;
     } else if (platform === "linux") {
-      // Kill process using lsof (Linux)
       command = `fuser -k ${numericPort}/tcp 2>/dev/null || true`;
     } else if (platform === "darwin") {
-      // macOS: Ensure xargs doesn't fail if no process is found
       command = `lsof -t -i :${numericPort} | xargs kill -9 2>/dev/null || true`;
     } else {
       return NextResponse.json({ error: "Unsupported platform" }, { status: 500 });
