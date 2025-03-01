@@ -11,6 +11,7 @@ export const useApi = () => {
         runCommand: API_PATH ? `${API_PATH}/api/run-command` : `api/run-command`,
         switchBranch: API_PATH ? `${API_PATH}/api/switch-branch` : `api/switch-branch`,
         latestVersion: API_PATH ? `${API_PATH}/api/check-updates` : `api/check-updates`,
+        usedPorts: API_PATH ? `${API_PATH}/api/used-ports` : `api/used-ports`,
     }
 
     return { routes }

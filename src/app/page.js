@@ -8,6 +8,7 @@ import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { useApi } from "./hooks/useApi"
 import MenuBar from "./components/menuBar/menuBar"
 import Socials from "./components/socials"
+import UsedPorts from "./components/usedPorts"
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -122,6 +123,7 @@ export default function Home() {
         <Socials />
       </div>
 
+<UsedPorts/>
       <MenuBar
         setIsCoolMode={setIsCoolMode}
         isCoolMode={isCoolMode}
