@@ -28,7 +28,8 @@ Desktop app right now only available for Ubuntu
 
 
 
-![Screenshot from 2025-02-26 23-50-15](https://github.com/user-attachments/assets/3d6e0403-37f8-4d4c-a3bc-cbf62581bf5b)
+![image](https://github.com/user-attachments/assets/e6a50c2c-ce3b-4217-82a2-48515aff20ad)
+
 
 ## RUN AS WEBAPP
 1) ```npm run rundeck:web```
