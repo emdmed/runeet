@@ -2,12 +2,14 @@ import { useEffect, useState } from "react"
 import { useApi } from "../../hooks/useApi"
 import UsedPortButton from "./components/usedPortButton"
 import { Button } from "../../../components/ui/button"
+import { Badge } from "../../../components/ui/badge"
 
-import { RefreshCw } from "lucide-react"
+import { ChevronLeft, RefreshCw, ChevronRight } from "lucide-react"
 
 const UsedPorts = () => {
 
     const [usedPorts, setUsedPorts] = useState([])
+    const [isCollapsed, setIsCollapsed] = useState(true)
 
     const { routes } = useApi()
 
@@ -27,10 +29,14 @@ const UsedPorts = () => {
     }, [])
 
     return <div className="flex gap-1 overflow-auto w-full py-4 items-center">
-        <Button onClick={handleRefetchUnavailablePorts} size="sm" variant="outline" className="me-2">Unavailable ports <RefreshCw /></Button>
-        {usedPorts && usedPorts.length > 0 && <div className="flex items-center gap-1">
-            {usedPorts.map(port => <UsedPortButton key={`port_btn_${port}`} port={port}/>)}
+        <Button onClick={handleRefetchUnavailablePorts} size="sm" variant="outline">Unavailable ports <RefreshCw /></Button>
+        <Button onClick={() => setIsCollapsed(prev => !prev)} className="text-white" size="sm" variant="outline">
+            {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
+        </Button>
+        {usedPorts && !isCollapsed && usedPorts.length > 0 && <div className="flex items-center gap-1">
+            {usedPorts.map(port => <UsedPortButton key={`port_btn_${port}`} port={port} />)}
         </div>}
+        {isCollapsed && <Badge className="text-foreground border-destructive h-[18px]" variant="outline">{usedPorts?.length || 0} used ports</Badge>}
     </div>
 }
 
