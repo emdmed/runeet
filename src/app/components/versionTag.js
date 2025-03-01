@@ -10,7 +10,7 @@ const VersionTag = ({openExternalLink}) => {
 
     const { routes } = useApi()
 
-    const version = "v0.5.4"
+    const version = "v0.5.5"
 
     const getVersionFromTag = (tag) => {
         try{

@@ -1,4 +1,4 @@
-## RunDeck v0.5.4
+## RunDeck v0.5.5
 
 Website https://exhilarated-aims-580481.framer.app/ (sorry, no domain yet)
 
@@ -22,7 +22,7 @@ Desktop app right now only available for Ubuntu
 
 🖥 Open in VS Code – Jump straight into coding with a single click.
 
-🌐 Manage ports - lists in use ports
+🌐 Manage ports - lists in use ports - kill processes using ports (> 3000 ports only)
 
 
 
