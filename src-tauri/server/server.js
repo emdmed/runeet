@@ -7,6 +7,7 @@ const monitorProcessesRoute = require("./routes/monitor-processes")
 const openEditorRoute = require("./routes/open-editor")
 const runCommandRoute = require("./routes/run-command")
 const switchBranchRoute = require("./routes/switch-branch")
+const checkUpdates = require("./routes/check-updates")
 
 const app = express();
 app.use(cors());
@@ -24,6 +25,7 @@ app.use("/api", monitorProcessesRoute)
 app.use("/api", openEditorRoute)
 app.use("/api", runCommandRoute)
 app.use("/api", switchBranchRoute)
+app.use("/api", checkUpdates)
 
 // Start the server
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001

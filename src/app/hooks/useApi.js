@@ -10,6 +10,7 @@ export const useApi = () => {
         openEditor: API_PATH ? `${API_PATH}/api/open-editor` : `api/open-editor`,
         runCommand: API_PATH ? `${API_PATH}/api/run-command` : `api/run-command`,
         switchBranch: API_PATH ? `${API_PATH}/api/switch-branch` : `api/switch-branch`,
+        latestVersion: API_PATH ? `${API_PATH}/api/check-updates` : `api/check-updates`,
     }
 
     return { routes }
