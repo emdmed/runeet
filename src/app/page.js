@@ -7,7 +7,6 @@ import { FastForward } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { useApi } from "./hooks/useApi"
 import MenuBar from "./components/menuBar/menuBar"
-import Socials from "./components/socials"
 import VersionTag from "./components/versionTag"
 
 export default function Home() {
@@ -110,14 +109,17 @@ export default function Home() {
 
   return (
     <div className={`h-screen max-h-screen p-8 ${isCoolMode ? "screen-container" : ""}`}>
-      <div className="flex gap-2 items-center mb-4 relative">
-        <h1 className={`font-bold me-3 text-2xl mb-0 text-primary ${isCoolMode ? "flicker" : ""}`}>./RunDeck</h1>
-        <div>
+      <div className="flex gap-2 justify-between mb-4 items-center">
+        <div className={`flex items-center  ${isCoolMode ? "flicker" : ""}`}>
+          <h1 className={`font-bold me-3 text-2xl mb-0 text-primary`}>./RunDeck</h1>
+
           <FastForward
-            className="text-primary absolute"
+            className="text-primary"
             style={{ bottom: 3 }}
           />
+
         </div>
+        <VersionTag />
       </div>
 
       <MenuBar
@@ -137,20 +139,18 @@ export default function Home() {
           <h5>Folders</h5>
         </div>
         <div className="overflow-auto px-2">
-        {pathCards.map((card) => (
-          <PathCard
-            allActiveTerminals={allActiveTerminals}
-            pathCard={card}
-            pathCards={pathCards}
-            setPathCards={setPathCards}
-            handleRemovePathCard={handleRemovePathCard}
-            key={`${card.path}_${card.id}`}
-          />
-        ))}
+          {pathCards.map((card) => (
+            <PathCard
+              allActiveTerminals={allActiveTerminals}
+              pathCard={card}
+              pathCards={pathCards}
+              setPathCards={setPathCards}
+              handleRemovePathCard={handleRemovePathCard}
+              key={`${card.path}_${card.id}`}
+            />
+          ))}
         </div>
       </div>
-      <Socials/>
-      <VersionTag/>
     </div>
   );
 }
