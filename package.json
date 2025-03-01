@@ -1,6 +1,6 @@
 {
   "name": "rundeck",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "private": true,
   "scripts": {
     "dev:next": "next dev -p 5551",
