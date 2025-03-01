@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
-import { Github, Twitter } from "lucide-react";
+import { Globe, Twitter } from "lucide-react";
+import VersionTag from "./versionTag";
 
 const Socials = () => {
     const [openExternalLink, setOpenExternalLink] = useState(() => (url) => {
@@ -24,14 +25,14 @@ const Socials = () => {
     }, []);
 
     return (
-        <div className="flex gap-1">
+        <div className="flex gap-2 opacity-50 items-center">
             <Button
-                onClick={() => openExternalLink('https://github.com/emdmed/rundeck')}
+                onClick={() => openExternalLink('https://exhilarated-aims-580481.framer.app/')}
                 className="rounded-full h-[25px] w-[25px] text-foreground"
                 variant="link"
                 size="icon"
             >
-                <Github />
+                <Globe />
             </Button>
             <Button
                 onClick={() => openExternalLink('https://x.com/e7r1us')}
@@ -41,6 +42,7 @@ const Socials = () => {
             >
                 <Twitter />
             </Button>
+            <VersionTag openExternalLink={openExternalLink} />
         </div>
     );
 };

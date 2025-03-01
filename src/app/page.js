@@ -7,7 +7,7 @@ import { FastForward } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { useApi } from "./hooks/useApi"
 import MenuBar from "./components/menuBar/menuBar"
-import VersionTag from "./components/versionTag"
+import Socials from "./components/socials"
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -119,7 +119,7 @@ export default function Home() {
           />
 
         </div>
-        <VersionTag />
+        <Socials />
       </div>
 
       <MenuBar
