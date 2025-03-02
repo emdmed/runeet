@@ -4,7 +4,7 @@ import {
 } from "../../../../components/ui/card";
 import { Button } from "../../../../components/ui/button";
 import { Play } from "lucide-react";
-import { Square } from "lucide-react";
+import { Square, Code } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import GitDisplay from "./components/gitDisplay"
@@ -107,15 +107,6 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
         }
 
     }
-
-    const getProjectTypeTag = (packageFile) => {
-        if (packageFile.framework === "vite") return { color: "text-secondary" }
-        if (packageFile.framework === "server") return { color: "text-secondary" }
-        if (packageFile.framework === "next") return { color: "text-secondary" }
-        if (packageFile.framework === "react") return { color: "text-secondary" }
-        return { color: "text-stone-500" }
-    }
-
     const handleStartProcess = async (process) => {
         await runProcess(process)
     }
@@ -130,8 +121,6 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
         console.log("allActiveTerminals", allActiveTerminals, "packageFile", packageFile)
         setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
     }, [allActiveTerminals])
-
-    const { color } = getProjectTypeTag(packageFile)
 
     if (isRunningFilterOn && currentProcess?.state !== "running") return null
     if (!currentProcess?.name && !packageFile?.projectName && packageFile?.framework === "unknown") return null
@@ -148,8 +137,8 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
                     <Tooltip>
                         <TooltipTrigger>
                         {currentProcess?.state === "running" ?
-                        <Button onClick={openEditor}>{packageFile.projectName}</Button> :
-                        <Button onClick={openEditor} variant="outline">{packageFile.projectName}</Button>}
+                        <Button onClick={openEditor}> <Code/> {packageFile.projectName}</Button> :
+                        <Button onClick={openEditor} variant="outline"><Code/> {packageFile.projectName}</Button>}
                         </TooltipTrigger>
                         <TooltipContent>
                             Open IDE
