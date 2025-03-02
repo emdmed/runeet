@@ -31,19 +31,24 @@ Desktop app right now only available for Ubuntu
 ![image](https://github.com/user-attachments/assets/e6a50c2c-ce3b-4217-82a2-48515aff20ad)
 
 
+RunDeck can be ran as a local web app or as a desktop app. The desktop app has been only tested in Ubuntu 22.04 for now.
+
 ## RUN AS WEBAPP
 1) ```npm run rundeck:web```
 
-
 ## RUN AS DESKTOP DEV MODE (no installation)
-1) ```npm run rundeck:desk```
+1) Clone repo
+2) ```npm install```
+3) ```npm run rundeck:desk```
 
-## BUILD DEB PACKAGE
-1) ```npm run rundeck:build```
-2) navigate to /src-tauri/target/release/bundle/deb
-3) ```sudo dpkg -i rundeck_0.1.0_amd64.deb```
+## RUN AS DESKTOP - BUILD & INSTALL DEB PACKAGE
+1) Clone repo
+2) ```npm install```
+3) ```npm run rundeck:build```
+4) navigate to /src-tauri/target/release/bundle/deb
+5) ```sudo dpkg -i rundeck_0.1.0_amd64.deb```
 
-## DOWNLOAD DEB PACKAGE AND INSTALL
+## RUN AS DESKTOP - DOWNLOAD DEB PACKAGE AND INSTALL
 1) download deb package
 2) navigate to download dir
 3) ```sudo dpkg -i rundeck_0.1.0_amd64.deb```
