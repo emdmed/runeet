@@ -3,11 +3,10 @@ import {
     CardContent,
 } from "../../../../components/ui/card";
 import { Button } from "../../../../components/ui/button";
-import { AppWindow, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { Square } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { Badge } from "../../../../components/ui/badge";
 import GitDisplay from "./components/gitDisplay"
 import { useApi } from "@/app/hooks/useApi";
 import Port from "./components/port"
@@ -15,6 +14,7 @@ import { toast } from "sonner";
 import FavoriteButton from "./components/favoriteButton"
 import { useFavorites } from "@/app/hooks/useFavorites";
 import { useSettings } from "../../../hooks/useSettings";
+import { TooltipTrigger, Tooltip, TooltipContent } from "../../../../components/ui/tooltip";
 import { useTheme } from "next-themes";
 
 const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPackageFiles, packageFiles, isFavoriteFilter }) => {
@@ -138,16 +138,25 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
     if (isFavoriteFilter && !isFavorite) return null
 
     return <Card className={`my-1 ${theme === "alien" ? "rounded-none" : ""}`} key={packageFile.filePath}>
-        <CardContent className="p-2 flex items-center gap-1">
+        <CardContent className="p-2 flex items-center gap-2">
 
             {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}
             {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-primary`} variant="ghost" size="sm"><Play /></Button> : null}
 
-            <Button variant="ghost" onClick={openEditor} size="sm" className="p-2 text-secondary hover:bg-secondary"><AppWindow /></Button>
+            {/*  <Button variant="ghost" onClick={openEditor} size="sm" className="p-2 text-secondary hover:bg-secondary"><AppWindow /></Button> */}
 
-            <div className="flex items-center gap-1 justify-between w-full">
+            <div className="flex items-center gap-2 justify-between w-full">
                 <div className="flex items-center me-2 justify-end w-fit gap-2">
-                    {currentProcess?.state === "running" ? <Badge className="bg-primary">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
+                    <Tooltip>
+                        <TooltipTrigger>
+                        {currentProcess?.state === "running" ?
+                        <Button onClick={openEditor}>{packageFile.projectName}</Button> :
+                        <Button onClick={openEditor} variant="outline">{packageFile.projectName}</Button>}
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            Open IDE
+                        </TooltipContent>
+                    </Tooltip>
                     <small style={{ opacity: 0.7 }} className={`${color}`}>{packageFile.framework}</small>
                 </div>
                 <div className="flex items-center gap-2 mx-2">

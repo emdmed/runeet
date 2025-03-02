@@ -32,7 +32,7 @@
         rgba(2, 2, 2, 0.05) 1px, 
         rgba(14, 14, 14, 0.7) 3px
     );
-    z-index: 2;
+    z-index: 9999;
     background-size: 100% 2px;
     pointer-events: none;
 }
