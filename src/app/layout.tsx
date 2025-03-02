@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Toaster } from "../components/ui/sonner"
+import { Toaster } from "../components/ui/sonner";
 import "./globals.css";
-import "./screen.css"
+import "./screen.css";
+import ThemeProvider from "./providers/themeProvider";
 
 const typestarOCR = localFont({
   src: "../fonts/Typestar-OCR.woff2",
@@ -42,9 +43,11 @@ export default function RootLayout({
           href="/favicon-16x16.png"
         />
       </head>
-      <body className={`${typestarOCR.variable} antialiased dark`}>
-        {children}
-        <Toaster richColors />
+      <body className={`${typestarOCR.variable} antialiased`}>
+        <ThemeProvider>
+          {children}
+          <Toaster richColors />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -41,6 +41,33 @@ body {
     --radius: 0.5rem;
   }
 
+  .win {
+    --background: 0 0% 100%;
+    --foreground: 208 71% 1%;
+    --muted: 0 0% 74.51%;
+    --muted-foreground: 0 0% 49.41%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 208 71% 1%;
+    --card: 0 0% 100%;
+    --card-foreground: 208 71% 1%;
+    --border: 0 0% 49.41%;
+    --input: 0 0% 74.51%;
+    --primary: 240 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 180 93.85% 25.49%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 300 100% 24.71%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 49.8%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 0 0% 74.51%;
+    --chart-1: 208 66% 44%;
+    --chart-2: 28 66% 44%;
+    --chart-3: 28 66% 44%;
+    --chart-4: 28 66% 47%;
+    --chart-5: 208 69% 44%;
+    --radius: 0.5rem;
+  }
 
   .dark {
     --background: 149.43 2.24% 6%;
@@ -67,6 +94,34 @@ body {
     --chart-3: 316.6 25.13% 36.67%;
     --chart-4: 186.76 97.26% 31.63%;
     --chart-5: 92.83 76.97% 61.58%;
+  }
+
+  .alien {
+    --background: 195, 23.08%, 10.2%;
+    --foreground: 180 94.16% 73.14%;
+    --muted: 28 27% 13%;
+    --muted-foreground: 28 7% 64%;
+    --popover: 208 32% 3%;
+    --popover-foreground: 208 12% 100%;
+    --card: 195, 23.08%, 10.2%;
+    --card-foreground: 180 94.16% 73.14%;
+    --border: 207.56 74.14% 54.51%;
+    --input: 208 14% 15%;
+    --primary: 109.41 51.52% 80.59%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 204.69 96.97% 61.18%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 28 66% 44%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 8.22 61.86% 53.73%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 208 66% 44%;
+    --chart-1: 208 66% 44%;
+    --chart-2: 28 66% 44%;
+    --chart-3: 28 66% 44%;
+    --chart-4: 28 66% 47%;
+    --chart-5: 208 69% 44%;
+    --radius: 0rem;
   }
 }
 
@@ -142,12 +197,12 @@ body {
   background: transparent;
 }
 
-.dark .text-git{
-  color: #fd7f63 ;
+.dark .text-git {
+  color: #fd7f63;
 }
 
-.bg-git{
-  background-color: #fd7f63 ;
+.bg-git {
+  background-color: #fd7f63;
 }
 
 .text-git {
@@ -156,8 +211,8 @@ body {
 
 
 .swing-in-top-fwd {
-	-webkit-animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
-	        animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+  -webkit-animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+  animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
 }
 
 /* ----------------------------------------------
@@ -172,35 +227,38 @@ body {
  * animation swing-in-top-fwd
  * ----------------------------------------
  */
- @-webkit-keyframes swing-in-top-fwd {
+@-webkit-keyframes swing-in-top-fwd {
   0% {
     -webkit-transform: rotateX(-100deg);
-            transform: rotateX(-100deg);
+    transform: rotateX(-100deg);
     -webkit-transform-origin: top;
-            transform-origin: top;
+    transform-origin: top;
     opacity: 0;
   }
+
   100% {
     -webkit-transform: rotateX(0deg);
-            transform: rotateX(0deg);
+    transform: rotateX(0deg);
     -webkit-transform-origin: top;
-            transform-origin: top;
+    transform-origin: top;
     opacity: 1;
   }
 }
+
 @keyframes swing-in-top-fwd {
   0% {
     -webkit-transform: rotateX(-100deg);
-            transform: rotateX(-100deg);
+    transform: rotateX(-100deg);
     -webkit-transform-origin: top;
-            transform-origin: top;
+    transform-origin: top;
     opacity: 0;
   }
+
   100% {
     -webkit-transform: rotateX(0deg);
-            transform: rotateX(0deg);
+    transform: rotateX(0deg);
     -webkit-transform-origin: top;
-            transform-origin: top;
+    transform-origin: top;
     opacity: 1;
   }
 }

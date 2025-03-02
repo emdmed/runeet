@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import FavoriteButton from "./components/favoriteButton"
 import { useFavorites } from "@/app/hooks/useFavorites";
 import { useSettings } from "../../../hooks/useSettings";
+import { useTheme } from "next-themes";
 
 const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPackageFiles, packageFiles, isFavoriteFilter }) => {
 
@@ -23,6 +24,8 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
     const [port, setPort] = useState("")
 
     const { currentSettings } = useSettings()
+
+    const { theme } = useTheme()
 
     const { isFavorite, toggleFavorite } = useFavorites(packageFile.path)
 
@@ -134,7 +137,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
     if (!currentProcess?.name && !packageFile?.projectName && packageFile?.framework === "unknown") return null
     if (isFavoriteFilter && !isFavorite) return null
 
-    return <Card className={`my-1`} key={packageFile.filePath}>
+    return <Card className={`my-1 ${theme === "alien" ? "rounded-none" : ""}`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-1">
 
             {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}

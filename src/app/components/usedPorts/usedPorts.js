@@ -30,7 +30,7 @@ const UsedPorts = () => {
 
     return <div className="flex gap-1 overflow-auto w-full py-4 items-center">
         <Button onClick={handleRefetchUnavailablePorts} size="sm" variant="outline">Unavailable ports <RefreshCw /></Button>
-        <Button onClick={() => setIsCollapsed(prev => !prev)} className="text-white px-1" size="sm" variant="outline">
+        <Button onClick={() => setIsCollapsed(prev => !prev)} className="px-1" size="sm" variant="outline">
             {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
         </Button>
         {usedPorts && !isCollapsed && usedPorts.length > 0 && <div className="flex items-center gap-1">
