@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import React, { useEffect } from "react";
 import { Button } from "../../../../components/ui/button";
+import { ArrowLeftRight } from "lucide-react";
 
 export default function ThemeToggle() {
     const { theme, setTheme, resolvedTheme } = useTheme(); 
@@ -37,8 +38,8 @@ export default function ThemeToggle() {
     }, [resolvedTheme]);
 
     return (
-        <Button onClick={handleCycleThemes} variant="outline" size="sm">
-            Cycle Themes
+        <Button onClick={handleCycleThemes} variant="outline">
+            Themes <ArrowLeftRight/>
         </Button>
     );
 }

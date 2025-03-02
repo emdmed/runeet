@@ -16,7 +16,6 @@ import { Switch } from "../../../components/ui/switch"
 import Settings from "../settings/settings"
 import ThemeToggle from "./components/themeToggle"
 
-//icons
 import { FolderPlus, RefreshCw, Trash, Activity } from "lucide-react"
 
 const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolMode, monitorTerminals, monitoringSettings }) => {
