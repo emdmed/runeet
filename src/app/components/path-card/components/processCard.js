@@ -14,12 +14,15 @@ import Port from "./components/port"
 import { toast } from "sonner";
 import FavoriteButton from "./components/favoriteButton"
 import { useFavorites } from "@/app/hooks/useFavorites";
+import { useSettings } from "../../../hooks/useSettings";
 
 const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPackageFiles, packageFiles, isFavoriteFilter }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
     const { routes } = useApi()
     const [port, setPort] = useState("")
+
+    const { currentSettings } = useSettings()
 
     const { isFavorite, toggleFavorite } = useFavorites(packageFile.path)
 
@@ -90,7 +93,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 path: currentProcess?.path || packageFile?.path || null,
-                command: "code . "
+                command: currentSettings.launchIDECommand || "code . "
             }),
         })
 

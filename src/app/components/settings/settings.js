@@ -11,7 +11,7 @@ import { Button } from "../../../components/ui/button"
 import { Settings2 } from "lucide-react"
 import { Input } from "../../../components/ui/input"
 import { useEffect, useState } from "react"
-import { useDefaultSettings } from "../../hooks/defaultSettings"
+import { useDefaultSettings } from "../../hooks/useSettings"
 
 const Settings = () => {
     const { currentSettings, saveSettings } = useDefaultSettings()
