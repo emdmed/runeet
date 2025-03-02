@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react"
 
 export const defaultSettings = {
@@ -5,14 +7,16 @@ export const defaultSettings = {
 }
 
 export const useSettings = () => {
-    const storedSettings = JSON.parse(localStorage.getItem("rundeck_settings") || "false")
-    const [currentSettings, setCurrentSettings] = useState(storedSettings || defaultSettings)
-
+    const [currentSettings, setCurrentSettings] = useState(() => {
+        return JSON.parse(localStorage.getItem("rundeck_settings") || "false") || defaultSettings;
+    });
 
     const saveSettings = (newSettings) => {
-        localStorage.setItem("rundeck_settings", JSON.stringify(newSettings))
-        setCurrentSettings({ ...newSettings })
+
+        localStorage.setItem("rundeck_settings", JSON.stringify(newSettings));
+        setCurrentSettings(newSettings);
+
     }
 
-    return { currentSettings, defaultSettings, saveSettings }
+    return { currentSettings, defaultSettings, saveSettings };
 }
