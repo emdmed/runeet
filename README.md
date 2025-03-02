@@ -26,9 +26,11 @@ Desktop app right now only available for Ubuntu
 
 
 
+![Screenshot from 2025-03-02 19-32-52](https://github.com/user-attachments/assets/b2ad99b9-7986-4dfa-bdab-4abe5acec5a1)
 
 
-![image](https://github.com/user-attachments/assets/e6a50c2c-ce3b-4217-82a2-48515aff20ad)
+![image](https://github.com/user-attachments/assets/7fac1386-0ac2-43e1-9262-0a6a46842612)
+
 
 
 RunDeck can be ran as a local web app or as a desktop app. The desktop app has been only tested in Ubuntu 22.04 for now.
