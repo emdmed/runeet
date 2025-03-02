@@ -17,6 +17,7 @@ export default function Home() {
     autoMonitoring: true,
     interval: 10,
   });
+
   const [allActiveTerminals, setAllActiveTerminals] = useState();
 
   const { routes } = useApi()
@@ -138,7 +139,7 @@ export default function Home() {
       >
         <div className="flex justify-start gap-2">
           <h5 className="font-bold">Folders</h5>
-          <Folder/>
+          <Folder />
         </div>
         <div className="overflow-auto px-2">
           {pathCards.map((card) => (

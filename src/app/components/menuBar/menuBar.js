@@ -13,6 +13,7 @@ import {
 
 import { Label } from "../../../components/ui/label"
 import { Switch } from "../../../components/ui/switch"
+import Settings from "../settings/settings"
 
 //icons
 import { FolderPlus, RefreshCw, Trash, Activity } from "lucide-react"
@@ -90,16 +91,21 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center space-x-3">
-                <Label htmlFor="cool-mode text">Cool mode</Label>
-                <Switch
-                    checked={isCoolMode}
-                    onCheckedChange={() => {
-                        setIsCoolMode(!isCoolMode)
-                    }}
-                    id="cool-mode"
-                />
+            <div className="flex gap-3">
+                <div className="flex items-center space-x-3">
+                    <Label htmlFor="cool-mode text">Cool mode</Label>
+                    <Switch
+                        checked={isCoolMode}
+                        onCheckedChange={() => {
+                            setIsCoolMode(!isCoolMode)
+                        }}
+                        id="cool-mode"
+                    />
+                </div>
+                <Settings />
+
             </div>
+
         </div>
     )
 }
