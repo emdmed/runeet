@@ -52,3 +52,10 @@ RunDeck can be ran as a local web app or as a desktop app. The desktop app has b
 1) download deb package
 2) navigate to download dir
 3) ```sudo dpkg -i rundeck_0.1.0_amd64.deb```
+
+
+### Known issues
+
+1) MacOS-web - start project feature not working
+
+If you would like to test in windows and macOs please let me know!
