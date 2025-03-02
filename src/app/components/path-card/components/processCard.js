@@ -3,23 +3,29 @@ import {
     CardContent,
 } from "../../../../components/ui/card";
 import { Button } from "../../../../components/ui/button";
-import { AppWindow, Play } from "lucide-react";
-import { Square } from "lucide-react";
+import { Play } from "lucide-react";
+import { Square, Code } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { Badge } from "../../../../components/ui/badge";
 import GitDisplay from "./components/gitDisplay"
 import { useApi } from "@/app/hooks/useApi";
 import Port from "./components/port"
 import { toast } from "sonner";
 import FavoriteButton from "./components/favoriteButton"
 import { useFavorites } from "@/app/hooks/useFavorites";
+import { useSettings } from "../../../hooks/useSettings";
+import { TooltipTrigger, Tooltip, TooltipContent } from "../../../../components/ui/tooltip";
+import { useTheme } from "next-themes";
 
 const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPackageFiles, packageFiles, isFavoriteFilter }) => {
 
     const [currentProcess, setCurrentProcess] = useState()
     const { routes } = useApi()
     const [port, setPort] = useState("")
+
+    const { currentSettings } = useSettings()
+
+    const { theme } = useTheme()
 
     const { isFavorite, toggleFavorite } = useFavorites(packageFile.path)
 
@@ -90,7 +96,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 path: currentProcess?.path || packageFile?.path || null,
-                command: "code . "
+                command: currentSettings.launchIDECommand || "code . "
             }),
         })
 
@@ -101,15 +107,6 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
         }
 
     }
-
-    const getProjectTypeTag = (packageFile) => {
-        if (packageFile.framework === "vite") return { color: "text-secondary" }
-        if (packageFile.framework === "server") return { color: "text-secondary" }
-        if (packageFile.framework === "next") return { color: "text-secondary" }
-        if (packageFile.framework === "react") return { color: "text-secondary" }
-        return { color: "text-stone-500" }
-    }
-
     const handleStartProcess = async (process) => {
         await runProcess(process)
     }
@@ -125,24 +122,29 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
         setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
     }, [allActiveTerminals])
 
-    const { color } = getProjectTypeTag(packageFile)
-
     if (isRunningFilterOn && currentProcess?.state !== "running") return null
     if (!currentProcess?.name && !packageFile?.projectName && packageFile?.framework === "unknown") return null
     if (isFavoriteFilter && !isFavorite) return null
 
-    return <Card className={`my-1`} key={packageFile.filePath}>
-        <CardContent className="p-2 flex items-center gap-1">
+    return <Card className={`my-1 ${theme === "alien" ? "rounded-none" : ""}`} key={packageFile.filePath}>
+        <CardContent className="p-2 flex items-center gap-2">
 
             {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}
             {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-primary`} variant="ghost" size="sm"><Play /></Button> : null}
 
-            <Button variant="ghost" onClick={openEditor} size="sm" className="p-2 text-secondary hover:bg-secondary"><AppWindow /></Button>
-
-            <div className="flex items-center gap-1 justify-between w-full">
+            <div className="flex items-center gap-2 justify-between w-full">
                 <div className="flex items-center me-2 justify-end w-fit gap-2">
-                    {currentProcess?.state === "running" ? <Badge className="bg-primary">{packageFile.projectName}</Badge> : <Badge variant="outline">{packageFile.projectName}</Badge>}
-                    <small style={{ opacity: 0.7 }} className={`${color}`}>{packageFile.framework}</small>
+                    <Tooltip>
+                        <TooltipTrigger>
+                        {currentProcess?.state === "running" ?
+                        <Button onClick={openEditor}> <Code/> {packageFile.projectName}</Button> :
+                        <Button onClick={openEditor} variant="outline"><Code/> {packageFile.projectName}</Button>}
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            Open IDE
+                        </TooltipContent>
+                    </Tooltip>
+                    <small className="text-secondary" style={{ opacity: 0.7 }}>{packageFile.framework}</small>
                 </div>
                 <div className="flex items-center gap-2 mx-2">
                     <Port currentProcess={currentProcess} port={port} setPort={setPort}></Port>

@@ -13,8 +13,9 @@ import {
 
 import { Label } from "../../../components/ui/label"
 import { Switch } from "../../../components/ui/switch"
+import Settings from "../settings/settings"
+import ThemeToggle from "./components/themeToggle"
 
-//icons
 import { FolderPlus, RefreshCw, Trash, Activity } from "lucide-react"
 
 const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolMode, monitorTerminals, monitoringSettings }) => {
@@ -70,6 +71,7 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
                             }))
                         }
                         size="sm"
+                         variant="ghost"
                         className={`p-2 bg-dark ${monitoringSettings.autoMonitoring
                             ? "text-primary"
                             : "text-stone-700"
@@ -90,16 +92,22 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center space-x-3">
-                <Label htmlFor="cool-mode text">Cool mode</Label>
-                <Switch
-                    checked={isCoolMode}
-                    onCheckedChange={() => {
-                        setIsCoolMode(!isCoolMode)
-                    }}
-                    id="cool-mode"
-                />
+            <div className="flex gap-3 items-center">
+                <div className="flex items-center space-x-3">
+                    <Label htmlFor="cool-mode text">Cool mode</Label>
+                    <Switch
+                        checked={isCoolMode}
+                        onCheckedChange={() => {
+                            setIsCoolMode(!isCoolMode)
+                        }}
+                        id="cool-mode"
+                    />
+                </div>
+                <ThemeToggle/>
+                <Settings />
+
             </div>
+
         </div>
     )
 }

@@ -18,6 +18,7 @@ import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 import { Filter, Star } from "lucide-react";
 import { useApi } from "@/app/hooks/useApi";
+import { useTheme } from "next-themes";
 
 const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, allActiveTerminals }) => {
     const [folderPath, setFolderPath] = useState(pathCard?.path || "");
@@ -26,6 +27,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isFavoriteFilter, setIsFavoriteFilter] = useState(false)
     const { routes } = useApi()
+    const { theme } = useTheme()
 
     const [isRunningFilterOn, setIsRunningFilterOn] = useState(false)
 
@@ -98,7 +100,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
 
     return (
         <div className="px-2 mb-2 flex">
-            <Card className="w-fit min-w-[500px] flex flex-col h-full">
+            <Card className={`w-fit min-w-[500px] flex flex-col h-full ${theme === "alien" ? "border-4 border-double rounded-none" : ""}`}>
                 <CardHeader className={`${isCollapsed ? "p-0 px-2" : ""}`}>
                     <CardTitle className="flex justify-between items-center">
                         {packageFiles?.length === 0 && "Select directory"}

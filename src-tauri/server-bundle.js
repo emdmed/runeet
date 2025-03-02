@@ -23134,6 +23134,109 @@ var require_switch_branch = __commonJS({
   }
 });
 
+// routes/check-updates.js
+var require_check_updates = __commonJS({
+  "routes/check-updates.js"(exports2, module2) {
+    "use strict";
+    var express2 = require_express2();
+    var router = express2.Router();
+    router.get("/check-updates", async (req, res) => {
+      try {
+        const response = await fetch("https://api.github.com/repos/emdmed/rundeck/releases/latest");
+        const data = await response.json();
+        return res.json(data);
+      } catch (error) {
+        console.error("Unexpected error:", error.message);
+        return res.status(404).json({ error: error.message });
+      }
+    });
+    module2.exports = router;
+  }
+});
+
+// routes/used-ports.js
+var require_used_ports = __commonJS({
+  "routes/used-ports.js"(exports2, module2) {
+    "use strict";
+    var import_child_process = require("child_process");
+    var import_util = require("util");
+    var express2 = require_express2();
+    var router = express2.Router();
+    function extractUsedPorts(portsStr, platform) {
+      const ports = [];
+      const lines = portsStr.split(/\r?\n/);
+      if (platform === "win32") {
+        for (const line of lines) {
+          if (!line.trim().startsWith("TCP")) continue;
+          const tokens = line.trim().split(/\s+/);
+          if (tokens.length < 2) continue;
+          const localAddress = tokens[1];
+          const parts = localAddress.split(":");
+          const portStr = parts[parts.length - 1];
+          const port2 = Number(portStr);
+          if (!isNaN(port2)) {
+            ports.push(port2);
+          }
+        }
+      } else if (platform === "linux") {
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith("tcp") && !trimmed.startsWith("tcp6")) continue;
+          const tokens = trimmed.split(/\s+/);
+          if (tokens.length < 4) continue;
+          const localAddress = tokens[3];
+          const match = localAddress.match(/:(\d+)$/);
+          if (match) {
+            ports.push(Number(match[1]));
+          }
+        }
+      } else if (platform === "darwin") {
+        for (const line of lines) {
+          if (!line.includes("(LISTEN)")) continue;
+          const match = line.match(/:(\d+)\s+\(LISTEN\)/);
+          if (match) {
+            ports.push(Number(match[1]));
+          } else {
+            const matchGeneral = line.match(/:(\d+)\b/);
+            if (matchGeneral) {
+              ports.push(Number(matchGeneral[1]));
+            }
+          }
+        }
+      } else {
+        throw new Error("Unsupported platform");
+      }
+      return ports;
+    }
+    var execAsync = (0, import_util.promisify)(import_child_process.exec);
+    router.get("/used-ports", async (req, res) => {
+      try {
+        const platform = process.platform;
+        let command = "";
+        if (platform === "win32") {
+          command = "netstat -ano";
+        } else if (platform === "linux") {
+          command = "netstat -tuln";
+        } else if (platform === "darwin") {
+          command = "lsof -nP -iTCP -sTCP:LISTEN";
+        } else {
+          return res.status(400).json({ error: "Unsupported platform" });
+        }
+        const { stdout, stderr } = await execAsync(command);
+        if (stderr) {
+          return res.status(500).json({ error: stderr });
+        }
+        const formattedStdout = extractUsedPorts(stdout, platform);
+        return res.json({ ports: formattedStdout.filter((port2) => port2 > 3e3) });
+      } catch (error) {
+        console.error("Unexpected error:", error.message);
+        return res.status(404).json({ error: error.message });
+      }
+    });
+    module2.exports = router;
+  }
+});
+
 // server.js
 var express = require_express2();
 var cors = require_lib3();
@@ -23143,6 +23246,8 @@ var monitorProcessesRoute = require_monitor_processes();
 var openEditorRoute = require_open_editor();
 var runCommandRoute = require_run_command();
 var switchBranchRoute = require_switch_branch();
+var checkUpdates = require_check_updates();
+var usedPorts = require_used_ports();
 var app = express();
 app.use(cors());
 app.use(express.json());
@@ -23156,6 +23261,8 @@ app.use("/api", monitorProcessesRoute);
 app.use("/api", openEditorRoute);
 app.use("/api", runCommandRoute);
 app.use("/api", switchBranchRoute);
+app.use("/api", checkUpdates);
+app.use("/api", usedPorts);
 var port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
