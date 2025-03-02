@@ -143,8 +143,6 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
             {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}
             {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-primary`} variant="ghost" size="sm"><Play /></Button> : null}
 
-            {/*  <Button variant="ghost" onClick={openEditor} size="sm" className="p-2 text-secondary hover:bg-secondary"><AppWindow /></Button> */}
-
             <div className="flex items-center gap-2 justify-between w-full">
                 <div className="flex items-center me-2 justify-end w-fit gap-2">
                     <Tooltip>
@@ -157,7 +155,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
                             Open IDE
                         </TooltipContent>
                     </Tooltip>
-                    <small style={{ opacity: 0.7 }} className={`${color}`}>{packageFile.framework}</small>
+                    <small className="text-secondary" style={{ opacity: 0.7 }}>{packageFile.framework}</small>
                 </div>
                 <div className="flex items-center gap-2 mx-2">
                     <Port currentProcess={currentProcess} port={port} setPort={setPort}></Port>

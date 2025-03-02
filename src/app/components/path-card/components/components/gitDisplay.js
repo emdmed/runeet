@@ -47,7 +47,7 @@ const GitDisplay = ({ packageFile }) => {
     };
 
     return (
-        <div className={`${packageFile?.gitBranch ? "text-git" : "text-muted"} flex items-center gap-1 relative mx-2 h-8`}>
+        <div className={`${packageFile?.gitBranch ? "" : "opacity-40"} text-destructive flex items-center gap-1 relative mx-2 h-8`}>
             {isFetching ? (
                 <div className="flex items-center justify-center w-[140px]">
                     <LoaderCircle size={17} className="spinner text-git animate-spin p-0 m-0" />
@@ -62,7 +62,7 @@ const GitDisplay = ({ packageFile }) => {
                         <SelectContent>
                             <SelectGroup>
                                 {branches.map(branch => (
-                                    <SelectItem className="hover:text-git focus:text-git" key={branch} value={branch}>
+                                    <SelectItem key={branch} value={branch}>
                                         {branch}
                                     </SelectItem>
                                 ))}
