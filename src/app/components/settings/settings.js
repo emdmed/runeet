@@ -11,10 +11,10 @@ import { Button } from "../../../components/ui/button"
 import { Settings2 } from "lucide-react"
 import { Input } from "../../../components/ui/input"
 import { useEffect, useState } from "react"
-import { useDefaultSettings } from "../../hooks/useSettings"
+import { useSettings } from "../../hooks/useSettings"
 
 const Settings = () => {
-    const { currentSettings, saveSettings } = useDefaultSettings()
+    const { currentSettings, saveSettings } = useSettings()
     const [launchIDEcommandValue, setLaunchIDECommandValue] = useState(currentSettings.launchIDECommand)
     const [newSettings, setNewSettings] = useState(currentSettings)
 
@@ -25,7 +25,7 @@ const Settings = () => {
 
     return (<Dialog>
         <DialogTrigger>
-            <Button size="icon"><Settings2 /></Button>
+            <Button className="p-2 bg-dark text-primary hover:bg-primary hover:text-black" size="icon"><Settings2 /></Button>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader>
