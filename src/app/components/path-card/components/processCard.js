@@ -33,11 +33,12 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
         const portHandler = {
             vite: "-- --port",
             server: "-- --port",
-            next: "-- -p"
+            next: "-- -p",
+            default: "-- --p",
+            react: "-- --port"
         }
 
-        const command = `${process.command} ${port ? `${portHandler[process.framework]} ${port}` : ""}`
-        console.log("comannd", command)
+        const command = `${process.command} ${port ? `${portHandler[process?.framework || portHandler.default]} ${port}` : ""}`
         return command
     }
 

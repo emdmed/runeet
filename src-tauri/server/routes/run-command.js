@@ -38,6 +38,7 @@ router.post("/run-command", async (req, res) => {
             return res.status(400).json({ error: "Path is required" });
         }
 
+        console.log("PATH", path, "command", command)
         try {
             await access(path);
         } catch (err) {
