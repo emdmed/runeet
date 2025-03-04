@@ -166,7 +166,7 @@ body {
 * {
   scrollbar-width: thin;
   /* Firefox */
-  scrollbar-color: hsl(240 5% 26%) hsl(240 5% 15%);
+  scrollbar-color: hsl(var(--primary)) hsl(var(--background));
   /* Firefox */
 }
 
@@ -178,18 +178,18 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(240 5% 15%);
+  background: hsl(var(--background));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(240 5% 26%);
+  background: hsl(var(--primary));
   border-radius: 4px;
   transition: background 0.2s ease-in-out;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(240 5% 34%);
+  background: hsl(var(--primary));
 }
 
 /* For horizontal scrollbars */
@@ -208,7 +208,6 @@ body {
 .text-git {
   color: #cf4c2f;
 }
-
 
 .swing-in-top-fwd {
   -webkit-animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;

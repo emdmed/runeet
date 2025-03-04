@@ -74,7 +74,8 @@ export async function POST(req) {
                 }
             }
 
-            execCommand = `${terminal} -- zsh -i -c "source ~/.zshrc; cd ${path} && ${command}; exec zsh"`;
+            execCommand = `${terminal} -- bash -i -c "cd ${path} && ${command}; exec bash"`;
+
         }
 
         console.log("Executing:", execCommand);

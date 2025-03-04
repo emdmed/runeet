@@ -33,11 +33,12 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
         const portHandler = {
             vite: "-- --port",
             server: "-- --port",
-            next: "-- -p"
+            next: "-- -p",
+            default: "-- --p",
+            react: "-- --port"
         }
 
-        const command = `${process.command} ${port ? `${portHandler[process.framework]} ${port}` : ""}`
-        console.log("comannd", command)
+        const command = `${process.command} ${port ? `${portHandler[process?.framework || portHandler.default]} ${port}` : ""}`
         return command
     }
 
@@ -118,7 +119,6 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
     useEffect(() => {
         if (!allActiveTerminals || allActiveTerminals.length === 0) return
         const foundCurrentProcess = allActiveTerminals?.find(element => element.cwd === packageFile?.path) || null
-        console.log("allActiveTerminals", allActiveTerminals, "packageFile", packageFile)
         setCurrentProcess({ ...packageFile, state: foundCurrentProcess ? "running" : "stopped" })
     }, [allActiveTerminals])
 
