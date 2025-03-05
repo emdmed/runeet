@@ -24,13 +24,7 @@ Desktop app right now only available for Ubuntu
 
 🌐 Manage ports - lists in use ports - kill processes using ports (> 3000 ports only)
 
-
-
-![Screenshot from 2025-03-02 19-32-52](https://github.com/user-attachments/assets/b2ad99b9-7986-4dfa-bdab-4abe5acec5a1)
-
-
-![image](https://github.com/user-attachments/assets/7fac1386-0ac2-43e1-9262-0a6a46842612)
-
+![Screenshot from 2025-03-05 23-29-10](https://github.com/user-attachments/assets/3284b45c-88c3-4b98-a662-1458deab4128)
 
 
 RunDeck can be ran as a local web app or as a desktop app. The desktop app has been only tested in Ubuntu 22.04 for now.
