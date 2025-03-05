@@ -46,6 +46,8 @@ const GitDisplay = ({ packageFile }) => {
         }
     };
 
+    console.log("branches", branches)
+
     return (
         <div className={`${packageFile?.gitBranch ? "" : "opacity-40"} text-destructive flex items-center gap-1 relative mx-2 h-8`}>
             {isFetching ? (
@@ -55,14 +57,14 @@ const GitDisplay = ({ packageFile }) => {
             ) : (
                 <div className="flex items-center">
                     <GitBranch className="relative bottom-[2px]" size={15} />
-                    <Select value={selectedBranch} onValueChange={handleBranchChange}>
+                    <Select value={selectedBranch || ""} onValueChange={handleBranchChange}>
                         <SelectTrigger className="w-[140px] border-0">
                             <SelectValue placeholder="Select a branch" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                {branches.map(branch => (
-                                    <SelectItem key={branch} value={branch}>
+                                {branches.filter(branch => branch).map(branch => (
+                                    <SelectItem key={branch} value={branch || ""}>
                                         {branch}
                                     </SelectItem>
                                 ))}
