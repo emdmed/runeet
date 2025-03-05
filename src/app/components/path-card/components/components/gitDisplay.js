@@ -46,8 +46,6 @@ const GitDisplay = ({ packageFile }) => {
         }
     };
 
-    console.log("branches", branches)
-
     return (
         <div className={`${packageFile?.gitBranch ? "" : "opacity-40"} text-destructive flex items-center gap-1 relative mx-2 h-8`}>
             {isFetching ? (

@@ -114,7 +114,7 @@ export default function Home() {
   return (
     <TooltipProvider>
       <div className={`h-screen max-h-screen p-5 ${isCoolMode ? "screen-container" : ""}`}>
-        <div className="flex gap-2 justify-between items-center">
+        <div className="flex gap-2 justify-between items-center border p-2 border-primary">
           <div className={`flex items-center  ${isCoolMode ? "flicker" : ""}`}>
             <h1 className={`font-bold me-3 text-2xl mb-0 text-primary`}>./RunDeck</h1>
 
@@ -134,22 +134,24 @@ export default function Home() {
           <Socials />
         </div>
 
-        <UsedPorts />
 
         <div
-          className="flex flex-col gap-3 w-full flex-1 min-h-0"
+          className="flex flex-col gap-3 w-full flex-1 min-h-0 my-3"
           style={{ maxHeight: "calc(100% - 100px" }}
         >
-          <div className="flex justify-start gap-2 items-center">
+          <div className="flex justify-start gap-2 items-center border-b py-1">
             <h5 className="font-bold">Folders</h5>
             <Button
               onClick={menuBarActions.handleAddPathCard}
               size="icon"
               variant="outline"
-              className="text-primary hover:text-black hover:bg-primary"
+              className="text-primary hover:text-black hover:bg-primary border-primary"
             >
               <FolderPlus />
             </Button>
+
+            <UsedPorts />
+
           </div>
           <div className="overflow-auto px-2">
             {pathCards.map((card) => (
