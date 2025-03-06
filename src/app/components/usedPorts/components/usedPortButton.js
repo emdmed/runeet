@@ -47,8 +47,9 @@ const UsedPortButton = ({ port, getPorts }) => {
             <Button
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
+                size="sm"
                 variant="outline"
-                className="border-destructive w-[58px] max-w-[58px] px-1 hover:bg-destructive hover:text-black"
+                className="border-destructive w-[58px] max-w-[58px] px-1 hover:bg-destructive hover:text-black p-2"
             >
                 {isHover ? "kill" : port}
             </Button>

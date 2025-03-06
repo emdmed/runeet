@@ -143,9 +143,9 @@ export default function Home() {
             <h5 className="font-bold">Folders</h5>
             <Button
               onClick={menuBarActions.handleAddPathCard}
-              size="icon"
-              variant="outline"
-              className="text-primary hover:text-black hover:bg-primary border-primary"
+              size="sm"
+              variant="ghost"
+              className="text-primary hover:text-black hover:bg-primary p-2"
             >
               <FolderPlus />
             </Button>

@@ -11,10 +11,7 @@ import {
     AlertDialogTrigger,
 } from "../../../components/ui/alert-dialog";
 
-import { Label } from "../../../components/ui/label"
-import { Switch } from "../../../components/ui/switch"
 import Settings from "../settings/settings"
-import ThemeToggle from "./components/themeToggle"
 
 import { RefreshCw, Trash, Activity } from "lucide-react"
 
@@ -60,7 +57,7 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
          
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm" className="p-2">
+                        <Button variant="ghost" size="sm" className="p-2 text-destructive hover:bg-destructive hover:text-black">
                             <Trash />
                         </Button>
                     </AlertDialogTrigger>
@@ -81,21 +78,10 @@ const MenuBar = ({ menuBarActions, setMonitoringSettings, setIsCoolMode, isCoolM
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-
-            <div className="flex items-center space-x-3">
-                <Label htmlFor="cool-mode text">Cool mode</Label>
-                <Switch
-                    checked={isCoolMode}
-                    onCheckedChange={() => {
-                        setIsCoolMode(!isCoolMode)
-                    }}
-                    id="cool-mode"
-                />
-            </div>
-            <ThemeToggle />
-            <Settings />
-
-
+            <Settings
+                isCoolMode={isCoolMode}
+                setIsCoolMode={setIsCoolMode}
+            />
 
         </div>
     )
