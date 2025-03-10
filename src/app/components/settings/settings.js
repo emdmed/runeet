@@ -17,8 +17,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "../../../components/ui/alert-dialog"
-import { Label } from "../../../components/ui/label"
-import { Switch } from "../../../components/ui/switch"
 
 import { Button } from "../../../components/ui/button"
 import { Settings2, Bomb } from "lucide-react"
@@ -26,8 +24,9 @@ import { Input } from "../../../components/ui/input"
 import { useEffect, useState } from "react"
 import { useSettings } from "../../hooks/useSettings"
 import ThemeToggle from "../menuBar/components/themeToggle"
+import Socials from "../socials"
 
-const Settings = ({ isCoolMode, setIsCoolMode }) => {
+const Settings = () => {
     const { currentSettings, saveSettings } = useSettings()
     const [launchIDEcommandValue, setLaunchIDECommandValue] = useState(currentSettings.launchIDECommand)
     const [newSettings, setNewSettings] = useState(currentSettings)
@@ -59,6 +58,8 @@ const Settings = ({ isCoolMode, setIsCoolMode }) => {
                     <div className="flex items-center space-x-3">
                         <ThemeToggle />
 
+                        {/*     
+                        DISABLED FOR NOW
                         <Label htmlFor="cool-mode text">Cool mode</Label>
                         <Switch
                             checked={isCoolMode}
@@ -66,7 +67,7 @@ const Settings = ({ isCoolMode, setIsCoolMode }) => {
                                 setIsCoolMode(!isCoolMode)
                             }}
                             id="cool-mode"
-                        />
+                        /> */}
                     </div>
                 </div>
 
@@ -99,11 +100,15 @@ const Settings = ({ isCoolMode, setIsCoolMode }) => {
             </div>
 
 
-            <div className="flex justify-end gap-2">
-                <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                </DialogClose>
-                <Button onClick={() => saveSettings(newSettings)}>Save</Button>
+            <div className="flex justify-between items-center gap-2">
+                <Socials />
+
+                <div className="flex gap-2">
+                    <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button onClick={() => saveSettings(newSettings)}>Save</Button>
+                </div>
             </div>
         </DialogContent>
     </Dialog>)

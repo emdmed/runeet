@@ -115,9 +115,9 @@ export default function Home() {
   return (
     <TooltipProvider>
       <div className="overflow-auto h-screen px-3" style={{ borderRadius: 10 }}>
-        <div className="flex gap-2 justify-between items-center border p-2 border-primary">
+        <div className="flex gap-2 justify-between items-center p-1 border-primary">
           <div className={`flex items-center  ${isCoolMode ? "flicker" : ""}`}>
-            <h1 className={`font-bold me-3 text-2xl mb-0 text-primary`}>./RunDeck</h1>
+            <h1 className={`font-bold me-3 text-xl mb-0 text-primary`}>./RunDeck</h1>
 
             <FastForward
               className="text-primary me-4"
@@ -133,20 +133,19 @@ export default function Home() {
             />
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => appWindow.minimize()} variant="ghost" size="icon"><Minus /></Button>
-            <Button onClick={() => appWindow.toggleMaximize()} variant="ghost" size="icon"><Square /></Button>
-            <Button onClick={() => appWindow.close()} variant="ghost" size="icon"><X /></Button>
+            <Button onClick={() => appWindow.minimize()} variant="link" size="icon"><Minus /></Button>
+            <Button onClick={() => appWindow.toggleMaximize()} variant="link" size="icon"><Square /></Button>
+            <Button onClick={() => appWindow.close()} variant="link" size="icon"><X /></Button>
           </div>
-          {/*       <Socials /> */}
         </div>
 
 
         <div
           className="flex flex-col gap-3 w-full flex-1 min-h-0 my-3"
-          style={{ maxHeight: "calc(100% - 100px" }}
+          style={{ maxHeight: "calc(100% - 80px" }}
         >
           <div className="flex justify-start gap-2 items-center border-b py-1">
-            <h5 className="font-bold">Folders</h5>
+            <span className="font-bold">Folders</span>
             <Button
               onClick={menuBarActions.handleAddPathCard}
               size="sm"

@@ -70,7 +70,8 @@
         "resizable": true,
         "title": "rundeck",
         "width": 800,
-        "decorations": false
+        "decorations": false,
+        "transparent": true
       }
     ]
   }
