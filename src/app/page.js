@@ -3,14 +3,15 @@
 
 import PathCard from "./components/path-card/pathCard";
 import { useEffect, useState } from "react";
-import { FastForward, FolderPlus } from "lucide-react";
+import { FastForward, FolderPlus, X, Minus, Square } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { useApi } from "./hooks/useApi"
 import MenuBar from "./components/menuBar/menuBar"
-import Socials from "./components/socials"
+/* import Socials from "./components/socials" */
 import UsedPorts from "./components/usedPorts/usedPorts"
 import { TooltipProvider } from "../components/ui/tooltip";
 import { Button } from "../components/ui/button";
+import { appWindow } from '@tauri-apps/api/window';
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -113,7 +114,7 @@ export default function Home() {
 
   return (
     <TooltipProvider>
-      <div className={`h-screen max-h-screen p-5 ${isCoolMode ? "screen-container" : ""}`}>
+      <div className="overflow-auto h-screen px-3" style={{ borderRadius: 10 }}>
         <div className="flex gap-2 justify-between items-center border p-2 border-primary">
           <div className={`flex items-center  ${isCoolMode ? "flicker" : ""}`}>
             <h1 className={`font-bold me-3 text-2xl mb-0 text-primary`}>./RunDeck</h1>
@@ -131,7 +132,12 @@ export default function Home() {
               monitorTerminals={monitorTerminals}
             />
           </div>
-          <Socials />
+          <div className="flex gap-2">
+            <Button onClick={() => appWindow.minimize()} variant="ghost" size="icon"><Minus /></Button>
+            <Button onClick={() => appWindow.toggleMaximize()} variant="ghost" size="icon"><Square /></Button>
+            <Button onClick={() => appWindow.close()} variant="ghost" size="icon"><X /></Button>
+          </div>
+          {/*       <Socials /> */}
         </div>
 
 

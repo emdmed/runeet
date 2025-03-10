@@ -15,6 +15,14 @@
       "all": false,
       "shell": {
         "open": true
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "minimize": true,
+        "maximize": true,
+        "unmaximize": true,
+        "startDragging": true
       }
     },
     "bundle": {
@@ -61,7 +69,8 @@
         "height": 600,
         "resizable": true,
         "title": "rundeck",
-        "width": 800
+        "width": 800,
+        "decorations": false
       }
     ]
   }
