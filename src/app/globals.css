@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+  border-radius: 7px;
+}
+
 body {
   font-family: var(--font-typestar-ocr), monospace;
 }
@@ -136,6 +140,46 @@ body {
 }
 
 
+.screen {
+  position: relative;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 1;
+}
+
+.screen::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0.36;
+  background: repeating-linear-gradient(to bottom,
+          rgba(2, 2, 2, 0.05) 1px,
+          rgba(0, 0, 0, 0.7) 3px);
+  z-index: 9999;
+  background-size: 100% 2px;
+  pointer-events: none;
+}
+
+.screen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  animation: static-noise 1s steps(10) infinite;
+  pointer-events: none;
+}
+
+
+
 .spinner {
   display: inline-block;
   animation: spin 1s linear infinite;
@@ -261,3 +305,4 @@ body {
     opacity: 1;
   }
 }
+

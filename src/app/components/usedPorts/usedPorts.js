@@ -28,8 +28,8 @@ const UsedPorts = () => {
     }, [])
 
     return <>
-        <Button onClick={handleRefetchUnavailablePorts} size="icon" variant="outline"><RefreshCw /></Button>
-        <Button onClick={() => setIsCollapsed(prev => !prev)} variant="outline">{usedPorts?.length || 0} used ports {isCollapsed ? <ChevronRight /> : <ChevronLeft />}</Button>
+        <Button onClick={handleRefetchUnavailablePorts} size="sm" className="p-2" variant="ghost"><RefreshCw /></Button>
+        <Button onClick={() => setIsCollapsed(prev => !prev)} size="sm" className="p-2" variant="ghost">{usedPorts?.length || 0} used ports {isCollapsed ? <ChevronRight /> : <ChevronLeft />}</Button>
 
         {usedPorts && !isCollapsed && usedPorts.length > 0 && <div className="flex items-center gap-1 ms-1">
             {usedPorts.map(port => <UsedPortButton getPorts={getPorts} key={`port_btn_${port}`} port={port} />)}

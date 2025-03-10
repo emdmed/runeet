@@ -4,6 +4,7 @@ import { Toaster } from "../components/ui/sonner";
 import "./globals.css";
 import "./screen.css";
 import ThemeProvider from "./providers/themeProvider";
+import TitleBar from "./components/titleBar/titleBar";
 
 const typestarOCR = localFont({
   src: "../fonts/Typestar-OCR.woff2",
@@ -43,10 +44,13 @@ export default function RootLayout({
           href="/favicon-16x16.png"
         />
       </head>
-      <body className={`${typestarOCR.variable} antialiased`}>
+      <body className={`${typestarOCR.variable} antialiased screen-container`}>
         <ThemeProvider>
-          {children}
-          <Toaster richColors />
+          <>
+            <TitleBar />
+            {children}
+            <Toaster richColors />
+          </>
         </ThemeProvider>
       </body>
     </html>

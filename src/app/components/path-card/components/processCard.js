@@ -126,7 +126,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
     if (!currentProcess?.name && !packageFile?.projectName && packageFile?.framework === "unknown") return null
     if (isFavoriteFilter && !isFavorite) return null
 
-    return <Card className={`my-1 ${theme === "alien" ? "rounded-none" : ""}`} key={packageFile.filePath}>
+    return <Card className={`my-1 overflow-hidden ${theme === "alien" ? "rounded-none" : ""}`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">
 
             {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}

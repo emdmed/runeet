@@ -3,14 +3,15 @@
 
 import PathCard from "./components/path-card/pathCard";
 import { useEffect, useState } from "react";
-import { FastForward, FolderPlus } from "lucide-react";
+import { FastForward, FolderPlus, X, Minus, Square } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
 import { useApi } from "./hooks/useApi"
 import MenuBar from "./components/menuBar/menuBar"
-import Socials from "./components/socials"
+/* import Socials from "./components/socials" */
 import UsedPorts from "./components/usedPorts/usedPorts"
 import { TooltipProvider } from "../components/ui/tooltip";
 import { Button } from "../components/ui/button";
+import { appWindow } from '@tauri-apps/api/window';
 
 export default function Home() {
   const storedPathCards = usePathCardPersistence();
@@ -113,10 +114,10 @@ export default function Home() {
 
   return (
     <TooltipProvider>
-      <div className={`h-screen max-h-screen p-5 ${isCoolMode ? "screen-container" : ""}`}>
-        <div className="flex gap-2 justify-between items-center border p-2 border-primary">
+      <div className="overflow-auto h-screen px-3" style={{ borderRadius: 10 }}>
+        <div className="flex gap-2 justify-between items-center p-1 border-primary">
           <div className={`flex items-center  ${isCoolMode ? "flicker" : ""}`}>
-            <h1 className={`font-bold me-3 text-2xl mb-0 text-primary`}>./RunDeck</h1>
+            <h1 className={`font-bold me-3 text-xl mb-0 text-primary`}>./RunDeck</h1>
 
             <FastForward
               className="text-primary me-4"
@@ -131,21 +132,25 @@ export default function Home() {
               monitorTerminals={monitorTerminals}
             />
           </div>
-          <Socials />
+          <div className="flex gap-2">
+            <Button onClick={() => appWindow.minimize()} variant="link" size="icon"><Minus /></Button>
+            <Button onClick={() => appWindow.toggleMaximize()} variant="link" size="icon"><Square /></Button>
+            <Button onClick={() => appWindow.close()} variant="link" size="icon"><X /></Button>
+          </div>
         </div>
 
 
         <div
           className="flex flex-col gap-3 w-full flex-1 min-h-0 my-3"
-          style={{ maxHeight: "calc(100% - 100px" }}
+          style={{ maxHeight: "calc(100% - 80px" }}
         >
           <div className="flex justify-start gap-2 items-center border-b py-1">
-            <h5 className="font-bold">Folders</h5>
+            <span className="font-bold">Folders</span>
             <Button
               onClick={menuBarActions.handleAddPathCard}
-              size="icon"
-              variant="outline"
-              className="text-primary hover:text-black hover:bg-primary border-primary"
+              size="sm"
+              variant="ghost"
+              className="text-primary hover:text-black hover:bg-primary p-2"
             >
               <FolderPlus />
             </Button>
