@@ -2,12 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
-  border-radius: 7px;
-}
-
 body {
   font-family: var(--font-typestar-ocr), monospace;
+  border-color: hsl(var(--background));
+  border-style: solid;
 }
 
 @layer utilities {
@@ -159,8 +157,8 @@ body {
   right: 0;
   opacity: 0.36;
   background: repeating-linear-gradient(to bottom,
-          rgba(2, 2, 2, 0.05) 1px,
-          rgba(0, 0, 0, 0.7) 3px);
+      rgba(2, 2, 2, 0.05) 1px,
+      rgba(0, 0, 0, 0.7) 3px);
   z-index: 9999;
   background-size: 100% 2px;
   pointer-events: none;
@@ -305,4 +303,3 @@ body {
     opacity: 1;
   }
 }
-
