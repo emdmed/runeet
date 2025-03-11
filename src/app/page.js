@@ -1,29 +1,36 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import PathCard from "./components/path-card/pathCard";
 import { useEffect, useState } from "react";
 import { FastForward, FolderPlus, X, Minus, Square } from "lucide-react";
 import { usePathCardPersistence } from "./hooks/usePathCardsPersistence";
-import { useApi } from "./hooks/useApi"
-import MenuBar from "./components/menuBar/menuBar"
-/* import Socials from "./components/socials" */
-import UsedPorts from "./components/usedPorts/usedPorts"
+import { useApi } from "./hooks/useApi";
+import MenuBar from "./components/menuBar/menuBar";
+import UsedPorts from "./components/usedPorts/usedPorts";
 import { TooltipProvider } from "../components/ui/tooltip";
 import { Button } from "../components/ui/button";
-import { appWindow } from '@tauri-apps/api/window';
+
+// Remove the top-level import for appWindow
+// import { appWindow } from '@tauri-apps/api/window';
 
 export default function Home() {
+  const [appWindow, setAppWindow] = useState(null);
+
+  useEffect(() => {
+    import("@tauri-apps/api/window").then((module) => {
+      setAppWindow(module.appWindow);
+    });
+  }, []);
+
   const storedPathCards = usePathCardPersistence();
-  const [isCoolMode, setIsCoolMode] = useState(true)
+  const [isCoolMode, setIsCoolMode] = useState(true);
   const [monitoringSettings, setMonitoringSettings] = useState({
     autoMonitoring: true,
     interval: 10,
   });
 
-  const [allActiveTerminals, setAllActiveTerminals] = useState();
-
-  const { routes } = useApi()
+  const [allActiveTerminals, setAllActiveTerminals] = useState(null);
+  const { routes } = useApi();
 
   const [pathCards, setPathCards] = useState(
     storedPathCards || [
@@ -39,20 +46,16 @@ export default function Home() {
   }, [storedPathCards]);
 
   const handleAddPathCard = () => {
-
     const newPathCard = {
       path: "",
       id: new Date().getTime(),
-    }
-
-    setPathCards(state => ([newPathCard, ...state]));
+    };
+    setPathCards((state) => [newPathCard, ...state]);
   };
 
   async function monitorTerminals() {
     const response = await fetch(routes.monitorProcess);
-
     const data = await response.json();
-
     setAllActiveTerminals(data.terminals);
   }
 
@@ -60,19 +63,18 @@ export default function Home() {
 
   const handleMonitoringIntervalChange = () => {
     const arrayLength = monitoringIntervals.length;
-
     const index = monitoringIntervals.indexOf(monitoringSettings.interval);
-
-    if (index < arrayLength)
+    if (index < arrayLength - 1) {
       setMonitoringSettings((prev) => ({
         ...prev,
         interval: monitoringIntervals[index + 1],
       }));
-    if (index === arrayLength - 1)
+    } else {
       setMonitoringSettings((prev) => ({
         ...prev,
         interval: monitoringIntervals[0],
       }));
+    }
   };
 
   useEffect(() => {
@@ -82,9 +84,9 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       monitorTerminals();
-    }, monitoringSettings?.interval * 1000);
+    }, monitoringSettings.interval * 1000);
 
-    if (!monitoringSettings?.autoMonitoring) {
+    if (!monitoringSettings.autoMonitoring) {
       clearInterval(timer);
     }
 
@@ -109,20 +111,18 @@ export default function Home() {
   const menuBarActions = {
     handleAddPathCard,
     handleClearAll,
-    handleMonitoringIntervalChange
-  }
+    handleMonitoringIntervalChange,
+  };
 
   return (
     <TooltipProvider>
       <div className="overflow-auto h-screen px-3" style={{ borderRadius: 10 }}>
         <div className="flex gap-2 justify-between items-center p-1 border-primary">
-          <div className={`flex items-center  ${isCoolMode ? "flicker" : ""}`}>
-            <h1 className={`font-bold me-3 text-xl mb-0 text-primary`}>./RunDeck</h1>
-
-            <FastForward
-              className="text-primary me-4"
-              style={{ bottom: 3 }}
-            />
+          <div className={`flex items-center ${isCoolMode ? "flicker" : ""}`}>
+            <h1 className="font-bold me-3 text-xl mb-0 text-primary">
+              ./RunDeck
+            </h1>
+            <FastForward className="text-primary me-4" style={{ bottom: 3 }} />
             <MenuBar
               setIsCoolMode={setIsCoolMode}
               isCoolMode={isCoolMode}
@@ -133,16 +133,37 @@ export default function Home() {
             />
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => appWindow.minimize()} variant="link" size="icon"><Minus /></Button>
-            <Button onClick={() => appWindow.toggleMaximize()} variant="link" size="icon"><Square /></Button>
-            <Button onClick={() => appWindow.close()} variant="link" size="icon"><X /></Button>
+            {appWindow && (
+              <>
+                <Button
+                  onClick={() => appWindow.minimize()}
+                  variant="link"
+                  size="icon"
+                >
+                  <Minus />
+                </Button>
+                <Button
+                  onClick={() => appWindow.toggleMaximize()}
+                  variant="link"
+                  size="icon"
+                >
+                  <Square />
+                </Button>
+                <Button
+                  onClick={() => appWindow.close()}
+                  variant="link"
+                  size="icon"
+                >
+                  <X />
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
-
         <div
           className="flex flex-col gap-3 w-full flex-1 min-h-0 my-3"
-          style={{ maxHeight: "calc(100% - 80px" }}
+          style={{ maxHeight: "calc(100% - 80px)" }}
         >
           <div className="flex justify-start gap-2 items-center border-b py-1">
             <span className="font-bold">Folders</span>
@@ -154,9 +175,7 @@ export default function Home() {
             >
               <FolderPlus />
             </Button>
-
             <UsedPorts />
-
           </div>
           <div className="overflow-auto px-2">
             {pathCards.map((card) => (
