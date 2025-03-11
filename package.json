@@ -1,7 +1,8 @@
 {
   "name": "rundeck",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "private": true,
+
   "scripts": {
     "dev:next": "next dev -p 5551",
     "rundeck:web": "node next-standard-mode && next dev",
