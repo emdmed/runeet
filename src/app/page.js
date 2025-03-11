@@ -116,10 +116,10 @@ export default function Home() {
 
   return (
     <TooltipProvider>
-      <div className="overflow-auto h-screen px-3" style={{ borderRadius: 10 }}>
-        <div className="flex gap-2 justify-between items-center p-1 border-primary">
-          <div className={`flex items-center ${isCoolMode ? "flicker" : ""}`}>
-            <h1 className="font-bold me-3 text-xl mb-0 text-primary">
+      <div className="overflow-auto h-screen px-3">
+        <div data-tauri-drag-region className="flex gap-2 justify-between items-center border-primary">
+          <div className={`flex items-center`}>
+            <h1 className="font-bold me-3 text-xl mb-0 text-primary flicker">
               ./RunDeck
             </h1>
             <FastForward className="text-primary me-4" style={{ bottom: 3 }} />
@@ -162,8 +162,8 @@ export default function Home() {
         </div>
 
         <div
-          className="flex flex-col gap-3 w-full flex-1 min-h-0 my-3"
-          style={{ maxHeight: "calc(100% - 80px)" }}
+          className="flex flex-col gap-3 w-full flex-1 min-h-0 my-3 ps-2"
+          style={{ maxHeight: "calc(100% - 60px)" }}
         >
           <div className="flex justify-start gap-2 items-center border-b py-1">
             <span className="font-bold">Folders</span>
