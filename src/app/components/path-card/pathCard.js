@@ -88,8 +88,15 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
     }
 
     const handleDeleteFolderPath = () => {
+        const storedLs = localStorage.getItem("pathCards")
+        if(!storedLs) return
+        
+        const storedPathCards = JSON.parse(storedLs)
+        const filteredPathCards = storedPathCards.filter(storedPathCard => storedPathCard.path !== packageFile.path)
+        localStorage.setItem("pathCards", JSON.stringify(filteredPathCards))
         setPackageFiles([])
         setFolderPath("")
+
     }
 
     const onKeyDown = (e) => {
@@ -105,7 +112,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                     <CardTitle className="flex justify-between items-center">
                         {packageFiles?.length === 0 && "Select directory"}
                         {packageFiles?.length > 0 && <div className="flex items-center gap-1">
-                            <Badge onClick={() => setIsCollapsed(prev => !prev)} className="me-3 cursor-pointer">{"./"}{getFolderName()}</Badge>
+                            <Badge id={`pathCard_${pathCard.path}`} onClick={() => setIsCollapsed(prev => !prev)} className="me-3 cursor-pointer">{"./"}{getFolderName()}</Badge>
                         </div>}
                         <div className="gap-1 flex">
                             <Button onClick={() => setIsFavoriteFilter(prev => !prev)} variant="ghost" size="sm" className={`${isFavoriteFilter ? "text-primary" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Star /></Button>
