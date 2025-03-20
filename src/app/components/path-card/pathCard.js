@@ -14,7 +14,7 @@ import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 
 import ProcessCard from "./components/processCard"
-import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
+import { LoaderCircle, Minus, Square, X } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 import { Filter, Star } from "lucide-react";
 import { useApi } from "@/app/hooks/useApi";
@@ -87,16 +87,13 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
         setPackageFiles([...newPackageFiles])
     }
 
-    const handleDeleteFolderPath = () => {
-        setPackageFiles([])
-        setFolderPath("")
-    }
-
     const onKeyDown = (e) => {
         if (e.key === "Enter") {
             handleSearchPackages()
         }
     }
+
+    console.log("packageFiles", packageFiles)
 
     return (
         <div className="px-2 mb-2 flex">
@@ -105,12 +102,11 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                     <CardTitle className="flex justify-between items-center">
                         {packageFiles?.length === 0 && "Select directory"}
                         {packageFiles?.length > 0 && <div className="flex items-center gap-1">
-                            <Badge onClick={() => setIsCollapsed(prev => !prev)} className="me-3 cursor-pointer">{"./"}{getFolderName()}</Badge>
+                            <Badge id={`pathCard_${pathCard.path}`} onClick={() => setIsCollapsed(prev => !prev)} className="me-3 cursor-pointer">{"./"}{getFolderName()}</Badge>
                         </div>}
                         <div className="gap-1 flex">
                             <Button onClick={() => setIsFavoriteFilter(prev => !prev)} variant="ghost" size="sm" className={`${isFavoriteFilter ? "text-primary" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Star /></Button>
                             <Button onClick={() => setIsRunningFilterOn(prev => !prev)} variant="ghost" size="sm" className={`${isRunningFilterOn ? "text-primary" : "text-stone-700 "} p-2 hover:bg-primary hover:text-black`}><Filter /></Button>
-                            <Button onClick={handleDeleteFolderPath} variant="ghost" size="sm" className="p-2 bg-dark text-destructive hover:bg-destructive hover:text-black"><Trash /></Button>
                             <Button onClick={() => setIsCollapsed(prev => !prev)} size="sm" variant="ghost" className="text-stone-200 p-2">{isCollapsed ? <Square /> : <Minus />}</Button>
                             <Button onClick={() => handleRemovePathCard(pathCard)} variant="ghost" size="sm" className="text-stone-200 p-2"><X /></Button>
                         </div>
@@ -135,7 +131,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                     </div>}
 
                     <div className="flex-1 overflow-y-auto px-2">
-                        {packageFiles?.length > 0 && packageFiles.map(packageFile => {
+                        {packageFiles?.length > 0 && packageFiles.sort((a, b) => a.projectName.localeCompare(b.projectName)).map(packageFile => {
                             return <ProcessCard isFavoriteFilter={isFavoriteFilter} packageFiles={packageFiles} setPackageFiles={setPackageFiles} isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                         })}
                     </div>

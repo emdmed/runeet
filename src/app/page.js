@@ -9,9 +9,7 @@ import MenuBar from "./components/menuBar/menuBar";
 import UsedPorts from "./components/usedPorts/usedPorts";
 import { TooltipProvider } from "../components/ui/tooltip";
 import { Button } from "../components/ui/button";
-
-// Remove the top-level import for appWindow
-// import { appWindow } from '@tauri-apps/api/window';
+import Sidebar from "./components/sidebar/sidebar"
 
 export default function Home() {
   const [appWindow, setAppWindow] = useState(null);
@@ -56,7 +54,7 @@ export default function Home() {
   async function monitorTerminals() {
     const response = await fetch(routes.monitorProcess);
     const data = await response.json();
-    setAllActiveTerminals(data.terminals);
+    setAllActiveTerminals(data.terminals.filter(terminal => !terminal.command.includes("bash" || "zsh")));
   }
 
   const monitoringIntervals = [1, 3, 5, 10, 20];
@@ -107,6 +105,7 @@ export default function Home() {
     localStorage.setItem("pathCards", JSON.stringify(defaultPathCards));
     setPathCards([...defaultPathCards]);
   };
+  
 
   const menuBarActions = {
     handleAddPathCard,
@@ -117,7 +116,7 @@ export default function Home() {
   return (
     <TooltipProvider>
       <div className="overflow-auto h-screen px-3">
-        <div data-tauri-drag-region className="flex gap-2 justify-between items-center border-primary">
+        <div data-tauri-drag-region className="flex gap-2 justify-between items-center border px-2 mt-2 rounded-full bg-card">
           <div className={`flex items-center`}>
             <h1 className="font-bold me-3 text-xl mb-0 text-primary flicker">
               ./RunDeck
@@ -163,7 +162,7 @@ export default function Home() {
 
         <div
           className="flex flex-col gap-3 w-full flex-1 min-h-0 my-3 ps-2"
-          style={{ maxHeight: "calc(100% - 60px)" }}
+          style={{ maxHeight: "calc(100% - 70px)" }}
         >
           <div className="flex justify-start gap-2 items-center border-b py-1">
             <span className="font-bold">Folders</span>
@@ -177,17 +176,22 @@ export default function Home() {
             </Button>
             <UsedPorts />
           </div>
-          <div className="overflow-auto px-2">
-            {pathCards.map((card) => (
-              <PathCard
-                allActiveTerminals={allActiveTerminals}
-                pathCard={card}
-                pathCards={pathCards}
-                setPathCards={setPathCards}
-                handleRemovePathCard={handleRemovePathCard}
-                key={`${card.path}_${card.id}`}
-              />
-            ))}
+          <div className="overflow-hidden px-2 flex">
+            <div className="w-1/6 h-fit flex flex-col min-w-fit">
+              <Sidebar pathCards={pathCards}/>
+            </div>
+            <div className="w-5/6 overflow-auto min-w-fit">
+              {pathCards.map((card) => (
+                <PathCard
+                  allActiveTerminals={allActiveTerminals}
+                  pathCard={card}
+                  pathCards={pathCards}
+                  setPathCards={setPathCards}
+                  handleRemovePathCard={handleRemovePathCard}
+                  key={`${card.path}_${card.id}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

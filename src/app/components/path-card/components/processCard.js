@@ -129,24 +129,24 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
     return <Card className={`my-1 overflow-hidden ${theme === "alien" ? "rounded-none" : ""}`} key={packageFile.filePath}>
         <CardContent className="p-2 flex items-center gap-2">
 
-            {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="sm"><Square /></Button>}
-            {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-primary`} variant="ghost" size="sm"><Play /></Button> : null}
+            {currentProcess?.state === "running" && <Button onClick={handleStopProcess} className="p-2 text-destructive hover:text-black hover:bg-destructive" variant="ghost" size="icon"><Square /></Button>}
+            {currentProcess?.state === "stopped" || !currentProcess ? <Button onClick={() => handleStartProcess(packageFile)} className={`p-2 hover:text-black hover:bg-primary`} variant="ghost" size="icon"><Play /></Button> : null}
 
             <div className="flex items-center gap-2 justify-between w-full">
                 <div className="flex items-center me-2 justify-end w-fit gap-2">
                     <Tooltip>
                         <TooltipTrigger>
-                        {currentProcess?.state === "running" ?
-                        <Button onClick={openEditor}> <Code/> {packageFile.projectName}</Button> :
-                        <Button onClick={openEditor} variant="outline"><Code/> {packageFile.projectName}</Button>}
+                            {currentProcess?.state === "running" ?
+                                <Button onClick={openEditor}> <Code /> {packageFile.projectName}</Button> :
+                                <Button onClick={openEditor} variant="outline"><Code /> {packageFile.projectName}</Button>}
                         </TooltipTrigger>
                         <TooltipContent>
                             Open IDE
                         </TooltipContent>
                     </Tooltip>
-                    <small className="text-secondary" style={{ opacity: 0.7 }}>{packageFile.framework}</small>
                 </div>
                 <div className="flex items-center gap-2 mx-2">
+                    <small className="opacity-70">{packageFile.framework}</small>
                     <Port currentProcess={currentProcess} port={port} setPort={setPort}></Port>
                     <GitDisplay packageFile={packageFile} />
                 </div>
