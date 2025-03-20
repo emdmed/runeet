@@ -146,7 +146,7 @@ const ProcessCard = ({ packageFile, allActiveTerminals, isRunningFilterOn, setPa
                     </Tooltip>
                 </div>
                 <div className="flex items-center gap-2 mx-2">
-                    <small className="text-secondary" style={{ opacity: 0.7 }}>{packageFile.framework}</small>
+                    <small className="opacity-70">{packageFile.framework}</small>
                     <Port currentProcess={currentProcess} port={port} setPort={setPort}></Port>
                     <GitDisplay packageFile={packageFile} />
                 </div>
