@@ -14,7 +14,7 @@ import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 
 import ProcessCard from "./components/processCard"
-import { LoaderCircle, Minus, Square, Trash, X } from "lucide-react";
+import { LoaderCircle, Minus, Square, X } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 import { Filter, Star } from "lucide-react";
 import { useApi } from "@/app/hooks/useApi";
@@ -87,23 +87,13 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
         setPackageFiles([...newPackageFiles])
     }
 
-    const handleDeleteFolderPath = () => {
-        const storedLs = localStorage.getItem("pathCards")
-        if(!storedLs) return
-        
-        const storedPathCards = JSON.parse(storedLs)
-        const filteredPathCards = storedPathCards.filter(storedPathCard => storedPathCard.path !== packageFile.path)
-        localStorage.setItem("pathCards", JSON.stringify(filteredPathCards))
-        setPackageFiles([])
-        setFolderPath("")
-
-    }
-
     const onKeyDown = (e) => {
         if (e.key === "Enter") {
             handleSearchPackages()
         }
     }
+
+    console.log("packageFiles", packageFiles)
 
     return (
         <div className="px-2 mb-2 flex">
@@ -141,7 +131,7 @@ const PathCard = ({ handleRemovePathCard, pathCard, setPathCards, pathCards, all
                     </div>}
 
                     <div className="flex-1 overflow-y-auto px-2">
-                        {packageFiles?.length > 0 && packageFiles.map(packageFile => {
+                        {packageFiles?.length > 0 && packageFiles.sort((a, b) => a.projectName.localeCompare(b.projectName)).map(packageFile => {
                             return <ProcessCard isFavoriteFilter={isFavoriteFilter} packageFiles={packageFiles} setPackageFiles={setPackageFiles} isRunningFilterOn={isRunningFilterOn} toggleFavorite={toggleFavorite} allActiveTerminals={allActiveTerminals} key={packageFile?.filePath} packageFile={packageFile} />
                         })}
                     </div>
