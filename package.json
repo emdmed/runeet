@@ -1,18 +1,18 @@
 {
-  "name": "rundeck",
+  "name": "runeet",
   "version": "0.6.0",
   "private": true,
 
   "scripts": {
     "dev:next": "next dev -p 5551",
-    "rundeck:web": "node next-standard-mode && next dev",
+    "runeet:web": "node next-standard-mode && next dev",
     "serverBuild": "cd ./src-tauri/server && npm run bundle",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",
-    "rundeck:desk": "node next-static-mode && next dev -p 5551 & cd ./src-tauri/server && npm run bundle && cd ../.. && tauri dev",
-    "rundeck:build": "node next-static-mode && cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
+    "runeet:desk": "node next-static-mode && next dev -p 5551 & cd ./src-tauri/server && npm run bundle && cd ../.. && tauri dev",
+    "runeet:build": "node next-static-mode && cd ./src-tauri/server && npm run bundle && cd .. && tauri build"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.6",

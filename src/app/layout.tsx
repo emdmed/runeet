@@ -13,7 +13,7 @@ const typestarOCR = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "RunDeck",
+  title: "runeet",
   description: "Cool as fuck dev dashboard",
   icons: "/favicon.ico",
 };

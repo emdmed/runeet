@@ -42,7 +42,7 @@ const VersionTag = ({openExternalLink}) => {
     return <div>
         <div className="flex items-center gap-2">
             <Button
-                onClick={() => openExternalLink('https://github.com/emdmed/rundeck')}
+                onClick={() => openExternalLink('https://github.com/emdmed/runeet')}
                 size="sm"
                 variant="outline"
                 className={`${isUpdatePrompt ? "border-destructive text-destructive opacity-100 hover:bg-destructive hover:text-black" : "opacity-100"}`}

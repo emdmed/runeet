@@ -7,7 +7,7 @@
     "distDir": "../out"
   },
   "package": {
-    "productName": "rundeck",
+    "productName": "runeet",
     "version": "0.6.0"
   },
   "tauri": {
@@ -40,7 +40,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.emdmed.rundeck",
+      "identifier": "com.emdmed.runeet",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -68,7 +68,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "rundeck",
+        "title": "runeet",
         "width": 800,
         "decorations": false,
         "transparent": true

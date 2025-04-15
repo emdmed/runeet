@@ -119,7 +119,7 @@ export default function Home() {
         <div data-tauri-drag-region className="flex gap-2 justify-between items-center border px-2 mt-2 rounded-full bg-card">
           <div className={`flex items-center`}>
             <h1 className="font-bold me-3 text-xl mb-0 text-primary flicker">
-              ./RunDeck
+              ./runeet
             </h1>
             <FastForward className="text-primary me-4" style={{ bottom: 3 }} />
             <MenuBar

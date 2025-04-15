@@ -3,7 +3,7 @@ import { useState } from "react"
 
 export const useFavorites = (path) => {
     const [favorites, setFavorites] = useState(() => 
-        JSON.parse(localStorage.getItem("rundeck_favorites") || "[]")
+        JSON.parse(localStorage.getItem("runeet_favorites") || "[]")
     );
     
     const [isFavorite, setIsFavorite] = useState(false)
@@ -20,11 +20,11 @@ export const useFavorites = (path) => {
         if (foundFavorite) {
             const updatedFavorites = favorites.filter(element => element !== path)
             setFavorites(updatedFavorites)
-            localStorage.setItem("rundeck_favorites", JSON.stringify(updatedFavorites))
+            localStorage.setItem("runeet_favorites", JSON.stringify(updatedFavorites))
         } else {
             const updatedFavorites = [...favorites, path]
             setFavorites(updatedFavorites)
-            localStorage.setItem("rundeck_favorites", JSON.stringify(updatedFavorites))
+            localStorage.setItem("runeet_favorites", JSON.stringify(updatedFavorites))
         }
     }
 

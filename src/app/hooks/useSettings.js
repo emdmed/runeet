@@ -11,14 +11,14 @@ export const useSettings = () => {
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            const storedSettings = JSON.parse(localStorage.getItem("rundeck_settings") || "false") || defaultSettings;
+            const storedSettings = JSON.parse(localStorage.getItem("runeet_settings") || "false") || defaultSettings;
             setCurrentSettings(storedSettings);
         }
     }, []);
 
     const saveSettings = (newSettings) => {
         if (typeof window !== "undefined") {
-            localStorage.setItem("rundeck_settings", JSON.stringify(newSettings));
+            localStorage.setItem("runeet_settings", JSON.stringify(newSettings));
         }
         setCurrentSettings(newSettings);
     };

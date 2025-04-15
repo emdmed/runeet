@@ -23142,7 +23142,7 @@ var require_check_updates = __commonJS({
     var router = express2.Router();
     router.get("/check-updates", async (req, res) => {
       try {
-        const response = await fetch("https://api.github.com/repos/emdmed/rundeck/releases/latest");
+        const response = await fetch("https://api.github.com/repos/emdmed/runeet/releases/latest");
         const data = await response.json();
         return res.json(data);
       } catch (error) {
