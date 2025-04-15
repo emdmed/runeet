@@ -1,8 +1,8 @@
-## RunDeck v0.5.8
+## Runeet v0.5.8
 
 Website https://exhilarated-aims-580481.framer.app/ (sorry, no domain yet)
 
-## ✨ What's RunDeck?
+## ✨ What's Runeet?
 
 It's a desktop/web app that makes managing your React, Next.js, Vite, and Node servers effortless!
 
@@ -10,7 +10,7 @@ Web version Supports windows, ubuntu, ios. (tested only in ubuntu for now)
 
 Desktop app right now only available for Ubuntu
 
-✅ Auto-detect projects – Just enter a folder path, and RunDeck lists all available servers.
+✅ Auto-detect projects – Just enter a folder path, and Runeet lists all available servers.
 
 ⭐ Favorite projects – Keep important projects at the top for quick access.
 
@@ -27,27 +27,27 @@ Desktop app right now only available for Ubuntu
 ![Screenshot from 2025-03-05 23-29-10](https://github.com/user-attachments/assets/3284b45c-88c3-4b98-a662-1458deab4128)
 
 
-RunDeck can be ran as a local web app or as a desktop app. The desktop app has been only tested in Ubuntu 22.04 for now.
+Runeet can be ran as a local web app or as a desktop app. The desktop app has been only tested in Ubuntu 22.04 for now.
 
 ## RUN AS WEBAPP
-1) ```npm run rundeck:web```
+1) ```npm run Runeet:web```
 
 ## RUN AS DESKTOP DEV MODE (no installation)
 1) Clone repo
 2) ```npm install```
-3) ```npm run rundeck:desk```
+3) ```npm run Runeet:desk```
 
 ## RUN AS DESKTOP - BUILD & INSTALL DEB PACKAGE
 1) Clone repo
 2) ```npm install```
-3) ```npm run rundeck:build```
+3) ```npm run Runeet:build```
 4) navigate to /src-tauri/target/release/bundle/deb
-5) ```sudo dpkg -i rundeck_0.1.0_amd64.deb```
+5) ```sudo dpkg -i Runeet_0.1.0_amd64.deb```
 
 ## RUN AS DESKTOP - DOWNLOAD DEB PACKAGE AND INSTALL
 1) download deb package
 2) navigate to download dir
-3) ```sudo dpkg -i rundeck_0.1.0_amd64.deb```
+3) ```sudo dpkg -i Runeet_0.1.0_amd64.deb```
 
 
 ### Known issues
